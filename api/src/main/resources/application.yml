@@ -1,3 +1,8 @@
+jwt:
+  access-expiration-time: 1296000
+  refresh-expiration-time: 2592000
+  secret-key: ${JWT_SECRET_KEY}
+
 logging:
   level:
     root: info
@@ -12,26 +17,23 @@ spring:
       on-profile: default, local
 
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dayplancontentlocal
+    username: root
     password:
-  h2:
-    console:
-      enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
 
   data:
     redis:
       host: localhost
       port: 6379
-
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        format_sql: true
-    show-sql: true
 
   rabbitmq:
     host: localhost
@@ -39,6 +41,8 @@ spring:
     username: guest
     password: guest
 
+  jackson:
+    property-naming-strategy: SNAKE_CASE
 ---
 spring:
   config:
@@ -47,7 +51,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/dayplancontent
+    url: jdbc:mysql://localhost:3306/dayplanuser
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
