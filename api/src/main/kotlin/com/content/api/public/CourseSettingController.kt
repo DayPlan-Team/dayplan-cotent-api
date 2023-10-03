@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(("/content/course"))
-class `\CourseSettingController`(
+class CourseSettingController(
     private val courseSettingService: CourseSettingService,
     private val userQueryPort: UserQueryPort,
 ) {
