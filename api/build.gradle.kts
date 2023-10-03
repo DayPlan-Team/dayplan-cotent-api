@@ -8,6 +8,7 @@ jar.enabled = true
 
 dependencies {
 
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
@@ -18,4 +19,16 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":adapter"))
     implementation(project(":application"))
+}
+
+sourceSets {
+    main {
+        java.srcDir("src/main/generated")
+    }
+}
+
+kapt {
+    arguments {
+        arg("querydsl.generated", "src/main/generated")
+    }
 }
