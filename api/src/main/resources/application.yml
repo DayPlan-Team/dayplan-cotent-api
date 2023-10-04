@@ -1,7 +1,15 @@
+server:
+  port: 8078
+
 jwt:
   access-expiration-time: 1296000
   refresh-expiration-time: 2592000
   secret-key: ${JWT_SECRET_KEY}
+
+
+naver:
+  develop-client-id: fZDbnomZT2TEeFgejPuJ
+  develop-client-secret: ${NAVER_DEVELOP_SECRET_KEY}
 
 logging:
   level:

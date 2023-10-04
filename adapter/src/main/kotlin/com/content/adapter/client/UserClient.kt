@@ -1,7 +1,7 @@
 package com.content.adapter.client
 
 import org.springframework.stereotype.Component
-import retrofit2.Response
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
@@ -10,9 +10,9 @@ import retrofit2.http.Query
 interface UserClient {
 
     @Headers(ApiClientUtil.CONTENT_TYPE_APPLICATION_JSON)
-    @GET("/internal/verify")
+    @GET("/user/internal/verify")
     fun getUserResponse(
-        @Query("UserId") userId: Long,
-    ): Response<UserResponse>
+        @Query("userId") userId: Long,
+    ): Call<UserResponse>
 
 }

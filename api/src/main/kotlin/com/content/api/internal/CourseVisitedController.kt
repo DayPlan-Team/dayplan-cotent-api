@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/content/datecourse/visitedstatus")
+@RequestMapping("/content/internal/datecourse/visitedstatus")
 class CourseVisitedController(
     private val courseVisitedService: CourseVisitedService,
 ) {

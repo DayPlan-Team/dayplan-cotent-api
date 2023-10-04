@@ -24,12 +24,12 @@ class CourseSearchingController(
     @GetMapping
     fun searchCourse(
         @RequestHeader("UserId") userId: Long,
-        @RequestParam("address_category") addressCategory: AddressCategory,
+        @RequestParam("addresscategory") addressCategory: AddressCategory,
         pageable: Pageable,
     ): ResponseEntity<Slice<CourseDetailResponse>> {
         validatePage(pageable.pageNumber.toLong())
 
-        userQueryPort.findById(userId)
+        userQueryPort.verifyAndGetUser(userId)
         val sliceData = courseSearchingService.searchCourses(
             CourseSearchRequest(
                 addressCategory = addressCategory,
