@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Index
 import jakarta.persistence.Table
-import okhttp3.internal.userAgent
 import org.hibernate.annotations.DynamicUpdate
 
 @Entity

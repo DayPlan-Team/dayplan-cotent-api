@@ -28,14 +28,13 @@ class CourseCommandAdapter(
 
         courseEntityRepository.save(
             CourseEntity(
-                groupId = courseSettingRequest.groupId,
+                groupId = courseGroupEntity.id,
                 userId = courseSettingRequest.userId,
                 step = courseSettingRequest.step,
                 placeId = courseSettingRequest.placeId,
                 latitude = courseSettingRequest.location.latitude,
                 longitude = courseSettingRequest.location.longitude,
                 visitedStatus = false,
-                id = courseGroupEntity.id,
             )
         )
 
