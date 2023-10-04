@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component
 @Component
 interface UserQueryPort {
 
-    fun findById(userId: Long): User
+    fun verifyAndGetUser(userId: Long): User
 }

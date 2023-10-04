@@ -19,7 +19,7 @@ class CourseVisitedService(
         val (latitudeMin, latitudeMax) = LocationRectangleRangeCreator.getLatitudeRange(userLocation.latitude)
         val (longitudeMin, longitudeMax) = LocationRectangleRangeCreator.getLongitudeRange(userLocation.longitude)
 
-        val courses = courseQueryPort.getCursesByUserIdAndNotVisited(userLocation.userId)
+        val courses = courseQueryPort.getCursesByUserIdAndVisitedStatus(userLocation.userId,false)
             .filter {
                 it.location.latitude in latitudeMin..latitudeMax &&
                         it.location.longitude in longitudeMin..longitudeMax
@@ -30,7 +30,7 @@ class CourseVisitedService(
                     courseId = it.courseId,
                     userId = it.userId,
                     step = it.step,
-                    placeCategory = it.placeCategory,
+                    placeId = it.placeId,
                     location = it.location,
                     visitedStatus = true,
                 )
