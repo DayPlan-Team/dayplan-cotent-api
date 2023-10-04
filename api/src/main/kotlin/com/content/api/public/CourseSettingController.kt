@@ -75,7 +75,7 @@ class CourseSettingController(
     }
 
     data class CourseGroupResponse(
-        @JsonProperty("courseGroupId") val courseGroupId: Long,
+        val courseGroupId: Long,
     )
 
 
