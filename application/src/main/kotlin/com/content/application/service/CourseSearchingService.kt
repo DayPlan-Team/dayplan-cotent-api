@@ -2,7 +2,7 @@ package com.content.application.service
 
 import com.content.application.port.CourseSearchPort
 import com.content.application.request.CourseSearchRequest
-import com.content.application.response.CourseDetailResponse
+import com.content.application.response.DetailCourse
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 class CourseSearchingService(
     private val courseSearchPort: CourseSearchPort,
 ) {
-    fun searchCourses(courseSearchRequest: CourseSearchRequest): Slice<CourseDetailResponse> {
+    fun searchCourses(courseSearchRequest: CourseSearchRequest): Slice<DetailCourse> {
         return courseSearchPort.findCoursesByAddressCategory(courseSearchRequest)
     }
 
