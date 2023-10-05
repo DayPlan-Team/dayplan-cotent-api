@@ -3,7 +3,7 @@ package com.content.api.public
 import com.content.application.service.CourseSearchingService
 import com.content.application.port.UserQueryPort
 import com.content.application.request.CourseSearchRequest
-import com.content.application.response.CourseDetailResponse
+import com.content.application.response.DetailCourse
 import com.content.util.share.AddressCategory
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
@@ -26,7 +26,7 @@ class CourseSearchingController(
         @RequestHeader("UserId") userId: Long,
         @RequestParam("addresscategory") addressCategory: AddressCategory,
         pageable: Pageable,
-    ): ResponseEntity<Slice<CourseDetailResponse>> {
+    ): ResponseEntity<Slice<DetailCourse>> {
         validatePage(pageable.pageNumber.toLong())
 
         userQueryPort.verifyAndGetUser(userId)
