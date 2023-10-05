@@ -2,9 +2,12 @@ package com.content.application.service
 
 import com.content.application.port.CourseCommandPort
 import com.content.application.port.CourseQueryPort
+import com.content.application.port.PlacePort
 import com.content.domain.course.Course
 import com.content.domain.course.LocationRectangleRangeCreator
 import com.content.domain.location.UserLocation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -12,29 +15,40 @@ import org.springframework.transaction.annotation.Transactional
 class CourseVisitedService(
     private val courseCommandPort: CourseCommandPort,
     private val courseQueryPort: CourseQueryPort,
+    private val placePort: PlacePort,
+    private val coroutineScope: CoroutineScope,
 ) {
 
     @Transactional
     fun updateCourseVisitedStatus(userLocation: UserLocation) {
-        val (latitudeMin, latitudeMax) = LocationRectangleRangeCreator.getLatitudeRange(userLocation.latitude)
-        val (longitudeMin, longitudeMax) = LocationRectangleRangeCreator.getLongitudeRange(userLocation.longitude)
+        coroutineScope.launch {
 
-        val courses = courseQueryPort.getCursesByUserIdAndVisitedStatus(userLocation.userId,false)
-            .filter {
-                it.location.latitude in latitudeMin..latitudeMax &&
-                        it.location.longitude in longitudeMin..longitudeMax
-            }
-            .map {
-                Course(
-                    groupId = it.groupId,
-                    courseId = it.courseId,
-                    userId = it.userId,
-                    step = it.step,
-                    placeId = it.placeId,
-                    location = it.location,
-                    visitedStatus = true,
-                )
-            }
-        courseCommandPort.upsertCourses(courses)
+            val (latitudeMin, latitudeMax) = LocationRectangleRangeCreator.getLatitudeRange(userLocation.latitude)
+            val (longitudeMin, longitudeMax) = LocationRectangleRangeCreator.getLongitudeRange(userLocation.longitude)
+
+            val courses = courseQueryPort.getCursesByUserIdAndVisitedStatus(userLocation.userId, false)
+            val coursesMap = courses.groupBy { it.placeId }
+
+            val coursesToUpdate = placePort.getSuspendPlaceByPlaceId(coursesMap.keys.toList())
+                .filter {
+                    it.latitude in latitudeMin..latitudeMax &&
+                            it.longitude in longitudeMin..longitudeMax
+                }
+                .flatMap { place ->
+                    coursesMap[place.placeId]?.map { course ->
+                        Course(
+                            groupId = course.groupId,
+                            courseId = course.courseId,
+                            userId = course.userId,
+                            step = course.step,
+                            courseStage = course.courseStage,
+                            placeId = place.placeId,
+                            placeCategory = place.placeCategory,
+                            visitedStatus = true,
+                        )
+                    } ?: emptyList()
+                }
+            courseCommandPort.upsertCourses(coursesToUpdate)
+        }
     }
 }
