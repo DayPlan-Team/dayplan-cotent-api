@@ -2,8 +2,12 @@ package com.content.adapter.course.entity
 
 import com.content.adapter.share.BaseEntity
 import com.content.domain.course.CourseGroup
+import com.user.util.address.CityCode
+import com.user.util.address.DistrictCode
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -26,6 +30,14 @@ data class CourseGroupEntity(
     @Column
     val groupName: String,
 
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    val cityCode: CityCode,
+
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    val districtCode: DistrictCode,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
@@ -36,6 +48,8 @@ data class CourseGroupEntity(
             groupId = id,
             userId = userId,
             groupName = groupName,
+            cityCode = cityCode,
+            districtCode = districtCode,
         )
     }
 
@@ -44,6 +58,8 @@ data class CourseGroupEntity(
             return CourseGroupEntity(
                 userId = courseGroup.userId,
                 groupName = courseGroup.groupName,
+                cityCode = courseGroup.cityCode,
+                districtCode = courseGroup.districtCode,
                 id = courseGroup.groupId,
             )
         }
