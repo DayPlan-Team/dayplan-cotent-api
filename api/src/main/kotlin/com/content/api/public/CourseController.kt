@@ -1,11 +1,10 @@
 package com.content.api.public
 
-import com.content.application.service.CourseSettingService
 import com.content.application.port.UserQueryPort
-import com.content.application.request.CourseSettingRequest
-import com.content.domain.location.Location
-import com.content.util.exception.ContentException
-import com.content.util.exceptioncode.ContentExceptionCode
+import com.content.application.request.CourseUpsertRequest
+import com.content.application.service.CourseService
+import com.content.domain.course.CourseStage
+import com.content.domain.share.PlaceCategory
 import com.content.util.share.Logger
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.http.ResponseEntity
@@ -19,32 +18,31 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/content/course")
-class CourseSettingController(
+class CourseController(
     private val userQueryPort: UserQueryPort,
-    private val courseSettingService: CourseSettingService,
+    private val courseService: CourseService,
 ) {
-    @PostMapping
-    fun setCourseAndGetCourseGroupId(
-        @RequestHeader("UserId") userId: Long,
-        @RequestBody request: CourseSettingApiRequest,
-    ): ResponseEntity<CourseGroupResponse> {
-        log.info("request = ${request}")
-        val user = userQueryPort.verifyAndGetUser(userId)
-        val courseGroupId = courseSettingService.setCourseAndGetGroupId(
-            CourseSettingRequest(
-                groupId = request.groupId,
-                userId = user.userId,
-                step = request.step,
-                placeId = request.placeId,
-                location = request.location,
-            ),
-        )
 
-        return ResponseEntity.ok(
-            CourseGroupResponse(
-                courseGroupId = courseGroupId,
+    @PostMapping
+    fun upsertCourse(
+        @RequestHeader("UserId") userId: Long,
+        @RequestBody request: CourseUpsertApiRequest,
+    ): ResponseEntity<Unit> {
+
+        val user = userQueryPort.verifyAndGetUser(userId)
+
+        courseService.upsertCourse(
+            CourseUpsertRequest(
+                userId = user.userId,
+                courseId = request.courseId ?: 0L,
+                groupId = request.groupId,
+                step = request.step,
+                placeCategory = request.placeCategory,
+                placeId = request.placeId ?: 0L,
             )
         )
+
+        return ResponseEntity.ok().build()
     }
 
     @GetMapping
@@ -53,37 +51,38 @@ class CourseSettingController(
         @RequestParam("groupId") groupId: Long,
     ): ResponseEntity<CourseApiResponse> {
         val user = userQueryPort.verifyAndGetUser(userId)
-        val courses = courseSettingService.getCoursesByGroup(
+        val courses = courseService.getDetailCoursesByGroup(
             groupId = groupId,
             userId = user.userId,
         )
 
-        if (courses.isEmpty()) throw ContentException(ContentExceptionCode.CONTENT_GROUP_EMPTY)
+        log.info("placeResponseSize = ${courses.size}")
 
         return ResponseEntity.ok(
             CourseApiResponse(
-                groupId = courses[0].groupId,
+                groupId = groupId,
                 courses = courses.map {
                     CourseItem(
                         courseId = it.courseId,
                         placeId = it.placeId,
                         step = it.step,
+                        placeCategory = it.placeCategory,
+                        placeName = it.placeName,
+                        address = it.address,
+                        courseStage = it.courseStage,
+                        roadAddress = it.roadAddress,
                     )
                 },
             ),
         )
     }
 
-    data class CourseGroupResponse(
-        val courseGroupId: Long,
-    )
-
-
-    data class CourseSettingApiRequest(
+    data class CourseUpsertApiRequest(
+        @JsonProperty("courseId") val courseId: Long?,
         @JsonProperty("groupId") val groupId: Long = 0,
         @JsonProperty("step") val step: Int,
-        @JsonProperty("placeId") val placeId: Long,
-        @JsonProperty("location") val location: Location,
+        @JsonProperty("placeCategory") val placeCategory: PlaceCategory,
+        @JsonProperty("placeId") val placeId: Long?,
     )
 
     data class CourseApiResponse(
@@ -95,6 +94,11 @@ class CourseSettingController(
         @JsonProperty("courseId") val courseId: Long,
         @JsonProperty("placeId") val placeId: Long,
         @JsonProperty("step") val step: Int,
+        @JsonProperty("placeCategory") val placeCategory: PlaceCategory,
+        @JsonProperty("courseStage") val courseStage: CourseStage,
+        @JsonProperty("placeName") val placeName: String,
+        @JsonProperty("address") val address: String,
+        @JsonProperty("roadAddress") val roadAddress: String,
     )
 
     companion object : Logger()
