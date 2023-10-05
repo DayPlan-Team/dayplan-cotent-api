@@ -64,6 +64,9 @@ subprojects {
 
         implementation("com.h2database:h2")
 
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2")
+
         implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         testImplementation("io.kotest:kotest-runner-junit5:5.4.2")
         testImplementation("io.kotest:kotest-assertions-core:5.4.2")

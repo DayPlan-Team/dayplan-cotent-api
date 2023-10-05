@@ -9,7 +9,7 @@ import retrofit2.adapter.java8.Java8CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-@Profile("default | local | dev")
+@Profile("!prod")
 @Configuration
 class ApiClientDevConfig {
 
@@ -17,7 +17,6 @@ class ApiClientDevConfig {
         .connectTimeout(10, TimeUnit.SECONDS)    // 연결 타임아웃
         .readTimeout(30, TimeUnit.SECONDS)       // 데이터 읽기 타임아웃
         .build()
-
 
     @Bean
     fun applyUserClient(): UserClient {
@@ -27,6 +26,16 @@ class ApiClientDevConfig {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(UserClient::class.java)
+    }
+
+    @Bean
+    fun applyPlaceClient(): PlaceClient {
+        return Retrofit.Builder()
+            .baseUrl(USER_SERVER_DEV_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(PlaceClient::class.java)
     }
 
     companion object {
