@@ -21,8 +21,8 @@ import org.hibernate.annotations.DynamicUpdate
 @Table(
     name = "course",
     indexes = [
-        Index(name = "idx_groupId", columnList = "groupId"),
-        Index(name = "idx_userId", columnList = "userId"),
+        Index(name = "idx_course_groupId", columnList = "groupId"),
+        Index(name = "idx_course_userId", columnList = "userId"),
     ]
 )
 data class CourseEntity(

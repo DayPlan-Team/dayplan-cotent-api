@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface CourseEntityRepository : JpaRepository<CourseEntity, Long> {
 
-    fun findCourseEntitiesByGroupIdAndUserId(groupId: Long, userId: Long): List<CourseEntity>
+    fun findCourseEntitiesByGroupId(groupId: Long): List<CourseEntity>
 
     fun findCourseEntitiesByUserIdAndVisitedStatus(userId: Long, visitedStatus: Boolean): List<CourseEntity>
 }

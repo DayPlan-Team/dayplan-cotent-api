@@ -50,6 +50,14 @@ object AddressUtil {
         )
     }
 
+    fun getCityCode(cityCode: Long): CityCode {
+        return cityByCityCode[cityCode]!!
+    }
+
+    fun getDistrictCode(districtCode: Long): DistrictCode {
+        return districtByDistrictCode[districtCode]!!
+    }
+
     fun verifyAddressCodeAndGet(cityCodeNumber: Long, districtCodeNumber: Long): AddressCode {
         val cityCode = verifyCityCodeAndGet(cityCodeNumber)
         val districtCode = verifyDistrictCodeAndGet(districtCodeNumber)

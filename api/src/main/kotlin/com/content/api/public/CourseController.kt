@@ -51,9 +51,9 @@ class CourseController(
         @RequestParam("groupId") groupId: Long,
     ): ResponseEntity<CourseApiResponse> {
         val user = userQueryPort.verifyAndGetUser(userId)
+
         val courses = courseService.getDetailCoursesByGroup(
             groupId = groupId,
-            userId = user.userId,
         )
 
         log.info("placeResponseSize = ${courses.size}")
