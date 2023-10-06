@@ -2,6 +2,7 @@ package com.content.adapter.course.entity
 
 import com.content.adapter.share.BaseEntity
 import com.content.domain.course.CourseGroup
+import com.content.util.share.DateTimeCustomFormatter
 import com.user.util.address.CityCode
 import com.user.util.address.DistrictCode
 import jakarta.persistence.Column
@@ -56,9 +57,15 @@ data class CourseGroupEntity(
 
     companion object {
         fun fromCourseGroup(courseGroup: CourseGroup): CourseGroupEntity {
+
+            val groupName = when {
+                courseGroup.groupName.isBlank() -> "${CourseGroup.DEFAULT_NAME}_${DateTimeCustomFormatter.nowToDefaultFormat()}"
+                else -> courseGroup.groupName
+            }
+
             return CourseGroupEntity(
                 userId = courseGroup.userId,
-                groupName = courseGroup.groupName,
+                groupName = groupName,
                 cityCode = courseGroup.cityCode,
                 districtCode = courseGroup.districtCode,
                 id = courseGroup.groupId,

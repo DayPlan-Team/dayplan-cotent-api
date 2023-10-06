@@ -6,6 +6,7 @@ import com.content.application.response.CourseGroupSearchResponse
 import com.content.application.service.CourseGroupSearchService
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
+import com.content.util.share.Logger
 import com.user.util.address.AddressUtil
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,7 +22,7 @@ class CourseGroupSearchController(
     private val courseGroupSearchService: CourseGroupSearchService,
 ) {
 
-    @GetMapping
+    @GetMapping("/district")
     fun getCourseGroups(
         @RequestHeader("UserId") userId: Long,
         @RequestParam("cityCode") cityCode: Long,
@@ -37,7 +38,7 @@ class CourseGroupSearchController(
 
         verifyQuery(start)
 
-        val sliceResponse = courseGroupSearchService.searchCourseGroupsBy(
+        val courseGroupSearchResponse = courseGroupSearchService.searchCourseGroupsBy(
             CourseGroupAdministrativeSearchRequest(
                 cityCode = address.cityCode,
                 districtCode = address.districtCode,
@@ -45,14 +46,17 @@ class CourseGroupSearchController(
             )
         )
 
-        return ResponseEntity.ok(sliceResponse)
-    }
+        log.info("courseGroupSearchResponse = ${courseGroupSearchResponse}")
 
+        return ResponseEntity.ok(courseGroupSearchResponse)
+    }
 
     private fun verifyQuery(start: Int) {
         require(start >= 0) { throw ContentException(ContentExceptionCode.COURSE_SEARCH_BAD_REQUEST) }
         require(start <= 999) { throw ContentException(ContentExceptionCode.COURSE_SEARCH_BAD_REQUEST) }
     }
+
+    companion object : Logger()
 
 
 }
