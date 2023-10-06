@@ -2,9 +2,8 @@ package com.content.application.response
 
 import com.content.domain.share.PlaceCategory
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.time.LocalDateTime
 
-data class CourseGroupSearchResponse(
+data class CourseGroupListSearchResponse(
     @JsonProperty("hasNext") val hasNext: Boolean,
     @JsonProperty("courseGroupItems") val courseGroupItems: List<CourseGroupItem>,
 )

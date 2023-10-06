@@ -3,10 +3,12 @@ package com.content.adapter.course
 import com.content.adapter.course.persistence.CourseEntityRepository
 import com.content.adapter.course.persistence.CourseGroupEntityRepository
 import com.content.application.port.CourseGroupSearchPort
+import com.content.application.port.UserQueryPort
 import com.content.application.request.CourseGroupAdministrativeSearchRequest
 import com.content.application.response.CourseGroupItem
-import com.content.application.response.CourseGroupSearchResponse
+import com.content.application.response.CourseGroupListSearchResponse
 import com.content.application.response.CourseStepItem
+import com.content.domain.course.CourseGroup
 import com.content.domain.share.PlaceCategory
 import com.content.util.share.DateTimeCustomFormatter
 import com.content.util.share.Logger
@@ -18,7 +20,7 @@ class CourseGroupSearchAdapter(
     private val courseGroupEntityRepository: CourseGroupEntityRepository,
     private val courseEntityRepository: CourseEntityRepository,
 ) : CourseGroupSearchPort {
-    override fun findCourseGroupBy(request: CourseGroupAdministrativeSearchRequest): CourseGroupSearchResponse {
+    override fun findCourseGroupBy(request: CourseGroupAdministrativeSearchRequest): CourseGroupListSearchResponse {
 
         log.info("request = ${request}")
 
@@ -39,7 +41,7 @@ class CourseGroupSearchAdapter(
         }.groupBy { it.groupId }
 
 
-        return CourseGroupSearchResponse(hasNext = sliceCourseGroupEntity.hasNext(),
+        return CourseGroupListSearchResponse(hasNext = sliceCourseGroupEntity.hasNext(),
             courseGroupItems = sliceCourseGroupEntity.content.map {
                 CourseGroupItem(
                     title = it.groupName,
@@ -60,6 +62,13 @@ class CourseGroupSearchAdapter(
             }
 
         )
+    }
+
+    override fun findCourseGroupByGroupIds(courseGroupIds: List<Long>): List<CourseGroup> {
+        return courseGroupEntityRepository.findCourseGroupEntitiesByIdIn(courseGroupIds)
+            .map {
+                it.toCourseGroup()
+            }
     }
 
     data class CourseToData(

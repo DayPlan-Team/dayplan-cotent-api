@@ -13,6 +13,8 @@ interface CourseGroupEntityRepository : JpaRepository<CourseGroupEntity, Long> {
 
     fun findCourseGroupEntitiesByUserId(userId: Long): List<CourseGroupEntity>
 
+    fun findCourseGroupEntitiesByIdIn(ids: List<Long>): List<CourseGroupEntity>
+
     fun findCourseGroupEntitiesByCityCodeAndDistrictCode(
         cityCode: CityCode,
         districtCode: DistrictCode,

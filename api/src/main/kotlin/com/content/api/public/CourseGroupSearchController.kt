@@ -2,7 +2,8 @@ package com.content.api.public
 
 import com.content.application.port.UserQueryPort
 import com.content.application.request.CourseGroupAdministrativeSearchRequest
-import com.content.application.response.CourseGroupSearchResponse
+import com.content.application.response.CourseGroupListSearchResponse
+import com.content.application.response.CourseGroupWithUserNicknameResponse
 import com.content.application.service.CourseGroupSearchService
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
@@ -28,7 +29,7 @@ class CourseGroupSearchController(
         @RequestParam("cityCode") cityCode: Long,
         @RequestParam("districtCode") districtCode: Long,
         @RequestParam("start") start: Int,
-    ): ResponseEntity<CourseGroupSearchResponse> {
+    ): ResponseEntity<CourseGroupListSearchResponse> {
         userQueryPort.verifyAndGetUser(userId)
 
         val address = AddressUtil.verifyAddressCodeAndGet(
@@ -38,7 +39,7 @@ class CourseGroupSearchController(
 
         verifyQuery(start)
 
-        val courseGroupSearchResponse = courseGroupSearchService.searchCourseGroupsBy(
+        val courseGroupSearchResponse = courseGroupSearchService.searchCourseGroupsWithCourseBy(
             CourseGroupAdministrativeSearchRequest(
                 cityCode = address.cityCode,
                 districtCode = address.districtCode,
@@ -46,10 +47,32 @@ class CourseGroupSearchController(
             )
         )
 
-        log.info("courseGroupSearchResponse = ${courseGroupSearchResponse}")
+        return ResponseEntity.ok(courseGroupSearchResponse)
+    }
+
+    @GetMapping("/nickname")
+    fun getCourseGroups(
+        @RequestHeader("UserId") userId: Long,
+        @RequestParam("courseGroupIds") courseGroupIds: List<Long>,
+    ): ResponseEntity<List<CourseGroupWithUserNicknameResponse>> {
+        userQueryPort.verifyAndGetUser(userId)
+
+        val courseGroupSearchResponse = courseGroupSearchService.searchCourseGroupWithNickNameBy(courseGroupIds)
+
+        log.info("courseGroupSearchResponse = $courseGroupSearchResponse")
 
         return ResponseEntity.ok(courseGroupSearchResponse)
     }
+
+//    @GetMapping
+//    fun getCourseGroup(
+//        @RequestHeader("UserId") userId: Long,
+//        @RequestParam("groupId") groupId: Long,
+//    ): ResponseEntity<CourseGroupItem> {
+//        userQueryPort.verifyAndGetUser(userId)
+//
+//
+//    }
 
     private fun verifyQuery(start: Int) {
         require(start >= 0) { throw ContentException(ContentExceptionCode.COURSE_SEARCH_BAD_REQUEST) }
