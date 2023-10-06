@@ -1,6 +1,8 @@
 package com.content.application.response
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class CourseGroupWithUserNicknameResponse(
-    val courseGroupId: Long,
-    val userNickName: String,
+    @JsonProperty("courseGroupId") val courseGroupId: Long,
+    @JsonProperty("userNickName") val userNickName: String,
 )
