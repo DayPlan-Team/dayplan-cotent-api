@@ -7,7 +7,7 @@ import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 
 @Service
-class CourseSearchingService(
+class CourseSearchService(
     private val courseSearchPort: CourseSearchPort,
 ) {
     fun searchCourses(courseSearchRequest: CourseSearchRequest): Slice<DetailCourse> {

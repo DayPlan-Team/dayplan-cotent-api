@@ -1,6 +1,6 @@
 package com.content.api.public
 
-import com.content.application.service.CourseSearchingService
+import com.content.application.service.CourseSearchService
 import com.content.application.port.UserQueryPort
 import com.content.application.request.CourseSearchRequest
 import com.content.application.response.DetailCourse
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(("/content/course/search"))
-class CourseSearchingController(
+class CourseSearchController(
     private val userQueryPort: UserQueryPort,
-    private val courseSearchingService: CourseSearchingService,
+    private val courseSearchService: CourseSearchService,
 ) {
 
     @GetMapping
@@ -30,7 +30,7 @@ class CourseSearchingController(
         validatePage(pageable.pageNumber.toLong())
 
         userQueryPort.verifyAndGetUser(userId)
-        val sliceData = courseSearchingService.searchCourses(
+        val sliceData = courseSearchService.searchCourses(
             CourseSearchRequest(
                 addressCategory = addressCategory,
                 pageable = pageable,
