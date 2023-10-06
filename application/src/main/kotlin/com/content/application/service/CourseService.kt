@@ -7,6 +7,8 @@ import com.content.application.request.CourseUpsertRequest
 import com.content.application.response.DetailCourse
 import com.content.domain.course.Course
 import com.content.domain.course.CourseStage
+import com.content.util.exception.ContentException
+import com.content.util.exceptioncode.ContentExceptionCode
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -51,7 +53,7 @@ class CourseService(
                 courseStage = CourseStage.PLACE_FINISH,
             )
         } else {
-            throw IllegalArgumentException()
+            throw ContentException(ContentExceptionCode.CONTENT_COURSE_BAD_REQUEST)
         }
 
         courseCommandPort.upsertCourse(course)
