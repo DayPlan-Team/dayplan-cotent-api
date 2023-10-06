@@ -57,16 +57,16 @@ class CourseService(
         courseCommandPort.upsertCourse(course)
     }
 
-    fun getCoursesByGroup(userId: Long, groupId: Long): List<Course> {
+    fun getCoursesByGroup(groupId: Long): List<Course> {
         return courseQueryPort
-            .getCoursesByGroupIdAndUserId(groupId = groupId, userId = userId)
+            .getCoursesByGroupId(groupId = groupId)
             .sortedBy { it.step }
     }
 
-    fun getDetailCoursesByGroup(userId: Long, groupId: Long): List<DetailCourse> {
+    fun getDetailCoursesByGroup(groupId: Long): List<DetailCourse> {
 
         val courses = courseQueryPort
-            .getCoursesByGroupIdAndUserId(groupId = groupId, userId = userId)
+            .getCoursesByGroupId(groupId = groupId)
             .sortedBy { it.step }
 
         val courseIds = courses.map { it.placeId }

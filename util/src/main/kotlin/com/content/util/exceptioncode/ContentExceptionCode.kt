@@ -12,5 +12,6 @@ enum class ContentExceptionCode(
     BAD_REQUEST_DISTRICT_CODE(400, "COTR-005", "올바르지 않은 시/군/구에요"),
 
     CONTENT_GROUP_EMPTY(400, "COTR-006", "코스를 추가해주세요."),
+    COURSE_SEARCH_BAD_REQUEST(400, "COTR-007", "올바르지 않은 요청이에요."),
 }
 
