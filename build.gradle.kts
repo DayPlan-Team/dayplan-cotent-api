@@ -21,7 +21,7 @@ dependencies {
 }
 
 tasks.bootJar {
-    mainClass = "com.content.ApiApplication"
+    mainClass = "com.content.api.ApiApplicationKt"
 }
 
 

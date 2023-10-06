@@ -1,16 +1,25 @@
 package com.content.application.response
 
+import com.content.domain.share.PlaceCategory
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 
 data class CourseGroupSearchResponse(
-    val hasNext: Boolean,
-    val courseGroupItems: List<CourseGroupItem>,
+    @JsonProperty("hasNext") val hasNext: Boolean,
+    @JsonProperty("courseGroupItems") val courseGroupItems: List<CourseGroupItem>,
 )
 
 data class CourseGroupItem(
-    val title: String,
-    val groupId: Long,
-    val cityName: String,
-    val districtName: String,
-    val modifiedAt: LocalDateTime,
+    @JsonProperty("title") val title: String,
+    @JsonProperty("groupId") val groupId: Long,
+    @JsonProperty("cityName") val cityName: String,
+    @JsonProperty("districtName") val districtName: String,
+    @JsonProperty("courseCategories") val courseCategories: List<CourseStepItem>,
+    @JsonProperty("modifiedAt") val modifiedAt: String,
+)
+
+data class CourseStepItem(
+    @JsonProperty("step") val step: Int,
+    @JsonProperty("courseId") val courseId: Long,
+    @JsonProperty("category") val category: PlaceCategory,
 )

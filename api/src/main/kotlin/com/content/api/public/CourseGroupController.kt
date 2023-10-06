@@ -39,7 +39,7 @@ class CourseGroupController(
             CourseGroup(
                 groupId = courseGroupRequest.groupId ?: 0L,
                 groupName = courseGroupRequest.groupName
-                    ?: (CourseGroup.DEFAULT_NAME + "_" + DateTimeCustomFormatter.toDefaultFormat()),
+                    ?: (CourseGroup.DEFAULT_NAME + "_" + DateTimeCustomFormatter.nowToDefaultFormat()),
                 userId = user.userId,
                 cityCode = address.cityCode,
                 districtCode = address.districtCode,

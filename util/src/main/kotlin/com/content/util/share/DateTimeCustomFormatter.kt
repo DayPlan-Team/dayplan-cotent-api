@@ -6,8 +6,15 @@ import java.time.format.DateTimeFormatter
 object DateTimeCustomFormatter {
 
     private val defaultFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    private val dateMinuteFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
 
-    fun toDefaultFormat(): String {
+    fun nowToDefaultFormat(): String {
         return LocalDateTime.now().format(defaultFormatter)
     }
+
+    fun timeToDateMinuteFormat(localDateTime: LocalDateTime): String {
+        return localDateTime.format(dateMinuteFormatter)
+    }
+
+
 }
