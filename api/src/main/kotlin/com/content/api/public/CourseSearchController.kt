@@ -4,6 +4,8 @@ import com.content.application.service.CourseSearchService
 import com.content.application.port.UserQueryPort
 import com.content.application.request.CourseSearchRequest
 import com.content.application.response.DetailCourse
+import com.content.util.exception.ContentException
+import com.content.util.exceptioncode.ContentExceptionCode
 import com.content.util.share.AddressCategory
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
@@ -41,6 +43,6 @@ class CourseSearchController(
     }
 
     private fun validatePage(page: Long) {
-        require(page >= 0) { throw IllegalArgumentException() }
+        require(page >= 0) { throw ContentException(ContentExceptionCode.COURSE_SEARCH_BAD_REQUEST) }
     }
 }
