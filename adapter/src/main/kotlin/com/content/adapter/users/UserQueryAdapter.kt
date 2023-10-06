@@ -23,10 +23,36 @@ class UserQueryAdapter(
                 response.body()?.let {
                     return User(
                         userId = it.userId,
+                        nickName = it.nickName,
                     )
                 }
             }
             throw ContentException(ContentExceptionCode.USER_INVALID)
+        } catch (e: IOException) {
+            log.error(e.message)
+            throw SystemException(SystemExceptionCode.USER_SERVER_REST_EXCEPTION)
+        }
+    }
+
+    override fun findUsersByUserIds(userIds: List<Long>): List<User> {
+        try {
+            val call = userClient.getUserResponses(userIds)
+
+            val response = call.execute()
+            log.info("response = ${response}")
+            if (response.isSuccessful) {
+                val result = response.body()?.users.let {
+                    it?.map { user ->
+                        User(
+                            userId = user.userId,
+                            nickName = user.nickName,
+                        )
+                    }
+
+                }
+                return result ?: emptyList()
+            }
+            return emptyList()
         } catch (e: IOException) {
             log.error(e.message)
             throw SystemException(SystemExceptionCode.USER_SERVER_REST_EXCEPTION)
