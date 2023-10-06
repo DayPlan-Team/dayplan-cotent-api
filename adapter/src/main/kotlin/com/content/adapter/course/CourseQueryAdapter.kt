@@ -10,8 +10,8 @@ class CourseQueryAdapter(
     private val courseEntityRepository: CourseEntityRepository,
 ) : CourseQueryPort {
 
-    override fun getCoursesByGroupIdAndUserId(groupId: Long, userId: Long): List<Course> {
-        return courseEntityRepository.findCourseEntitiesByGroupIdAndUserId(groupId, userId)
+    override fun getCoursesByGroupId(groupId: Long): List<Course> {
+        return courseEntityRepository.findCourseEntitiesByGroupId(groupId)
             .map {
                 it.toCourse()
             }
