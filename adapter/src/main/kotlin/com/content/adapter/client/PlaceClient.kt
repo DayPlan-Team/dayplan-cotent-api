@@ -10,6 +10,7 @@ import retrofit2.http.Query
 @Component
 interface PlaceClient {
 
+
     @Headers(ApiClientUtil.CONTENT_TYPE_APPLICATION_JSON)
     @GET("/user/internal/place")
     fun getPlaceResponse(
