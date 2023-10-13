@@ -19,7 +19,7 @@
 
 - > #### DateCourse 조회 과정을 설명해요
 
-- > #### [Place 정보 gRPC 및 Retorit을 비교 후 Grpc-Retrofit 함께 처리하는 과정을 설명해요](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/PlaceRrpcVsRetrofit.md)
+- > #### [Place 정보 gRPC 및 Retorit을 비교 후 gRPC-Retrofit 함께 처리하는 과정을 설명해요](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/PlaceRrpcVsRetrofit.md)
   
 ## 5. 미비된 점
 - 리뷰 작성 기능 개발 중이에요!

@@ -1,4 +1,4 @@
-# Place 정보 gRPC 및 Retorit을 비교 후 Grpc-Retrofit 함께 처리하기
+# Place 정보 gRPC 및 Retorit을 비교 후 gRPC-Retrofit 함께 처리하기
 
 <br/>
 
