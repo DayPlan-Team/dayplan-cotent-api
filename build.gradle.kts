@@ -1,6 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.google.protobuf.gradle.*
 
 plugins {
+    id("com.google.protobuf") version "0.9.4"
     id("org.springframework.boot") version "3.1.3"
     id("io.spring.dependency-management") version "1.1.3"
     kotlin("jvm") version "1.8.22"
@@ -13,6 +15,13 @@ java {
 }
 
 dependencies {
+
+    /* GRPC */
+    implementation("io.grpc:grpc-kotlin-stub:1.3.0")
+    implementation("com.google.protobuf:protobuf-java:3.24.3")
+    implementation("io.grpc:grpc-netty-shaded:1.58.0")
+    implementation("io.grpc:grpc-protobuf:1.58.0")
+
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
@@ -86,4 +95,38 @@ dependencies {
     implementation(project(":application"))
     implementation(project(":adapter"))
     implementation(project(":api"))
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.24.3"
+    }
+    plugins {
+        id("grpc") {
+            artifact = "io.grpc:protoc-gen-grpc-java:1.58.0"
+        }
+        id("grpckt") {
+            artifact = "io.grpc:protoc-gen-grpc-kotlin:1.4.0:jdk8@jar"
+        }
+    }
+    generateProtoTasks {
+        ofSourceSet("main").forEach {
+            it.plugins {
+                add(GenerateProtoTask.PluginOptions("grpc"))
+                add(GenerateProtoTask.PluginOptions("grpckt"))
+            }
+        }
+    }
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir("content/adapter/src/main/proto")
+        }
+        java {
+            srcDirs("content/adapter/build/generated/source/proto/main/grpc")
+            srcDirs("content/adapter/build/generated/source/proto/main/java")
+        }
+    }
 }

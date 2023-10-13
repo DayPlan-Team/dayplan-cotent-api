@@ -2,29 +2,38 @@ package com.content.adapter.place
 
 import com.content.adapter.client.PlaceClient
 import com.content.adapter.client.PlaceItem
+import com.content.adapter.grpc.PlaceGrpcClient
 import com.content.application.port.PlacePort
 import com.content.domain.place.Place
+import com.content.domain.share.PlaceCategory
 import com.content.util.share.Logger
 import org.springframework.stereotype.Component
 
 @Component
 class PlaceAdapter(
     private val placeClient: PlaceClient,
+    private val placeGrpcClient: PlaceGrpcClient,
 ) : PlacePort {
     override fun getPlaceByPlaceId(placeIds: List<Long>): List<Place> {
         try {
+
             if (placeIds.isEmpty()) return emptyList()
 
-            val call = placeClient.getPlaceResponse(placeIds = placeIds)
+            return placeGrpcClient.getPlaceResponse(placeIds)
+                .map {
+                    Place(
+                        placeName = it.placeName,
+                        placeCategory = PlaceCategory.valueOf(it.placeCategory.name),
+                        latitude = it.latitude,
+                        longitude = it.longitude,
+                        address = it.address,
+                        roadAddress = it.roadAddress,
+                        placeId = it.placeId,
+                    )
+                }
 
-            val response = call.execute()
-            if (response.isSuccessful && response.body() != null) {
-                val placeItems = response.body()!!.places
-
-                return getPlaceItem(placeItems)
-            }
         } catch (e: Exception) {
-            log.error(e.message)
+            log.error("[PlaceAdapter Grpc Exception]", e)
         }
         return emptyList()
     }
@@ -40,7 +49,7 @@ class PlaceAdapter(
                 return getPlaceItem(placeItems)
             }
         } catch (e: Exception) {
-            log.error(e.message)
+            log.error("[PlaceAdapter Retrofit Exception]", e)
         }
         return emptyList()
     }
