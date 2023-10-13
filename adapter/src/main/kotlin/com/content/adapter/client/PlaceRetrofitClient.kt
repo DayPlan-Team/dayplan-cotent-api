@@ -8,7 +8,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Query
 
 @Component
-interface PlaceClient {
+interface PlaceRetrofitClient {
 
 
     @Headers(ApiClientUtil.CONTENT_TYPE_APPLICATION_JSON)

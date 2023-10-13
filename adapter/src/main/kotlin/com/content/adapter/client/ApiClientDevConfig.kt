@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import retrofit2.Retrofit
-import retrofit2.adapter.java8.Java8CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -29,13 +28,13 @@ class ApiClientDevConfig {
     }
 
     @Bean
-    fun applyPlaceClient(): PlaceClient {
+    fun applyPlaceClient(): PlaceRetrofitClient {
         return Retrofit.Builder()
             .baseUrl(USER_SERVER_DEV_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(PlaceClient::class.java)
+            .create(PlaceRetrofitClient::class.java)
     }
 
     companion object {
