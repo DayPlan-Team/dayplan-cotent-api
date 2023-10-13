@@ -6,18 +6,21 @@
   ### DateCurse 작성
     - 데이트 코스는 한명의 유저가 다수의 데이트 코스를 짤 수 있어요 (데이트 코스 그룹)
     - 데이트 코스는 지역 기반(노원구, 중랑구, 강남구 ..)으로 짤 수 있도록 구성하였어요.
-    - 데이트 코스는 Place(장소), Category(가게의 종류), Step(순서) 등을 포함하는 정보로 구성되요.
+    - 데이트 코스는 Place(장소), Category(가게의 종류), Step(순서) 등을 포함하는 정보로 구성돼요.
 
   ### DateCourse 조회
 
 ## 2. 도메인 구조
 
 ## 3. DB 구조
+![courseTable.png](readme%2Fimage%2FcourseTable.png)
 
 ## 4. 각 기능별 구현
 - > #### [DateCourse 작성 과정을 설명해요]()
 
 - > #### DateCourse 조회 과정을 설명해요
+
+- > #### [유저가 방문한 코스를 검증하는 과정을 설명해요]()
 
 - > #### [Place 정보 gRPC 및 Retorit을 비교 후 gRPC-Retrofit 함께 처리하는 과정을 설명해요](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/PlaceRrpcVsRetrofit.md)
   
