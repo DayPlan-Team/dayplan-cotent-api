@@ -2,8 +2,9 @@ package com.content.domain.course
 
 object LocationRectangleRangeCreator {
 
-    private const val LATITUDE_ERROR = 0.0045
-    private const val LONGITUDE_ERROR = 0.0056
+    /* 위도와 경도 약 500m 오차 */
+    const val LATITUDE_ERROR = 0.0045
+    const val LONGITUDE_ERROR = 0.0055
 
     fun getLatitudeRange(latitude: Double): LocationStayRange {
         return LocationStayRange(
