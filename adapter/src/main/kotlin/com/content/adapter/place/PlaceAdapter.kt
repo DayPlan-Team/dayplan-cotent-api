@@ -1,6 +1,6 @@
 package com.content.adapter.place
 
-import com.content.adapter.client.PlaceClient
+import com.content.adapter.client.PlaceRetrofitClient
 import com.content.adapter.client.PlaceItem
 import com.content.adapter.grpc.PlaceGrpcClient
 import com.content.application.port.PlacePort
@@ -11,15 +11,17 @@ import org.springframework.stereotype.Component
 
 @Component
 class PlaceAdapter(
-    private val placeClient: PlaceClient,
+    private val placeRetrofitClient: PlaceRetrofitClient,
     private val placeGrpcClient: PlaceGrpcClient,
 ) : PlacePort {
     override fun getPlaceByPlaceId(placeIds: List<Long>): List<Place> {
-        try {
+        if (placeIds.isEmpty()) return emptyList()
+        return tryGrpcPlaces(placeIds) ?: tryRetrofitPlaces(placeIds) ?: emptyList()
+    }
 
-            if (placeIds.isEmpty()) return emptyList()
-
-            return placeGrpcClient.getPlaceResponse(placeIds)
+    private fun tryGrpcPlaces(placeIds: List<Long>): List<Place>? {
+        return try {
+            placeGrpcClient.getPlaceResponse(placeIds)
                 .map {
                     Place(
                         placeName = it.placeName,
@@ -31,18 +33,30 @@ class PlaceAdapter(
                         placeId = it.placeId,
                     )
                 }
-
         } catch (e: Exception) {
             log.error("[PlaceAdapter Grpc Exception]", e)
+            null
         }
-        return emptyList()
+    }
+
+    private fun tryRetrofitPlaces(placeIds: List<Long>): List<Place>? {
+        return try {
+            val call = placeRetrofitClient.getPlaceResponse(placeIds = placeIds)
+            val response = call.execute()
+            if (response.isSuccessful && response.body() != null) {
+                getPlaceItem(response.body()!!.places)
+            } else null
+        } catch (e: Exception) {
+            log.error("[PlaceAdapter Retrofit Exception]", e)
+            null
+        }
     }
 
     override suspend fun getSuspendPlaceByPlaceId(placeIds: List<Long>): List<Place> {
         try {
             if (placeIds.isEmpty()) return emptyList()
 
-            val response = placeClient.getSuspendPlaceResponse(placeIds = placeIds)
+            val response = placeRetrofitClient.getSuspendPlaceResponse(placeIds = placeIds)
             if (response.isSuccessful && response.body() != null) {
                 val placeItems = response.body()!!.places
 

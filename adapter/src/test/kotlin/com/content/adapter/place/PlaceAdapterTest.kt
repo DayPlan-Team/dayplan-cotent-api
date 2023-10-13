@@ -1,6 +1,6 @@
 package com.content.adapter.place
 
-import com.content.adapter.client.PlaceClient
+import com.content.adapter.client.PlaceRetrofitClient
 import com.content.adapter.grpc.PlaceGrpcClient
 import io.kotest.core.annotation.Ignored
 import io.kotest.core.spec.style.BehaviorSpec
@@ -12,7 +12,7 @@ import java.util.concurrent.Executors
 @Ignored
 @SpringBootTest
 class PlaceAdapterTest(
-    @Autowired private val placeClient: PlaceClient,
+    @Autowired private val placeRetrofitClient: PlaceRetrofitClient,
     @Autowired private val placeGrpcClient: PlaceGrpcClient,
 ) : BehaviorSpec({
 
@@ -24,7 +24,7 @@ class PlaceAdapterTest(
 
             /* Warm-up */
             repeat(10) {
-                val call = placeClient.getPlaceResponse(placeIds = placeIds)
+                val call = placeRetrofitClient.getPlaceResponse(placeIds = placeIds)
 
                 val response = call.execute()
                 if (response.isSuccessful && response.body() != null) {
@@ -34,7 +34,7 @@ class PlaceAdapterTest(
 
             val startTime = System.currentTimeMillis()
             repeat(100) {
-                val call = placeClient.getPlaceResponse(placeIds = placeIds)
+                val call = placeRetrofitClient.getPlaceResponse(placeIds = placeIds)
 
                 val response = call.execute()
                 if (response.isSuccessful && response.body() != null) {
@@ -75,7 +75,7 @@ class PlaceAdapterTest(
 
             /* Warm-up */
             repeat(10) {
-                val call = placeClient.getPlaceResponse(placeIds = placeIds)
+                val call = placeRetrofitClient.getPlaceResponse(placeIds = placeIds)
 
                 val response = call.execute()
                 if (response.isSuccessful && response.body() != null) {
@@ -87,7 +87,7 @@ class PlaceAdapterTest(
             repeat(100) {
                 executorService.submit {
                     try {
-                        val call = placeClient.getPlaceResponse(placeIds = placeIds)
+                        val call = placeRetrofitClient.getPlaceResponse(placeIds = placeIds)
                         val response = call.execute()
                         if (response.isSuccessful && response.body() != null) {
                             response.body()!!.places
