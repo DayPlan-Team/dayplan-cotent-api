@@ -6,6 +6,9 @@ jwt:
   refresh-expiration-time: 2592000
   secret-key: ${JWT_SECRET_KEY}
 
+grpc:
+  server:
+    port: 50052
 
 naver:
   develop-client-id: fZDbnomZT2TEeFgejPuJ

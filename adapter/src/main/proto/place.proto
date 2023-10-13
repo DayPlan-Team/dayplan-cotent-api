@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package place;
+
+service PlaceService {
+  rpc GetPlace(GetPlaceRequest) returns (PlaceResponse) {};
+}
+
+message GetPlaceRequest {
+  repeated int64 placeIds = 1;
+}
+
+message PlaceResponse {
+  repeated PlaceItem places = 1;
+}
+
+message PlaceItem {
+  string placeName = 1;
+  PlaceCategory placeCategory = 2;
+  double latitude = 3;
+  double longitude = 4;
+  string address = 5;
+  string roadAddress = 6;
+  int64 placeId = 7;
+}
+
+enum PlaceCategory {
+  CATEGORY_UNKNOWN = 0;
+  CAFE = 1;
+  MOVIE_THEATER = 2;
+  RESTAURANT = 3;
+  FITNESS = 4;
+  ACTIVITY = 5;
+  PARK = 6;
+  MUSEUM = 7;
+  EXHIBITION = 8;
+  SHOPPING_MALL = 9;
+  CONCERT_HALL = 10;
+  ZOO = 11;
+  AQUARIUM = 12;
+  BOTANIC_GARDEN = 13;
+  LIBRARY = 14;
+  THEATER = 15;
+  ETC = 16;
+}
