@@ -20,7 +20,7 @@
 
 - > #### DateCourse 조회 과정을 설명해요
 
-- > #### [유저가 방문한 코스를 검증하는 과정을 설명해요]()
+- > #### ["접점 및 거점 테스트"로 유저가 방문한 코스 검증하기를 설명해요](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/CourseVisited.md)
 
 - > #### [Place 정보 gRPC 및 Retorit을 비교 후 gRPC-Retrofit 함께 처리하는 과정을 설명해요](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/PlaceRrpcVsRetrofit.md)
   
