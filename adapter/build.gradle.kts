@@ -8,7 +8,6 @@ bootJar.enabled = false
 jar.enabled = true
 
 plugins {
-    kotlin("plugin.jpa") version "1.8.22"
     id("com.google.protobuf") version "0.9.4"
 }
 
