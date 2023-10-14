@@ -37,25 +37,8 @@ object AddressUtil {
         .filter { it != CityCode.DEFAULT }
 
 
-    fun transformToAddress(cityName: String, districtName: String): AddressCode {
-        val cityCode = citiesByKoreanName[cityName]?.get(0) ?: return AddressCode()
-        val districtCode = districtsByKoreanName[districtName]?.get(0) ?: return AddressCode(
-            cityCode = cityCode,
-            districtCode = DistrictCode.DEFAULT,
-        )
-
-        return AddressCode(
-            cityCode = cityCode,
-            districtCode = districtCode,
-        )
-    }
-
-    fun getCityCode(cityCode: Long): CityCode {
-        return cityByCityCode[cityCode]!!
-    }
-
-    fun getDistrictCode(districtCode: Long): DistrictCode {
-        return districtByDistrictCode[districtCode]!!
+    fun getDistrictByCityCode(cityCode: Long): List<DistrictCode> {
+        return districtsByCityCode[cityCode] ?: throw ContentException(ContentExceptionCode.BAD_REQUEST_CITY_CODE)
     }
 
     fun verifyAddressCodeAndGet(cityCodeNumber: Long, districtCodeNumber: Long): AddressCode {
