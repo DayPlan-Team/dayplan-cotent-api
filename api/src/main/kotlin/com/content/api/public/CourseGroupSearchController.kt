@@ -64,16 +64,6 @@ class CourseGroupSearchController(
         return ResponseEntity.ok(courseGroupSearchResponse)
     }
 
-//    @GetMapping
-//    fun getCourseGroup(
-//        @RequestHeader("UserId") userId: Long,
-//        @RequestParam("groupId") groupId: Long,
-//    ): ResponseEntity<CourseGroupItem> {
-//        userQueryPort.verifyAndGetUser(userId)
-//
-//
-//    }
-
     private fun verifyQuery(start: Int) {
         require(start >= 0) { throw ContentException(ContentExceptionCode.COURSE_SEARCH_BAD_REQUEST) }
         require(start <= 999) { throw ContentException(ContentExceptionCode.COURSE_SEARCH_BAD_REQUEST) }
