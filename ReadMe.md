@@ -16,7 +16,7 @@
 ![courseTable.png](readme%2Fimage%2FcourseTable.png)
 
 ## 4. 각 기능별 구현
-- > #### [DateCourse 작성 과정을 설명해요]()
+- > #### [지역 및 카테고리 기반 데이트 코스 짜기를 설명해요](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/DateCourseSetting.md)
 
 - > #### DateCourse 조회 과정을 설명해요
 
