@@ -5,11 +5,15 @@
 - 데이플랜 프로젝트의 주요 기능인 데이트 코스 짜는 기능을 구성해요.
 - 데이트 코스는 위치 선택과 데이트 활동 카테고리 선택, 장소 선택으로 이뤄져요.
 
+<br/>
+
 ## 2. 기능 구현
 - 데이트 코스는 지역 기반으로 3단계 행정체계를 이용하며 도/특별시/광역시 -> 시/군/구 단위까지 선택해요.
 - 데이트 활동 카테고리는 카페, 영화관, 도서관 등으로 이뤄지는 장소의 특성 카테고리를 의미해요.
 - 장소 선택은 앞 서 선택한 지역과 카테고리를 바탕으로 리스트가 주어지면 유저가 희망하는 곳을 선택할 수 있어야 해요.
 - 장소를 클릭하면 해당 장소를 실제 지도에 위치하는 장소를 시각적으로 보여주는 기능이 필요했어요.
+
+<br/>
 
 ## 3. 지역 선택하기
 - 지역을 선택하기 위한 용어를 정리해요.
@@ -128,6 +132,7 @@ enum class CityCode(
 - 지역 선택을 마치면 카테고리를 선택해야해요.
 - 카테고리는 안드로이드와 서버가 동일하게 ENUM을 사용하고 있는데, 추후 서버에서 내려주는 방식을 적용할 예정이에요.
 
+<br/>
 
 ## 6. 코스 생성 - 개별 코스 저장하기
 - 코스는 step이라는 개념이 존재해요. step은 방문하는 코스의 단계를 나타내요.
@@ -202,7 +207,7 @@ enum class CityCode(
 ```
 <br/>
 
-## 7. [테스트](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/application/src/test/kotlin/com/content/application/service/CourseServiceTest.kt)
+## [7. 테스트](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/application/src/test/kotlin/com/content/application/service/CourseServiceTest.kt)
 - 접점과 거점으로 when절에 대한 단위 테스트를 진행해요.
 - 테스트 대상인 CourseService을 제외하고 mock 객체를 생성해요
 
