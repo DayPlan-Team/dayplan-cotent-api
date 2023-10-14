@@ -67,6 +67,8 @@ subprojects {
     }
 
     dependencies {
+        implementation("org.jetbrains.kotlin:kotlin-maven-allopen:1.9.0")
+        implementation("org.jetbrains.kotlin:kotlin-maven-noarg:1.9.0")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         testImplementation("org.springframework.boot:spring-boot-starter-test")

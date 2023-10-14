@@ -23,7 +23,7 @@ class CourseService(
     fun upsertCourse(request: CourseUpsertRequest) {
 
         val course = when {
-            request.courseId == 0L -> createCurseStageStart(request)
+            request.courseId == 0L && request.placeId == 0L -> createCurseStageStart(request)
             request.courseId != 0L && request.placeId == 0L -> createCourseCategoryFinish(request)
             request.courseId != 0L -> createCoursePlaceFinish(request)
             else -> throw ContentException(ContentExceptionCode.CONTENT_COURSE_BAD_REQUEST)
@@ -61,6 +61,7 @@ class CourseService(
     private fun verifyCourseByUser(courseId: Long, userId: Long) {
         require(courseQueryPort.getCourseById(courseId).userId == userId) { throw ContentException(ContentExceptionCode.USER_INVALID) }
     }
+
     private fun createCoursePlaceFinish(request: CourseUpsertRequest): Course {
         verifyCourseByUser(request.courseId, request.userId)
         verifyPlaceId(request.groupId)
