@@ -3,7 +3,6 @@ package com.content.adapter.course.entity
 import com.content.adapter.share.BaseEntity
 import com.content.domain.course.Course
 import com.content.domain.course.CourseStage
-import com.content.domain.location.Location
 import com.content.domain.share.PlaceCategory
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -54,7 +53,7 @@ data class CourseEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 ) : BaseEntity() {
-    fun toCourse(): Course {
+    fun toDomainModel(): Course {
         return Course(
             courseId = id,
             groupId = groupId,

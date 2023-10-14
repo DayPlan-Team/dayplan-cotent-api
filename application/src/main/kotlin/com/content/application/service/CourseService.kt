@@ -22,47 +22,64 @@ class CourseService(
     @Transactional
     fun upsertCourse(request: CourseUpsertRequest) {
 
-        val course = if (request.courseId == 0L && request.placeId == 0L) {
-            Course(
-                userId = request.userId,
-                courseId = 0L,
-                groupId = request.groupId,
-                step = request.step,
-                placeCategory = request.placeCategory,
-                placeId = 0L,
-                courseStage = CourseStage.START,
-            )
-        } else if (request.courseId != 0L && request.placeId == 0L) {
-            Course(
-                userId = request.userId,
-                courseId = 0L,
-                groupId = request.groupId,
-                step = request.step,
-                placeCategory = request.placeCategory,
-                placeId = request.placeId,
-                courseStage = CourseStage.CATEGORY_FINISH,
-            )
-        } else if (request.courseId != 0L) {
-            Course(
-                userId = request.userId,
-                courseId = request.courseId,
-                groupId = request.groupId,
-                step = request.step,
-                placeCategory = request.placeCategory,
-                placeId = request.placeId,
-                courseStage = CourseStage.PLACE_FINISH,
-            )
-        } else {
-            throw ContentException(ContentExceptionCode.CONTENT_COURSE_BAD_REQUEST)
+        val course = when {
+            request.courseId == 0L -> createCurseStageStart(request)
+            request.courseId != 0L && request.placeId == 0L -> createCourseCategoryFinish(request)
+            request.courseId != 0L -> createCoursePlaceFinish(request)
+            else -> throw ContentException(ContentExceptionCode.CONTENT_COURSE_BAD_REQUEST)
         }
 
         courseCommandPort.upsertCourse(course)
     }
 
-    fun getCoursesByGroup(groupId: Long): List<Course> {
-        return courseQueryPort
-            .getCoursesByGroupId(groupId = groupId)
-            .sortedBy { it.step }
+    private fun createCurseStageStart(request: CourseUpsertRequest): Course {
+        return Course(
+            userId = request.userId,
+            courseId = 0L,
+            groupId = request.groupId,
+            step = request.step,
+            placeCategory = request.placeCategory,
+            placeId = 0L,
+            courseStage = CourseStage.START,
+        )
+    }
+
+    private fun createCourseCategoryFinish(request: CourseUpsertRequest): Course {
+        verifyCourseByUser(request.courseId, request.userId)
+
+        return Course(
+            userId = request.userId,
+            courseId = 0L,
+            groupId = request.groupId,
+            step = request.step,
+            placeCategory = request.placeCategory,
+            placeId = request.placeId,
+            courseStage = CourseStage.CATEGORY_FINISH,
+        )
+    }
+
+    private fun verifyCourseByUser(courseId: Long, userId: Long) {
+        require(courseQueryPort.getCourseById(courseId).userId == userId) { throw ContentException(ContentExceptionCode.USER_INVALID) }
+    }
+    private fun createCoursePlaceFinish(request: CourseUpsertRequest): Course {
+        verifyCourseByUser(request.courseId, request.userId)
+        verifyPlaceId(request.groupId)
+
+        return Course(
+            userId = request.userId,
+            courseId = request.courseId,
+            groupId = request.groupId,
+            step = request.step,
+            placeCategory = request.placeCategory,
+            placeId = request.placeId,
+            courseStage = CourseStage.PLACE_FINISH,
+        )
+    }
+
+    private fun verifyPlaceId(placeId: Long) {
+        require(
+            placePort.getPlaceByPlaceId(listOf(placeId)).isNotEmpty()
+        ) { throw ContentException(ContentExceptionCode.CONTENT_COURSE_BAD_REQUEST) }
     }
 
     fun getDetailCoursesByGroup(groupId: Long): List<DetailCourse> {
