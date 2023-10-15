@@ -8,6 +8,7 @@ bootJar.enabled = false
 jar.enabled = true
 
 plugins {
+    kotlin("plugin.noarg") version "1.8.21"
     id("com.google.protobuf") version "0.9.4"
 }
 
@@ -20,6 +21,8 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+    implementation("org.jetbrains.kotlin:kotlin-noarg:1.8.21")
 
     /* RabbitMq */
     implementation("org.springframework.boot:spring-boot-starter-amqp")
@@ -77,4 +80,14 @@ sourceSets {
             srcDirs("content/adapter/build/generated/source/proto/main/java")
         }
     }
+}
+
+noArg {
+    invokeInitializers = true
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
 }

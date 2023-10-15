@@ -42,7 +42,7 @@ allprojects {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs += "-Xjsr305=strict"
-            jvmTarget = "17"
+            jvmTarget = JavaVersion.VERSION_17.toString()
         }
     }
 
@@ -64,11 +64,10 @@ subprojects {
         apply(plugin = "org.jetbrains.kotlin.plugin.spring")
         apply(plugin = "kotlin")
         apply(plugin = "kotlin-kapt")
+        apply(plugin = "org.jetbrains.kotlin.plugin.allopen")
     }
 
     dependencies {
-        implementation("org.jetbrains.kotlin:kotlin-maven-allopen:1.9.0")
-        implementation("org.jetbrains.kotlin:kotlin-maven-noarg:1.9.0")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
