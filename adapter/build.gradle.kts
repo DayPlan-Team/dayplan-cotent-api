@@ -24,8 +24,8 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-noarg:1.8.21")
 
-    /* RabbitMq */
-    implementation("org.springframework.boot:spring-boot-starter-amqp")
+    /* RedissonClient */
+    implementation("org.redisson:redisson-spring-boot-starter:3.17.7")
 
     /* MySQL */
     runtimeOnly("com.mysql:mysql-connector-j")
