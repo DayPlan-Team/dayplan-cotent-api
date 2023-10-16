@@ -1,4 +1,4 @@
-package com.content.api.public
+package com.content.api.publics
 
 import com.content.application.service.CourseGroupService
 import com.content.application.service.UserVerifyService

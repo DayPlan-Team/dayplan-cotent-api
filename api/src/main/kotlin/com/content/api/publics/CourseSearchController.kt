@@ -1,4 +1,4 @@
-package com.content.api.public
+package com.content.api.publics
 
 import com.content.application.request.CourseSearchRequest
 import com.content.application.response.DetailCourse
