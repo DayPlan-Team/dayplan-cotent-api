@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import java.util.concurrent.TimeUnit
 
-@Profile("default | local")
+@Profile("default | local | test")
 @Configuration
 class GrpcLocalConfig {
 
