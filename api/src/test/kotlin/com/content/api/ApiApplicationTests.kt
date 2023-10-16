@@ -2,8 +2,10 @@ package com.content.api
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest(classes = [ApiTestConfiguration::class])
+@ActiveProfiles("test")
+@SpringBootTest
 class ApiApplicationTests {
 
     @Test

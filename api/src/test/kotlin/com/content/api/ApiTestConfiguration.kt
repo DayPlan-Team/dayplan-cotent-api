@@ -1,8 +1,0 @@
-package com.content.api
-
-import org.springframework.boot.SpringBootConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-
-@SpringBootConfiguration
-@SpringBootApplication
-class ApiTestConfiguration
