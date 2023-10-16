@@ -49,7 +49,7 @@
 <br/>
 
 ## 3. DB 구조
-![courseTable.png](readme%2Fimage%2FcourseTable.png)
+![img.png](readme/image/Erd.png)
 
 <br/>
 
