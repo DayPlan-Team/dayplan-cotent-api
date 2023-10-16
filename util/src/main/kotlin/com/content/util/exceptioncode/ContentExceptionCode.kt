@@ -19,5 +19,6 @@ enum class ContentExceptionCode(
     ALREADY_REVIEW_COURSE_GROUP(400, "COTR-010", "이미 처리 중인 요청이에요."),
     NOT_FOUND_REVIEW_GROUP(400, "COTR-011", "올바르지 않은 요청이에요."),
     DEFAULT_BAD_REQUEST(400, "COTR-012", "올바르지 않은 요청이에요"),
+    NOT_FOUND_REVIEW(400, "COTR-013", "리뷰를 찾을 수 없어요"),
 }
 
