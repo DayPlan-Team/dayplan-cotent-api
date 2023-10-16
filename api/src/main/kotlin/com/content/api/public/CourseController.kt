@@ -1,8 +1,8 @@
 package com.content.api.public
 
-import com.content.application.port.UserQueryPort
 import com.content.application.request.CourseUpsertRequest
 import com.content.application.service.CourseService
+import com.content.application.service.UserVerifyService
 import com.content.domain.course.CourseStage
 import com.content.domain.share.PlaceCategory
 import com.content.util.share.Logger
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/content/course")
 class CourseController(
-    private val userQueryPort: UserQueryPort,
+    private val userVerifyService: UserVerifyService,
     private val courseService: CourseService,
 ) {
 
@@ -29,7 +29,7 @@ class CourseController(
         @RequestBody request: CourseUpsertApiRequest,
     ): ResponseEntity<Unit> {
 
-        val user = userQueryPort.verifyAndGetUser(userId)
+        val user = userVerifyService.verifyNormalUserAndGet(userId)
 
         courseService.upsertCourse(
             CourseUpsertRequest(
@@ -50,7 +50,7 @@ class CourseController(
         @RequestHeader("UserId") userId: Long,
         @RequestParam("groupId") groupId: Long,
     ): ResponseEntity<CourseApiResponse> {
-        val user = userQueryPort.verifyAndGetUser(userId)
+        val user = userVerifyService.verifyNormalUserAndGet(userId)
 
         val courses = courseService.getDetailCoursesByGroup(
             groupId = groupId,

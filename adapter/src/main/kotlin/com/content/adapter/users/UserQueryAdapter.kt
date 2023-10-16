@@ -15,7 +15,7 @@ import java.io.IOException
 class UserQueryAdapter(
     private val userClient: UserClient,
 ) : UserQueryPort {
-    override fun verifyAndGetUser(userId: Long): User {
+    override fun findUserByUserId(userId: Long): User {
         try {
             val call = userClient.getUserResponse(userId)
             val response = call.execute()
@@ -23,6 +23,7 @@ class UserQueryAdapter(
                 response.body()?.let {
                     return User(
                         userId = it.userId,
+                        userAccountStatus = it.userAccountStatus,
                         nickName = it.nickName,
                     )
                 }
@@ -45,6 +46,7 @@ class UserQueryAdapter(
                     it?.map { user ->
                         User(
                             userId = user.userId,
+                            userAccountStatus = user.userAccountStatus,
                             nickName = user.nickName,
                         )
                     }

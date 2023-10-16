@@ -1,10 +1,10 @@
 package com.content.api.public
 
-import com.content.application.port.UserQueryPort
 import com.content.application.request.CourseGroupAdministrativeSearchRequest
 import com.content.application.response.CourseGroupListSearchResponse
 import com.content.application.response.CourseGroupWithUserNicknameResponse
 import com.content.application.service.CourseGroupSearchService
+import com.content.application.service.UserVerifyService
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
 import com.content.util.share.Logger
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/content/coursegroup/search")
 class CourseGroupSearchController(
-    private val userQueryPort: UserQueryPort,
+    private val userVerifyService: UserVerifyService,
     private val courseGroupSearchService: CourseGroupSearchService,
 ) {
 
@@ -30,7 +30,7 @@ class CourseGroupSearchController(
         @RequestParam("districtCode") districtCode: Long,
         @RequestParam("start") start: Int,
     ): ResponseEntity<CourseGroupListSearchResponse> {
-        userQueryPort.verifyAndGetUser(userId)
+        userVerifyService.verifyNormalUserAndGet(userId)
 
         val address = AddressUtil.verifyAddressCodeAndGet(
             cityCodeNumber = cityCode,
@@ -55,7 +55,7 @@ class CourseGroupSearchController(
         @RequestHeader("UserId") userId: Long,
         @RequestParam("courseGroupIds") courseGroupIds: List<Long>,
     ): ResponseEntity<List<CourseGroupWithUserNicknameResponse>> {
-        userQueryPort.verifyAndGetUser(userId)
+        userVerifyService.verifyNormalUserAndGet(userId)
 
         val courseGroupSearchResponse = courseGroupSearchService.searchCourseGroupWithNickNameBy(courseGroupIds)
 

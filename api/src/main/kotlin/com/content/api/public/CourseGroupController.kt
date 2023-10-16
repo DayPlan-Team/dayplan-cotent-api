@@ -1,7 +1,7 @@
 package com.content.api.public
 
-import com.content.application.port.UserQueryPort
 import com.content.application.service.CourseGroupService
+import com.content.application.service.UserVerifyService
 import com.content.domain.course.CourseGroup
 import com.content.util.share.DateTimeCustomFormatter
 import com.content.util.share.Logger
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/content/coursegroup")
 class CourseGroupController(
-    private val userQueryPort: UserQueryPort,
+    private val userVerifyService: UserVerifyService,
     private val courseGroupService: CourseGroupService,
 ) {
 
@@ -28,7 +28,7 @@ class CourseGroupController(
         @RequestHeader("UserId") userId: Long,
         @RequestBody courseGroupRequest: CourseGroupApiRequest,
     ): ResponseEntity<CourseGroupApiResponse> {
-        val user = userQueryPort.verifyAndGetUser(userId)
+        val user = userVerifyService.verifyNormalUserAndGet(userId)
 
         val address = AddressUtil.verifyAddressCodeAndGet(
             cityCodeNumber = courseGroupRequest.cityCode,
@@ -63,7 +63,7 @@ class CourseGroupController(
         @RequestHeader("UserId") userId: Long,
         @PathVariable("courseGroup") courseGroupId: Long,
     ): ResponseEntity<CourseGroupApiResponse> {
-        val user = userQueryPort.verifyAndGetUser(userId)
+        val user = userVerifyService.verifyNormalUserAndGet(userId)
         val response = courseGroupService.getCourseGroup(
             userId = user.userId,
             groupId = courseGroupId,
@@ -85,7 +85,7 @@ class CourseGroupController(
     fun getCourseGroups(
         @RequestHeader("UserId") userId: Long,
     ): ResponseEntity<CourseGroupsApiResponse> {
-        val user = userQueryPort.verifyAndGetUser(userId)
+        val user = userVerifyService.verifyNormalUserAndGet(userId)
         val courseGroups = courseGroupService.getCourseGroups(user.userId)
             .map {
                 CourseGroupApiResponse(

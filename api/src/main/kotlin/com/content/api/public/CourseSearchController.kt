@@ -1,9 +1,9 @@
 package com.content.api.public
 
-import com.content.application.service.CourseSearchService
-import com.content.application.port.UserQueryPort
 import com.content.application.request.CourseSearchRequest
 import com.content.application.response.DetailCourse
+import com.content.application.service.CourseSearchService
+import com.content.application.service.UserVerifyService
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
 import com.content.util.share.AddressCategory
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping(("/content/course/search"))
 class CourseSearchController(
-    private val userQueryPort: UserQueryPort,
+    private val userVerifyService: UserVerifyService,
     private val courseSearchService: CourseSearchService,
 ) {
 
@@ -31,7 +31,7 @@ class CourseSearchController(
     ): ResponseEntity<Slice<DetailCourse>> {
         validatePage(pageable.pageNumber.toLong())
 
-        userQueryPort.verifyAndGetUser(userId)
+        userVerifyService.verifyNormalUserAndGet(userId)
         val sliceData = courseSearchService.searchCourses(
             CourseSearchRequest(
                 addressCategory = addressCategory,

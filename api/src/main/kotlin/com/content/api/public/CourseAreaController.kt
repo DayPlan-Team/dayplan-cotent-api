@@ -1,6 +1,6 @@
 package com.content.api.public
 
-import com.content.application.port.UserQueryPort
+import com.content.application.service.UserVerifyService
 import com.content.util.share.Logger
 import com.user.util.address.AddressUtil
 import org.springframework.http.ResponseEntity
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/content/area")
 class CourseAreaController(
-    private val userQueryPort: UserQueryPort,
+    private val userVerifyService: UserVerifyService,
 ) {
 
     @GetMapping("/city")
@@ -21,7 +21,7 @@ class CourseAreaController(
         @RequestHeader("UserId") userId: Long,
     ): ResponseEntity<LocationOuterResponse<List<LocationResponse>>> {
 
-        userQueryPort.verifyAndGetUser(userId)
+        userVerifyService.verifyNormalUserAndGet(userId)
 
         return ResponseEntity.ok(
             LocationOuterResponse(
@@ -41,7 +41,7 @@ class CourseAreaController(
         @PathVariable("cityCode") cityCode: Long,
     ): ResponseEntity<LocationOuterResponse<List<LocationResponse>>> {
 
-        userQueryPort.verifyAndGetUser(userId)
+        userVerifyService.verifyNormalUserAndGet(userId)
 
         return ResponseEntity.ok(
             LocationOuterResponse(
