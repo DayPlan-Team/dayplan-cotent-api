@@ -15,6 +15,6 @@ class CourseGroupCommandAdapter(
     override fun upsertCourseGroup(courseGroup: CourseGroup): CourseGroup {
         return courseGroupEntityRepository.save(
             CourseGroupEntity.fromCourseGroup(courseGroup)
-        ).toCourseGroup()
+        ).toDomainModel()
     }
 }

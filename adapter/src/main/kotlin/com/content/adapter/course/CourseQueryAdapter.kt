@@ -29,4 +29,9 @@ class CourseQueryAdapter(
                 it.toDomainModel()
             }
     }
+
+    override fun getCourseByUserId(userId: Long): List<Course> {
+        return courseEntityRepository.findCourseEntitiesByUserId(userId)
+            .map { it.toDomainModel() }
+    }
 }

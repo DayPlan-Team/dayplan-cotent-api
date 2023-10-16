@@ -70,7 +70,7 @@ class CourseGroupSearchAdapter(
     override fun findCourseGroupByGroupIds(courseGroupIds: List<Long>): List<CourseGroup> {
         return courseGroupEntityRepository.findCourseGroupEntitiesByIdIn(courseGroupIds)
             .map {
-                it.toCourseGroup()
+                it.toDomainModel()
             }
     }
 

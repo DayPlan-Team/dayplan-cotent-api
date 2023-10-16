@@ -16,7 +16,7 @@ class CourseGroupQueryAdapter(
             .orElseThrow { throw ContentException(ContentExceptionCode.CONTENT_GROUP_INVALID) }
 
         if (courseGroupEntity.userId == userId) {
-            return courseGroupEntity.toCourseGroup()
+            return courseGroupEntity.toDomainModel()
         }
         throw ContentException(ContentExceptionCode.CONTENT_GROUP_USER_ID_NOT_MATCH)
     }
@@ -25,7 +25,12 @@ class CourseGroupQueryAdapter(
         return courseGroupEntityRepository.findCourseGroupEntitiesByUserId(userId)
             .sortedBy { it.modifiedAt }
             .map {
-                it.toCourseGroup()
+                it.toDomainModel()
             }
+    }
+
+    override fun getCourseGroupByIds(courseGroupIds: List<Long>): List<CourseGroup> {
+        return courseGroupEntityRepository.findCourseGroupEntitiesByIdIn(courseGroupIds)
+            .map { it.toDomainModel() }
     }
 }
