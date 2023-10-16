@@ -5,7 +5,10 @@ import com.content.application.port.ReviewGroupQueryPort
 import com.content.application.port.ReviewQueryPort
 import com.content.domain.course.Course
 import com.content.domain.review.CourseWithPossibleReview
+import com.content.domain.review.PossibleReviewVerifier
 import com.content.domain.review.Review
+import com.content.domain.review.ReviewGroup
+import com.content.domain.review.ReviewOwnerVerifier
 import com.content.domain.review.ReviewWriteUseCase
 import org.springframework.stereotype.Service
 
@@ -17,16 +20,32 @@ class ReviewWriteService(
 ) : ReviewWriteUseCase {
 
     override fun getAllPossibleReviewToWrite(userId: Long, reviewGroupId: Long): List<CourseWithPossibleReview> {
-        val reviewGroup = reviewGroupQueryPort.getReviewGroupById(reviewGroupId = reviewGroupId)
-        ReviewOwnerVerifier.verifyReviewOwner(userId = userId, reviewGroupUserId = reviewGroup.userId)
+        val reviewGroup = getReviewGroupAndVerify(
+            userId = userId,
+            reviewGroupId = reviewGroupId,
+        )
 
-        val courses = courseQueryPort.getCoursesByGroupId(reviewGroup.courseGroupId)
-            .sortedBy { it.step }
+        val courses = getCoursesByCourseGroupIdAndVerify(reviewGroup.courseGroupId)
 
         val reviewMap = reviewQueryPort.getReviewsByCourseIds(courses.map { it.courseId })
             .associateBy { it.courseId }
 
         return mapToCourseWithPossibleReview(courses = courses, reviewMap = reviewMap)
+    }
+
+    private fun getReviewGroupAndVerify(userId: Long, reviewGroupId: Long): ReviewGroup {
+        val reviewGroup = reviewGroupQueryPort.getReviewGroupById(reviewGroupId = reviewGroupId)
+        ReviewOwnerVerifier.verifyReviewOwner(userId = userId, reviewGroupUserId = reviewGroup.userId)
+
+        return reviewGroup
+    }
+
+    private fun getCoursesByCourseGroupIdAndVerify(courseGroupId: Long): List<Course> {
+        val courses = courseQueryPort.getCoursesByGroupId(courseGroupId)
+            .sortedBy { it.step }
+        PossibleReviewVerifier.verifyPossibleReviewCourses(courses)
+
+        return courses
     }
 
     private fun mapToCourseWithPossibleReview(

@@ -3,7 +3,8 @@ package com.content.application.service
 import com.content.application.port.CourseGroupQueryPort
 import com.content.application.port.CourseQueryPort
 import com.content.domain.course.CourseGroup
-import com.content.domain.review.PossibleReviewCourseGroupFinder
+import com.content.domain.review.PossibleReviewFinder
+import com.content.domain.review.PossibleReviewVerifier
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,11 +15,11 @@ class PossibleReviewCourseFindService(
 
     fun getPossibleReviewCourseGroup(userId: Long): List<CourseGroup> {
         val courseGroupIds =
-            PossibleReviewCourseGroupFinder.processPossibleReviewCourseGroup(courseQueryPort.getCourseByUserId(userId))
+            PossibleReviewFinder.processPossibleReviewCourseGroup(courseQueryPort.getCourseByUserId(userId))
         return courseGroupQueryPort.getCourseGroupByIds(courseGroupIds)
     }
 
     fun verifyPossibleReviewCourseGroup(courseGroup: CourseGroup) {
-        PossibleReviewCourseGroupFinder.verifyPossibleReviewCourseGroup(courseQueryPort.getCoursesByGroupId(courseGroup.groupId))
+        PossibleReviewVerifier.verifyPossibleReviewCourses(courseQueryPort.getCoursesByGroupId(courseGroup.groupId))
     }
 }
