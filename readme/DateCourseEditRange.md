@@ -7,4 +7,4 @@
   - 신뢰할 수 없는 리뷰가 작성될 수 있어요
 
 ## 2. 데이트 코스와 리뷰의 흐름
-![img.png](image/datecourse-review-range.png)
+![datecourse-review-range.png](image%2Fdatecourse-review-range.png)
