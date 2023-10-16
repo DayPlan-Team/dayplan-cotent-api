@@ -1,4 +1,5 @@
 package com.content.util.exceptioncode
+
 enum class ContentExceptionCode(
     val status: Int,
     val errorCode: String,
@@ -16,5 +17,6 @@ enum class ContentExceptionCode(
     CONTENT_COURSE_BAD_REQUEST(400, "COTR-008", "올바르지 않은 요청이에요."),
     NOT_POSSIBLE_REVIEW_COURSE_GROUP(400, "COTR-009", "올바르지 않은 요청이에요."),
     ALREADY_REVIEW_COURSE_GROUP(400, "COTR-010", "이미 처리 중인 요청이에요."),
+    NOT_FOUND_REVIEW_GROUP(400, "COTR-011", "올바르지 않은 요청이에요."),
 }
 

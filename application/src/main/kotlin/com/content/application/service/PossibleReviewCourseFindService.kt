@@ -13,7 +13,12 @@ class PossibleReviewCourseFindService(
 ) {
 
     fun getPossibleReviewCourseGroup(userId: Long): List<CourseGroup> {
-        val courseGroupIds = PossibleReviewCourseGroupFinder.processPossibleReviewCourseGroup(courseQueryPort.getCourseByUserId(userId))
+        val courseGroupIds =
+            PossibleReviewCourseGroupFinder.processPossibleReviewCourseGroup(courseQueryPort.getCourseByUserId(userId))
         return courseGroupQueryPort.getCourseGroupByIds(courseGroupIds)
+    }
+
+    fun verifyPossibleReviewCourseGroup(courseGroup: CourseGroup) {
+        PossibleReviewCourseGroupFinder.verifyPossibleReviewCourseGroup(courseQueryPort.getCoursesByGroupId(courseGroup.groupId))
     }
 }
