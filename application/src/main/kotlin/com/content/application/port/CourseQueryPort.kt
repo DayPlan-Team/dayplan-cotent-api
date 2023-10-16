@@ -10,4 +10,6 @@ interface CourseQueryPort {
     fun getCoursesByGroupId(groupId: Long): List<Course>
 
     fun getCursesByUserIdAndVisitedStatus(userId: Long, visitedStatus: Boolean): List<Course>
+
+    fun getCourseByUserId(userId: Long): List<Course>
 }

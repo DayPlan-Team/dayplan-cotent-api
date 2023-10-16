@@ -45,7 +45,7 @@ data class CourseGroupEntity(
     val id: Long = 0L,
 ) : BaseEntity() {
 
-    fun toCourseGroup(): CourseGroup {
+    fun toDomainModel(): CourseGroup {
         return CourseGroup(
             groupId = id,
             userId = userId,

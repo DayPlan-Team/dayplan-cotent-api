@@ -12,4 +12,6 @@ interface CourseEntityRepository : JpaRepository<CourseEntity, Long> {
     fun findCoursesEntitiesByGroupIdIn(groupIds: List<Long>): List<CourseEntity>
 
     fun findCourseEntitiesByUserIdAndVisitedStatus(userId: Long, visitedStatus: Boolean): List<CourseEntity>
+
+    fun findCourseEntitiesByUserId(userId: Long): List<CourseEntity>
 }
