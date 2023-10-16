@@ -1,4 +1,4 @@
-package com.content.api.public
+package com.content.api.publics
 
 import com.content.application.request.CourseUpsertRequest
 import com.content.application.service.CourseService
@@ -50,7 +50,7 @@ class CourseController(
         @RequestHeader("UserId") userId: Long,
         @RequestParam("groupId") groupId: Long,
     ): ResponseEntity<CourseApiResponse> {
-        val user = userVerifyService.verifyNormalUserAndGet(userId)
+        userVerifyService.verifyNormalUserAndGet(userId)
 
         val courses = courseService.getDetailCoursesByGroup(
             groupId = groupId,
