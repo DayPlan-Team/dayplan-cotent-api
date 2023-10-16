@@ -1,0 +1,17 @@
+### 1. 리뷰 그룹 생성 요청
+
+POST {{baseUrl}}/reviewgroups
+Content-Type: application/json
+Accept: */*
+Connection: keep-alive
+UserId: 1
+
+{
+  "courseGroup12Id": 12345
+}
+
+> {%
+    client.test("잘못된 요청", function() {
+        client.assert(response.status === 400);
+    });
+%}
