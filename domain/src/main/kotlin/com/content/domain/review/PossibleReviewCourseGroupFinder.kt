@@ -1,6 +1,7 @@
 package com.content.domain.review
 
 import com.content.domain.course.Course
+import com.content.domain.course.CourseStage
 import org.springframework.stereotype.Component
 
 @Component
@@ -9,7 +10,7 @@ object PossibleReviewCourseGroupFinder {
         val courseGroupMap = courses.groupBy { it.groupId }
 
         return courseGroupMap.entries
-            .filter { entry -> entry.value.none { it.visitedStatus } }
+            .filter { entry -> entry.value.all { it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH } }
             .mapNotNull { entry ->
                 entry.value.takeIf { it.isNotEmpty() }?.let {
                     entry.key
