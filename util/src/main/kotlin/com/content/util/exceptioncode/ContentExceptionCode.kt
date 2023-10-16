@@ -14,5 +14,7 @@ enum class ContentExceptionCode(
     CONTENT_GROUP_EMPTY(400, "COTR-006", "코스를 추가해주세요."),
     COURSE_SEARCH_BAD_REQUEST(400, "COTR-007", "올바르지 않은 요청이에요."),
     CONTENT_COURSE_BAD_REQUEST(400, "COTR-008", "올바르지 않은 요청이에요."),
+    NOT_POSSIBLE_REVIEW_COURSE_GROUP(400, "COTR-009", "올바르지 않은 요청이에요."),
+    ALREADY_REVIEW_COURSE_GROUP(400, "COTR-010", "이미 처리 중인 요청이에요."),
 }
 
