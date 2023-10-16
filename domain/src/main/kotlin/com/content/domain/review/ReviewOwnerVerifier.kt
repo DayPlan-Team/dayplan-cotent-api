@@ -1,4 +1,4 @@
-package com.content.application.service
+package com.content.domain.review
 
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode

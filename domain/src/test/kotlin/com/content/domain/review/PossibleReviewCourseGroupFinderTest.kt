@@ -96,7 +96,7 @@ class PossibleReviewCourseGroupFinderTest : BehaviorSpec({
         )
 
         `when`("리뷰 가능한 코스를 확인하면") {
-            val result = PossibleReviewCourseGroupFinder.processPossibleReviewCourseGroup(courses)
+            val result = PossibleReviewFinder.processPossibleReviewCourseGroup(courses)
 
             then("courseGroupId = 1L 만 리턴되어야 해요") {
                 result.size shouldBe 1
