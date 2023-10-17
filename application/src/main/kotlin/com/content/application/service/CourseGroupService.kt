@@ -1,7 +1,7 @@
 package com.content.application.service
 
-import com.content.application.port.CourseGroupCommandPort
-import com.content.application.port.CourseGroupQueryPort
+import com.content.domain.course.port.CourseGroupCommandPort
+import com.content.domain.course.port.CourseGroupQueryPort
 import com.content.domain.course.CourseGroup
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

@@ -25,6 +25,9 @@ data class ReviewEntity(
     @Column
     val reviewGroupId: Long,
 
+    @Column
+    val content: String,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
@@ -37,12 +40,22 @@ data class ReviewEntity(
             title = title,
             courseId = courseId,
             reviewId = id,
+            content = content,
             createdAt = createdAt,
             modifiedAt = modifiedAt,
         )
     }
 
     companion object {
-
+        fun from(review: Review): ReviewEntity {
+            return ReviewEntity(
+                reviewGroupId = review.reviewId,
+                userId = review.userId,
+                title = review.title,
+                courseId = review.courseId,
+                content = review.content,
+                id = review.reviewId,
+            )
+        }
     }
 }

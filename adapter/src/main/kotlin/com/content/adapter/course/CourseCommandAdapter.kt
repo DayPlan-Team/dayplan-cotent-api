@@ -2,7 +2,7 @@ package com.content.adapter.course
 
 import com.content.adapter.course.entity.CourseEntity
 import com.content.adapter.course.persistence.CourseEntityRepository
-import com.content.application.port.CourseCommandPort
+import com.content.domain.course.port.CourseCommandPort
 import com.content.domain.course.Course
 import com.content.util.share.Logger
 import org.springframework.stereotype.Component

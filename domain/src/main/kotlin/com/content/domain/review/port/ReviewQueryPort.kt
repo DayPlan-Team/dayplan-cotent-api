@@ -1,4 +1,4 @@
-package com.content.application.port
+package com.content.domain.review.port
 
 import com.content.domain.review.Review
 import org.springframework.stereotype.Component

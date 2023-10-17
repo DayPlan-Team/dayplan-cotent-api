@@ -1,7 +1,7 @@
 package com.content.application.service
 
-import com.content.application.port.CourseGroupQueryPort
-import com.content.application.port.CourseQueryPort
+import com.content.domain.course.port.CourseGroupQueryPort
+import com.content.domain.course.port.CourseQueryPort
 import com.content.domain.course.Course
 import com.content.domain.course.CourseGroup
 import com.content.domain.course.CourseStage

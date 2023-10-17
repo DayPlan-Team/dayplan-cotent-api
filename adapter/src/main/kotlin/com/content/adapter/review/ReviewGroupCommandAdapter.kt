@@ -2,7 +2,7 @@ package com.content.adapter.review
 
 import com.content.adapter.review.entity.ReviewGroupEntity
 import com.content.adapter.review.persistence.ReviewGroupEntityRepository
-import com.content.application.port.ReviewGroupCommandPort
+import com.content.domain.review.port.ReviewGroupCommandPort
 import com.content.domain.course.CourseGroup
 import com.content.domain.review.ReviewGroup
 import org.springframework.stereotype.Component

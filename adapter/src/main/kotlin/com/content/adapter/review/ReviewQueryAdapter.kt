@@ -1,7 +1,7 @@
 package com.content.adapter.review
 
 import com.content.adapter.review.persistence.ReviewEntityRepository
-import com.content.application.port.ReviewQueryPort
+import com.content.domain.review.port.ReviewQueryPort
 import com.content.domain.review.Review
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode

@@ -1,7 +1,7 @@
 package com.content.application.service
 
-import com.content.application.port.CourseCommandPort
-import com.content.application.port.CourseQueryPort
+import com.content.domain.course.port.CourseCommandPort
+import com.content.domain.course.port.CourseQueryPort
 import com.content.application.port.PlacePort
 import com.content.domain.course.Course
 import com.content.domain.course.LocationRectangleRangeCreator

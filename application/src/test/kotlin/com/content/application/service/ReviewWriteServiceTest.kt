@@ -1,13 +1,14 @@
 package com.content.application.service
 
-import com.content.application.port.CourseQueryPort
-import com.content.application.port.ReviewGroupQueryPort
-import com.content.application.port.ReviewQueryPort
+import com.content.domain.course.port.CourseQueryPort
+import com.content.domain.review.port.ReviewGroupQueryPort
+import com.content.domain.review.port.ReviewQueryPort
 import com.content.domain.course.Course
 import com.content.domain.course.CourseStage
 import com.content.domain.review.CourseWithPossibleReview
 import com.content.domain.review.Review
 import com.content.domain.review.ReviewGroup
+import com.content.domain.review.port.ReviewCommandPort
 import com.content.domain.share.PlaceCategory
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -19,12 +20,14 @@ class ReviewWriteServiceTest(
     private val reviewGroupQueryPort: ReviewGroupQueryPort = mockk(),
     private val reviewQueryPort: ReviewQueryPort = mockk(),
     private val courseQueryPort: CourseQueryPort = mockk(),
+    private val reviewCommandPort: ReviewCommandPort = mockk(),
 ) : BehaviorSpec({
 
     val sut = ReviewWriteService(
         reviewGroupQueryPort = reviewGroupQueryPort,
         reviewQueryPort = reviewQueryPort,
         courseQueryPort = courseQueryPort,
+        reviewCommandPort = reviewCommandPort,
     )
 
     val userId = 1L
@@ -90,6 +93,7 @@ class ReviewWriteServiceTest(
                 reviewGroupId = 1L,
                 courseId = 2L,
                 title = "ReviewA",
+                content = "contentA",
                 createdAt = LocalDateTime.now(),
                 modifiedAt = LocalDateTime.now(),
             )
@@ -115,6 +119,7 @@ class ReviewWriteServiceTest(
                 reviewGroupId = 1L,
                 courseId = 1L,
                 title = "ReviewA",
+                content = "contentB",
                 createdAt = LocalDateTime.now(),
                 modifiedAt = LocalDateTime.now(),
             )
@@ -125,6 +130,7 @@ class ReviewWriteServiceTest(
                 reviewGroupId = 1L,
                 courseId = 2L,
                 title = "ReviewB",
+                content = "contentB",
                 createdAt = LocalDateTime.now(),
                 modifiedAt = LocalDateTime.now(),
             )

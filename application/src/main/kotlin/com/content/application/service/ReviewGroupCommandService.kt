@@ -1,7 +1,7 @@
 package com.content.application.service
 
-import com.content.application.port.ReviewGroupCommandPort
-import com.content.application.port.ReviewGroupQueryPort
+import com.content.domain.review.port.ReviewGroupCommandPort
+import com.content.domain.review.port.ReviewGroupQueryPort
 import com.content.domain.course.CourseGroup
 import com.content.domain.review.ReviewGroup
 import com.content.domain.review.ReviewGroupCommandUseCase
