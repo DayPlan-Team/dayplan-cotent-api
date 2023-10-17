@@ -2,16 +2,19 @@ package com.content.api.publics
 
 import com.content.application.service.UserVerifyService
 import com.content.domain.review.CourseWithPossibleReview
+import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewWriteUseCase
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/content/reviewgroups/{reviewGroupId}/reviews")
@@ -39,12 +42,11 @@ class ReviewWriteController(
         )
     }
 
-    @PostMapping("/{reviewId}")
+    @PostMapping
     fun writeReview(
         @RequestHeader("UserId") userId: Long,
         @PathVariable("reviewGroupId") reviewGroupId: Long,
-        @PathVariable("reviewId") reviewId: Long,
-        @RequestBody reviewWriteApiRequest: ReviewWriteApiRequest,
+        @ModelAttribute reviewWriteApiRequest: ReviewWriteApiRequest,
     ) {
         val user = userVerifyService.verifyNormalUserAndGet(userId)
 
@@ -76,6 +78,9 @@ class ReviewWriteController(
 
     data class ReviewWriteApiRequest(
         @JsonProperty("content") val content: String,
+        @JsonProperty("title") val title: String,
+        @JsonProperty("courseId") val courseId: Long,
+        val reviewImages: List<MultipartFile>
     )
 
 }
