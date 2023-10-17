@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -37,6 +39,17 @@ class ReviewWriteController(
         )
     }
 
+    @PostMapping("/{reviewId}")
+    fun writeReview(
+        @RequestHeader("UserId") userId: Long,
+        @PathVariable("reviewGroupId") reviewGroupId: Long,
+        @PathVariable("reviewId") reviewId: Long,
+        @RequestBody reviewWriteApiRequest: ReviewWriteApiRequest,
+    ) {
+        val user = userVerifyService.verifyNormalUserAndGet(userId)
+
+    }
+
     data class CourseWithPossibleApiReviews(
         @JsonProperty("courses") val courses: List<CourseWithPossibleApiReview>,
     )
@@ -60,5 +73,9 @@ class ReviewWriteController(
             }
         }
     }
+
+    data class ReviewWriteApiRequest(
+        @JsonProperty("content") val content: String,
+    )
 
 }
