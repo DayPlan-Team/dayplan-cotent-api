@@ -8,6 +8,7 @@ data class Review(
     val reviewGroupId: Long,
     val courseId: Long,
     val title: String,
+    val content: String,
     val createdAt: LocalDateTime,
     val modifiedAt: LocalDateTime,
 )

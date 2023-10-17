@@ -1,7 +1,7 @@
 package com.content.adapter.course
 
 import com.content.adapter.course.persistence.CourseEntityRepository
-import com.content.application.port.CourseQueryPort
+import com.content.domain.course.port.CourseQueryPort
 import com.content.domain.course.Course
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode

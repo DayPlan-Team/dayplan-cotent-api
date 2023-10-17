@@ -1,8 +1,9 @@
 package com.content.application.service
 
-import com.content.application.port.CourseQueryPort
-import com.content.application.port.ReviewGroupQueryPort
-import com.content.application.port.ReviewQueryPort
+import com.content.domain.course.port.CourseQueryPort
+import com.content.domain.review.port.ReviewCommandPort
+import com.content.domain.review.port.ReviewGroupQueryPort
+import com.content.domain.review.port.ReviewQueryPort
 import com.content.domain.course.Course
 import com.content.domain.review.CourseWithPossibleReview
 import com.content.domain.review.PossibleReviewVerifier
@@ -17,6 +18,7 @@ class ReviewWriteService(
     private val reviewGroupQueryPort: ReviewGroupQueryPort,
     private val reviewQueryPort: ReviewQueryPort,
     private val courseQueryPort: CourseQueryPort,
+    private val reviewCommandPort: ReviewCommandPort,
 ) : ReviewWriteUseCase {
 
     override fun getAllPossibleReviewToWrite(userId: Long, reviewGroupId: Long): List<CourseWithPossibleReview> {
@@ -25,7 +27,7 @@ class ReviewWriteService(
             reviewGroupId = reviewGroupId,
         )
 
-        val courses = getCoursesByCourseGroupIdAndVerify(reviewGroup.courseGroupId)
+        val courses = getCoursesAndVerifyPossibleReviewCourses(reviewGroup.courseGroupId)
 
         val reviewMap = reviewQueryPort.getReviewsByCourseIds(courses.map { it.courseId })
             .associateBy { it.courseId }
@@ -40,14 +42,13 @@ class ReviewWriteService(
         return reviewGroup
     }
 
-    private fun getCoursesByCourseGroupIdAndVerify(courseGroupId: Long): List<Course> {
+    private fun getCoursesAndVerifyPossibleReviewCourses(courseGroupId: Long): List<Course> {
         val courses = courseQueryPort.getCoursesByGroupId(courseGroupId)
             .sortedBy { it.step }
         PossibleReviewVerifier.verifyPossibleReviewCourses(courses)
 
         return courses
     }
-
     private fun mapToCourseWithPossibleReview(
         courses: List<Course>,
         reviewMap: Map<Long, Review>
@@ -58,4 +59,19 @@ class ReviewWriteService(
             } ?: CourseWithPossibleReview.of(course = course)
         }
     }
+
+    override fun writeReview(review: Review): Review {
+        val reviewGroup = getReviewGroupAndVerify(
+            userId = review.userId,
+            reviewGroupId = review.reviewGroupId,
+        )
+        verifyPossibleReviewCourse(reviewGroup.courseGroupId)
+
+        return reviewCommandPort.upsertReview(review)
+    }
+
+    private fun verifyPossibleReviewCourse(courseGroupId: Long) {
+        PossibleReviewVerifier.verifyPossibleReviewCourses(courseQueryPort.getCoursesByGroupId(courseGroupId))
+    }
+
 }

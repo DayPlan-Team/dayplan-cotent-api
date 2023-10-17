@@ -1,4 +1,4 @@
-package com.content.application.port
+package com.content.domain.course.port
 
 import com.content.domain.course.Course
 import org.springframework.stereotype.Component
