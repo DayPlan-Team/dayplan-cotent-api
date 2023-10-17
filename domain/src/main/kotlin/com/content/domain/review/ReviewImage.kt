@@ -1,5 +1,7 @@
 package com.content.domain.review
 
+import java.security.MessageDigest
+
 data class ReviewImage(
     val image: ByteArray,
 ) {
@@ -13,6 +15,14 @@ data class ReviewImage(
     }
 
     override fun hashCode(): Int {
-        return image.contentHashCode()
+        return sha256Digest.digest(image).contentHashCode()
+    }
+
+    companion object {
+        private const val SHA256 = "SHA-256"
+
+        val sha256Digest: MessageDigest by lazy {
+            MessageDigest.getInstance(SHA256)
+        }
     }
 }
