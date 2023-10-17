@@ -1,6 +1,7 @@
 package com.content.adapter.review
 
 import com.content.adapter.review.persistence.ReviewImageEntityRepository
+import com.content.adapter.share.Status
 import com.content.domain.review.port.ReviewImageMetaQueryPort
 import com.content.domain.review.ReviewImageMeta
 import com.content.util.exception.ContentException
@@ -18,12 +19,12 @@ class ReviewImageMetaQueryAdapter(
     }
 
     override fun getReviewImageMetasByIds(reviewImageIds: List<Long>): List<ReviewImageMeta> {
-        return reviewImageMetaEntityRepository.findReviewImageMetaEntitiesByIdIn(reviewImageIds)
+        return reviewImageMetaEntityRepository.findReviewImageMetaEntitiesByIdInAndStatus(reviewImageIds, Status.NORMAL)
             .map { it.toDomainModel() }
     }
 
     override fun getReviewImageMetasByReviewId(reviewId: Long): List<ReviewImageMeta> {
-        return reviewImageMetaEntityRepository.findReviewImageMetaEntitiesByReviewId(reviewId = reviewId)
+        return reviewImageMetaEntityRepository.findReviewImageMetaEntitiesByReviewIdAndStatus(reviewId = reviewId, Status.NORMAL)
             .map { it.toDomainModel() }
     }
 }

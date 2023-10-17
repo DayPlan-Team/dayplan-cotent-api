@@ -1,6 +1,7 @@
 package com.content.adapter.review.entity
 
 import com.content.adapter.share.BaseEntity
+import com.content.adapter.share.Status
 import com.content.domain.review.ReviewImageMeta
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -27,6 +28,12 @@ data class ReviewImageMetaEntity(
     @Column
     val rename: String,
 
+    @Column
+    val reviewImageHashCode: Int,
+
+    @Column
+    val status: Status,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
@@ -39,6 +46,7 @@ data class ReviewImageMetaEntity(
             reviewId = reviewId,
             originalName = originalName,
             rename = rename,
+            reviewImageHashCode = reviewImageHashCode,
             reviewImageId = id,
         )
     }
@@ -51,6 +59,21 @@ data class ReviewImageMetaEntity(
                 reviewId = reviewImageMeta.reviewId,
                 originalName = reviewImageMeta.originalName,
                 rename = reviewImageMeta.rename,
+                reviewImageHashCode = reviewImageMeta.reviewImageHashCode,
+                status = Status.NORMAL,
+                id = reviewImageMeta.reviewImageId
+            )
+        }
+
+        fun fromToDelete(reviewImageMeta: ReviewImageMeta): ReviewImageMetaEntity {
+            return ReviewImageMetaEntity(
+                sequence = reviewImageMeta.sequence,
+                imageUrl = reviewImageMeta.imageUrl,
+                reviewId = reviewImageMeta.reviewId,
+                originalName = reviewImageMeta.originalName,
+                rename = reviewImageMeta.rename,
+                reviewImageHashCode = reviewImageMeta.reviewImageHashCode,
+                status = Status.NORMAL,
                 id = reviewImageMeta.reviewImageId
             )
         }
