@@ -24,29 +24,48 @@ class ReviewImageMetaWriteService(
         reviewImageMetaRequests: List<ReviewImageMetaRequest>,
     ) {
 
-        val reviewImageMetas = ReviewImageMeta.from(reviewImages, reviewImageMetaRequests)
+        val reviewImageMetas = ReviewImageMeta
+            .from(reviewImages, reviewImageMetaRequests)
             .sortedBy { it.sequence }
 
-        val findReviewImageMetas =
-            reviewImageMetaQueryPort.getReviewImageMetasByReviewId(reviewImageMetas.first().reviewId)
-                .sortedBy { it.sequence }
+        val findReviewImageMetas = reviewImageMetaQueryPort
+            .getReviewImageMetasByReviewId(reviewImageMetas.first().reviewId)
+            .sortedBy { it.sequence }
 
+        writeReviewIfNotEqualBefore(reviewImageMetas, findReviewImageMetas, reviewImages)
+    }
+
+    private fun writeReviewIfNotEqualBefore(
+        reviewImageMetas: List<ReviewImageMeta>,
+        findReviewImageMetas: List<ReviewImageMeta>,
+        reviewImages: List<ReviewImage>
+    ) {
         if (!reviewImageMetas.isEqual(findReviewImageMetas)) {
-            if (findReviewImageMetas.isNotEmpty()) {
-                reviewImageMetaCommandPort.deleteReviewImageMetas(findReviewImageMetas)
-            }
+            deleteReviewImageMetaIfNotEmpty(findReviewImageMetas)
 
             reviewImageMetaCommandPort.upsertReviewImageMetas(reviewImageMetas)
-
-            reviewImageStoragePort.saveReviewImageAndGetImageUrl(
-                reviewImages = reviewImages,
-                reviewImageStorages = reviewImageMetas.map {
-                    ReviewImageStorage(
-                        name = it.rename,
-                        imageUrl = it.imageUrl,
-                    )
-                }
-            )
+            saveReviewImageAndGetImageUrl(reviewImages = reviewImages, reviewImageMetas = reviewImageMetas)
         }
+    }
+
+    private fun deleteReviewImageMetaIfNotEmpty(reviewImageMetas: List<ReviewImageMeta>) {
+        if (reviewImageMetas.isNotEmpty()) {
+            reviewImageMetaCommandPort.deleteReviewImageMetas(reviewImageMetas)
+        }
+    }
+
+    private fun saveReviewImageAndGetImageUrl(
+        reviewImages: List<ReviewImage>,
+        reviewImageMetas: List<ReviewImageMeta>
+    ) {
+        reviewImageStoragePort.saveReviewImageAndGetImageUrl(
+            reviewImages = reviewImages,
+            reviewImageStorages = reviewImageMetas.map {
+                ReviewImageStorage(
+                    name = it.rename,
+                    imageUrl = it.imageUrl,
+                )
+            }
+        )
     }
 }
