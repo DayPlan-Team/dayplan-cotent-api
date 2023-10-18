@@ -49,6 +49,7 @@ class ReviewWriteService(
 
         return courses
     }
+
     private fun mapToCourseWithPossibleReview(
         courses: List<Course>,
         reviewMap: Map<Long, Review>
@@ -60,7 +61,7 @@ class ReviewWriteService(
         }
     }
 
-    override fun writeReview(review: Review): Review {
-        return reviewCommandPort.upsertReview(review)
+    override fun writeReview(review: Review) {
+        reviewCommandPort.upsertReview(review)
     }
 }

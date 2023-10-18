@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 interface ReviewImageMetaCommandPort {
     fun upsertReviewImageMeta(reviewImageMeta: ReviewImageMeta): ReviewImageMeta
 
-    fun upsertReviewImageMetas(reviewImageMetas: List<ReviewImageMeta>): List<ReviewImageMeta>
+    fun upsertReviewImageMetas(reviewImageMetas: List<ReviewImageMeta>)
 
     fun deleteReviewImageMeta(reviewImageMeta: ReviewImageMeta)
 

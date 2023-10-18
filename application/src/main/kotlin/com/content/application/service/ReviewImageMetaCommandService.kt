@@ -24,11 +24,32 @@ class ReviewImageMetaCommandService(
     ) {
 
         if (reviewImageMetas.isNotEmpty()) {
-            val findReviewImageMetas = reviewImageMetaQueryPort
-                .getReviewImageMetasByReviewId(reviewImageMetas.first().reviewId)
-                .sortedBy { it.sequence }
+            processReviewImageByReviewId(
+                reviewImages = reviewImages,
+                reviewImageMetas = reviewImageMetas,
+            )
+        }
+    }
 
-            upsertIfNotEqualBefore(reviewImageMetas, findReviewImageMetas, reviewImages)
+    private fun processReviewImageByReviewId(
+        reviewImages: List<ReviewImage>,
+        reviewImageMetas: List<ReviewImageMeta>,
+    ) {
+        when (reviewImageMetas.first().reviewId) {
+            0L -> {
+                saveReviewImageAndMetas(
+                    reviewImages = reviewImages,
+                    reviewImageMetas = reviewImageMetas,
+                )
+            }
+
+            else -> {
+                val findReviewImageMetas = reviewImageMetaQueryPort
+                    .getReviewImageMetasByReviewId(reviewImageMetas.first().reviewId)
+                    .sortedBy { it.sequence }
+
+                upsertIfNotEqualBefore(reviewImageMetas, findReviewImageMetas, reviewImages)
+            }
         }
     }
 
@@ -40,8 +61,10 @@ class ReviewImageMetaCommandService(
         if (!reviewImageMetas.isEqual(findReviewImageMetas)) {
             deleteReviewImageMetaIfNotEmpty(findReviewImageMetas)
 
-            reviewImageMetaCommandPort.upsertReviewImageMetas(reviewImageMetas)
-            saveReviewImage(reviewImages = reviewImages, reviewImageMetas = reviewImageMetas)
+            saveReviewImageAndMetas(
+                reviewImages = reviewImages,
+                reviewImageMetas = reviewImageMetas,
+            )
         }
     }
 
@@ -49,6 +72,11 @@ class ReviewImageMetaCommandService(
         if (reviewImageMetas.isNotEmpty()) {
             reviewImageMetaCommandPort.deleteReviewImageMetas(reviewImageMetas)
         }
+    }
+
+    private fun saveReviewImageAndMetas(reviewImages: List<ReviewImage>, reviewImageMetas: List<ReviewImageMeta>) {
+        reviewImageMetaCommandPort.upsertReviewImageMetas(reviewImageMetas)
+        saveReviewImage(reviewImages = reviewImages, reviewImageMetas = reviewImageMetas)
     }
 
     private fun saveReviewImage(

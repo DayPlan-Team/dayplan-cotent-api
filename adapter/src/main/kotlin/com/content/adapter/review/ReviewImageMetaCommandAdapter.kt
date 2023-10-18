@@ -17,10 +17,10 @@ class ReviewImageMetaCommandAdapter(
             .toDomainModel()
     }
 
-    override fun upsertReviewImageMetas(reviewImageMetas: List<ReviewImageMeta>): List<ReviewImageMeta> {
-        return reviewImageEntityRepository.saveAll(
+    override fun upsertReviewImageMetas(reviewImageMetas: List<ReviewImageMeta>) {
+        reviewImageEntityRepository.saveAll(
             reviewImageMetas.map { ReviewImageMetaEntity.from(it) }
-        ).map { it.toDomainModel() }
+        )
     }
 
     override fun deleteReviewImageMeta(reviewImageMeta: ReviewImageMeta) {
