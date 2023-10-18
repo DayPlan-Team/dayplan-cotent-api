@@ -7,6 +7,7 @@ import com.content.domain.review.ReviewGroup
 import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewImageMeta
 import com.content.domain.review.ReviewImageMetaCommandUseCase
+import com.content.domain.review.ReviewImageStorageData
 import com.content.domain.review.ReviewWriteUseCase
 import com.content.domain.review.port.ReviewGroupQueryPort
 import com.content.domain.review.port.ReviewQueryPort
@@ -26,12 +27,12 @@ class ReviewAndReviewImageService(
     private val reviewImageMetaCommandUseCase: ReviewImageMetaCommandUseCase,
 ) {
 
-    fun writeReviewAndImages(
+    fun writeReviewAndGetReviewImageStorageData(
         user: User,
         review: Review,
         reviewImages: List<ReviewImage>,
         reviewImageMetas: List<ReviewImageMeta>,
-    ) {
+    ): List<ReviewImageStorageData> {
         val reviewGroup = getReviewGroup(review.reviewGroupId)
 
         verifyInvalidReviewWrite(
@@ -42,7 +43,7 @@ class ReviewAndReviewImageService(
 
         reviewWriteUseCase.writeReview(review = review)
 
-        reviewImageMetaCommandUseCase.upsertReviewImageMeta(
+        return reviewImageMetaCommandUseCase.upsertReviewImageMeta(
             reviewImages = reviewImages,
             reviewImageMetas = reviewImageMetas
         )

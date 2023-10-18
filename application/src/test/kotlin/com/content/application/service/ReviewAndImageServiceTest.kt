@@ -8,6 +8,7 @@ import com.content.domain.review.ReviewGroup
 import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewImageMeta
 import com.content.domain.review.ReviewImageMetaCommandUseCase
+import com.content.domain.review.ReviewImageStorageData
 import com.content.domain.review.ReviewWriteUseCase
 import com.content.domain.review.port.ReviewGroupQueryPort
 import com.content.domain.review.port.ReviewQueryPort
@@ -71,7 +72,7 @@ class ReviewAndImageServiceTest(
 
             then("예외가 발생해요!") {
                 shouldThrow<ContentException> {
-                    sut.writeReviewAndImages(
+                    sut.writeReviewAndGetReviewImageStorageData(
                         user = user,
                         review = review,
                         reviewImages = reviewImages,
@@ -104,7 +105,7 @@ class ReviewAndImageServiceTest(
 
             then("예외가 발생해요!") {
                 shouldThrow<ContentException> {
-                    sut.writeReviewAndImages(
+                    sut.writeReviewAndGetReviewImageStorageData(
                         user = user,
                         review = review,
                         reviewImages = reviewImages,
@@ -137,7 +138,7 @@ class ReviewAndImageServiceTest(
 
             then("예외가 발생해요!") {
                 shouldThrow<ContentException> {
-                    sut.writeReviewAndImages(
+                    sut.writeReviewAndGetReviewImageStorageData(
                         user = user,
                         review = review,
                         reviewImages = reviewImages,
@@ -186,7 +187,7 @@ class ReviewAndImageServiceTest(
 
             then("예외가 발생해요!") {
                 shouldThrow<ContentException> {
-                    sut.writeReviewAndImages(
+                    sut.writeReviewAndGetReviewImageStorageData(
                         user = user,
                         review = review,
                         reviewImages = reviewImages,
@@ -234,10 +235,10 @@ class ReviewAndImageServiceTest(
             )
 
             every { reviewWriteUseCase.writeReview(any()) } just Runs
-            every { reviewImageMetaCommandUseCase.upsertReviewImageMeta(any(), any()) } just Runs
+            every { reviewImageMetaCommandUseCase.upsertReviewImageMeta(any(), any()) } returns emptyList()
 
             then("예외 발생 없이 정상 실행 되어야 해요") {
-                sut.writeReviewAndImages(
+                sut.writeReviewAndGetReviewImageStorageData(
                     user = user,
                     review = review,
                     reviewImages = reviewImages,
