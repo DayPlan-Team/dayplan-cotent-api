@@ -47,6 +47,88 @@
 ```
 <br/>
 
+- ReviewGroup
+  - 리뷰 그룹은 유저가 데이트 코스를 모두 방문한 경우 생성할 수 있어요.
+  - 리뷰 그룹과 코스 그룹은 1:1 관계에요!
+  - 하나의 리뷰 그룹과 리뷰는 1:N 관계로, 코스 그룹에 대한 코스의 리뷰를 묶어주는 개념이 리뷰 그룹이에요!
+``` kotlin
+  data class ReviewGroup(
+      val courseGroupId: Long,
+      val reviewGroupId: Long,
+      val reviewGroupName: String,
+      val userId: Long,
+      val createdAt: LocalDateTime = LocalDateTime.now(),
+      val modifiedAt: LocalDateTime = LocalDateTime.now(),
+  )
+```
+<br/>
+
+- Review
+  - 리뷰는 유저가 데이트 코스를 모두 방문한 경우 작성할 수 있어요.
+  - 리뷰와 코스는 1:1 대응 관계를 가져요!
+  - 리뷰는 리뷰 그룹이 생성된 후, 리뷰를 작성하게 되면 생성이 되는 구조에요.
+``` kotlin
+  data class Review(
+      val reviewId: Long,
+      val reviewGroupId: Long,
+      val courseId: Long,
+      val content: String,
+      val createdAt: LocalDateTime = LocalDateTime.now(),
+      val modifiedAt: LocalDateTime = LocalDateTime.now(),
+  )
+```
+<br/>
+
+- ReviewImageMeta
+  - ReviewImageMeta는 Review를 작성할 때, 저장되는 이미지의 메타 정보를 저장하는 도메인이에요!
+  - 작성된 리뷰는 언제나 편집될 수 있어요!
+  - 이 과정에서 매 요청마다 이미지를 수정하거나 덮어쓴다면, 리소스가 많이 소비될 수 있어요!
+  - 이를 방지하기 위해 이미지에 대한 메타 정보를 저장하고, 만약 이미지가 변경되지 않는다면, 불필요한 중복 저장 혹은 덮어쓰기를 방지할 수 있어요!
+``` kotlin
+  data class ReviewImageMeta(
+      val sequence: Int,
+      val reviewId: Long,
+      val originalName: String,
+      val reviewImageHashCode: Int,
+      val reviewImageId: Long,
+      val imageName: String = "${RENAME_DEFAULT}-${UUID.randomUUID()}.${originalName.parseExtension()}",
+      val imageUrl: String = "/$reviewId/$sequence/$imageName",
+  )
+```
+<br/>
+
+- ReviewImage
+  - 바이트 배열로 정의된 ReviewImage에요.!
+  - 바이트 배열을 SHA-256으로 해시한 후, 해시코드로 동일성을 비교하고자 작성하였어요!
+``` kotlin
+  data class ReviewImage(
+      val image: ByteArray,
+  ) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ReviewImage
+
+        return image.contentEquals(other.image)
+    }
+
+    override fun hashCode(): Int {
+        return sha256Digest.digest(image).contentHashCode()
+    }
+
+    companion object {
+        private const val SHA256 = "SHA-256"
+
+        val sha256Digest: MessageDigest by lazy {
+            MessageDigest.getInstance(SHA256)
+        }
+    }
+}
+```
+<br/>
+
+
 ## 3. DB 구조
 ![img.png](readme/image/Erd.png)
 
