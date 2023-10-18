@@ -64,7 +64,7 @@ class ReviewWriteController(
             reviewWriteApiRequest = reviewWriteApiRequest,
         )
 
-        reviewAndImageService.writeReviewAndImage(
+        reviewAndImageService.writeReviewAndSaveImage(
             user = user,
             review = review,
             reviewImages = reviewImages,

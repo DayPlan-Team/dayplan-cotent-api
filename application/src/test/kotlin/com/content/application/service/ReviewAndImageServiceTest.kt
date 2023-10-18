@@ -10,6 +10,7 @@ import com.content.domain.review.ReviewImageMeta
 import com.content.domain.review.ReviewImageMetaCommandUseCase
 import com.content.domain.review.ReviewWriteUseCase
 import com.content.domain.review.port.ReviewGroupQueryPort
+import com.content.domain.review.port.ReviewQueryPort
 import com.content.domain.share.PlaceCategory
 import com.content.domain.user.User
 import com.content.domain.user.UserAccountStatus
@@ -17,7 +18,6 @@ import com.content.util.exception.ContentException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -29,6 +29,7 @@ class ReviewAndImageServiceTest(
     private val courseQueryPort: CourseQueryPort = mockk(),
     private val reviewWriteUseCase: ReviewWriteUseCase = mockk(),
     private val reviewImageMetaCommandUseCase: ReviewImageMetaCommandUseCase = mockk(),
+    private val reviewQueryPort: ReviewQueryPort = mockk(),
 ) : BehaviorSpec({
 
     isolationMode = IsolationMode.InstancePerLeaf
@@ -38,16 +39,10 @@ class ReviewAndImageServiceTest(
         courseQueryPort = courseQueryPort,
         reviewWriteUseCase = reviewWriteUseCase,
         reviewImageMetaCommandUseCase = reviewImageMetaCommandUseCase,
+        reviewQueryPort = reviewQueryPort,
     )
 
     given("reviewGroup 주어져요") {
-
-        val review = Review(
-            reviewId = 1L,
-            reviewGroupId = 1L,
-            courseId = 1L,
-            content = "reviewA"
-        )
 
         val reviewImages = emptyList<ReviewImage>()
 
@@ -61,6 +56,13 @@ class ReviewAndImageServiceTest(
         )
 
         `when`("요청한 userId가 reviewGroup의 userId와 다르면") {
+            val review = Review(
+                reviewId = 1L,
+                reviewGroupId = 1L,
+                courseId = 1L,
+                content = "reviewA"
+            )
+
             val user = User(
                 userId = 100L,
                 userAccountStatus = UserAccountStatus.NORMAL,
@@ -69,7 +71,73 @@ class ReviewAndImageServiceTest(
 
             then("예외가 발생해요!") {
                 shouldThrow<ContentException> {
-                    sut.writeReviewAndImage(
+                    sut.writeReviewAndSaveImage(
+                        user = user,
+                        review = review,
+                        reviewImages = reviewImages,
+                        reviewImageMetas = reviewImageMetas,
+                    )
+                }
+            }
+        }
+
+        `when`("요청한 코스의 리뷰가 1:1이 아니라면") {
+            val review = Review(
+                reviewId = 1L,
+                reviewGroupId = 1L,
+                courseId = 1L,
+                content = "reviewA"
+            )
+
+            val user = User(
+                userId = 1L,
+                userAccountStatus = UserAccountStatus.NORMAL,
+                nickName = "nickName",
+            )
+
+            every { reviewQueryPort.getReviewByCourseId(any()) } returns Review(
+                reviewId = 2L,
+                reviewGroupId = 1L,
+                courseId = 1L,
+                content = "reviewA"
+            )
+
+            then("예외가 발생해요!") {
+                shouldThrow<ContentException> {
+                    sut.writeReviewAndSaveImage(
+                        user = user,
+                        review = review,
+                        reviewImages = reviewImages,
+                        reviewImageMetas = reviewImageMetas,
+                    )
+                }
+            }
+        }
+
+        `when`("요청한 코스의 리뷰가 작성되지 않았는데 reviewId가 0이 아니라면") {
+            val review = Review(
+                reviewId = 1L,
+                reviewGroupId = 1L,
+                courseId = 1L,
+                content = "reviewA"
+            )
+
+            val user = User(
+                userId = 1L,
+                userAccountStatus = UserAccountStatus.NORMAL,
+                nickName = "nickName",
+            )
+
+            every { reviewQueryPort.getReviewByCourseId(any()) } returns Review(
+                reviewId = 0L,
+                reviewGroupId = 1L,
+                courseId = 1L,
+                content = "reviewA"
+            )
+
+            then("예외가 발생해요!") {
+                shouldThrow<ContentException> {
+                    sut.writeReviewAndSaveImage(
                         user = user,
                         review = review,
                         reviewImages = reviewImages,
@@ -80,11 +148,20 @@ class ReviewAndImageServiceTest(
         }
 
         `when`("요청한 코스가 리뷰 작성 불가능한 경우라면") {
+            val review = Review(
+                reviewId = 1L,
+                reviewGroupId = 1L,
+                courseId = 1L,
+                content = "reviewA"
+            )
+
             val user = User(
                 userId = 1L,
                 userAccountStatus = UserAccountStatus.NORMAL,
                 nickName = "nickName",
             )
+
+            every { reviewQueryPort.getReviewByCourseId(any()) } returns review
 
             every { courseQueryPort.getCoursesByGroupId(any()) } returns listOf(
                 Course(
@@ -109,7 +186,7 @@ class ReviewAndImageServiceTest(
 
             then("예외가 발생해요!") {
                 shouldThrow<ContentException> {
-                    sut.writeReviewAndImage(
+                    sut.writeReviewAndSaveImage(
                         user = user,
                         review = review,
                         reviewImages = reviewImages,
@@ -118,12 +195,22 @@ class ReviewAndImageServiceTest(
                 }
             }
         }
+
         `when`("요청한 코스가 리뷰 작성이 가능하다면") {
+            val review = Review(
+                reviewId = 1L,
+                reviewGroupId = 1L,
+                courseId = 1L,
+                content = "reviewA"
+            )
+
             val user = User(
                 userId = 1L,
                 userAccountStatus = UserAccountStatus.NORMAL,
                 nickName = "nickName",
             )
+
+            every { reviewQueryPort.getReviewByCourseId(any()) } returns review
 
             every { courseQueryPort.getCoursesByGroupId(any()) } returns listOf(
                 Course(
@@ -150,7 +237,7 @@ class ReviewAndImageServiceTest(
             every { reviewImageMetaCommandUseCase.upsertReviewImageMeta(any(), any()) } just Runs
 
             then("예외 발생 없이 정상 실행 되어야 해요") {
-                sut.writeReviewAndImage(
+                sut.writeReviewAndSaveImage(
                     user = user,
                     review = review,
                     reviewImages = reviewImages,

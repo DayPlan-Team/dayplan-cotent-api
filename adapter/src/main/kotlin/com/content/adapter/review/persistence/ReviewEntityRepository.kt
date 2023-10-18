@@ -11,4 +11,6 @@ interface ReviewEntityRepository : JpaRepository<ReviewEntity, Long> {
 
     fun findReviewEntitiesByCourseIdIn(courseIds: List<Long>): List<ReviewEntity>
 
+    fun findReviewEntityByCourseId(courseId: Long): ReviewEntity?
+
 }

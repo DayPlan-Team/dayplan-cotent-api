@@ -26,4 +26,8 @@ class ReviewQueryAdapter(
         return reviewEntityRepository.findReviewEntitiesByCourseIdIn(courseIds)
             .map { it.toDomainModel() }
     }
+
+    override fun getReviewByCourseId(courseId: Long): Review? {
+        return reviewEntityRepository.findReviewEntityByCourseId(courseId)?.toDomainModel()
+    }
 }

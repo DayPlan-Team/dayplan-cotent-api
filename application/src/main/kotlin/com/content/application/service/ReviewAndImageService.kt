@@ -9,6 +9,7 @@ import com.content.domain.review.ReviewImageMeta
 import com.content.domain.review.ReviewImageMetaCommandUseCase
 import com.content.domain.review.ReviewWriteUseCase
 import com.content.domain.review.port.ReviewGroupQueryPort
+import com.content.domain.review.port.ReviewQueryPort
 import com.content.domain.user.User
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
@@ -19,16 +20,23 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class ReviewAndImageService(
     private val reviewGroupQueryPort: ReviewGroupQueryPort,
+    private val reviewQueryPort: ReviewQueryPort,
     private val courseQueryPort: CourseQueryPort,
     private val reviewWriteUseCase: ReviewWriteUseCase,
     private val reviewImageMetaCommandUseCase: ReviewImageMetaCommandUseCase,
 ) {
 
-    fun writeReviewAndImage(user: User, review: Review, reviewImages: List<ReviewImage>, reviewImageMetas: List<ReviewImageMeta>) {
+    fun writeReviewAndSaveImage(
+        user: User,
+        review: Review,
+        reviewImages: List<ReviewImage>,
+        reviewImageMetas: List<ReviewImageMeta>
+    ) {
         val reviewGroup = getReviewGroup(review.reviewGroupId)
 
         verifyInvalidReviewWrite(
             user = user,
+            review = review,
             reviewGroup = reviewGroup,
         )
 
@@ -47,8 +55,10 @@ class ReviewAndImageService(
             )
     }
 
-    private fun verifyInvalidReviewWrite(user: User, reviewGroup: ReviewGroup) {
+    private fun verifyInvalidReviewWrite(user: User, review: Review, reviewGroup: ReviewGroup) {
         verifyReviewGroupOwner(reviewGroup.userId, user.userId)
+
+        verifyReviewToCourse(review)
 
         verifyInvalidReviewCourse(
             courseGroupId = reviewGroup.courseGroupId,
@@ -68,6 +78,15 @@ class ReviewAndImageService(
             courses.any { it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH }
         ) {
             throw ContentException(ContentExceptionCode.BAD_REQUEST_REVIEW)
+        }
+    }
+
+    private fun verifyReviewToCourse(review: Review) {
+
+        reviewQueryPort.getReviewByCourseId(review.courseId)?.let {
+            require(it.reviewId == review.reviewId) { throw ContentException(ContentExceptionCode.BAD_REQUEST_REVIEW) }
+        } ?: run {
+            require(review.reviewId == 0L) { throw ContentException(ContentExceptionCode.BAD_REQUEST_REVIEW) }
         }
     }
 }
