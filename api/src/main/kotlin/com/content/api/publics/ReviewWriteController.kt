@@ -55,7 +55,7 @@ class ReviewWriteController(
     ): ResponseEntity<Unit> {
         val user = userVerifyService.verifyNormalUserAndGet(userId)
 
-        val review = createReview(reviewWriteApiRequest, user.userId, reviewGroupId)
+        val review = createReview(reviewWriteApiRequest, reviewGroupId)
 
         val reviewImages = createReviewImages(reviewWriteApiRequest.reviewImages)
 
@@ -65,7 +65,8 @@ class ReviewWriteController(
         )
 
         reviewAndImageService.writeReviewAndImage(
-            review,
+            user = user,
+            review = review,
             reviewImages = reviewImages,
             reviewImageMetas = reviewImageMetas
         )
@@ -96,10 +97,9 @@ class ReviewWriteController(
         }
     }
 
-    private fun createReview(reviewWriteApiRequest: ReviewWriteApiRequest, userId: Long, reviewGroupId: Long): Review {
+    private fun createReview(reviewWriteApiRequest: ReviewWriteApiRequest, reviewGroupId: Long): Review {
         return Review.from(
             reviewId = reviewWriteApiRequest.reviewId,
-            userId = userId,
             reviewGroupId = reviewGroupId,
             courseId = reviewWriteApiRequest.courseId,
             content = reviewWriteApiRequest.content,
