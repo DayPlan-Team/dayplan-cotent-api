@@ -9,7 +9,6 @@ import com.content.domain.review.ReviewImageMeta
 import com.content.domain.review.ReviewImageMetaCommandUseCase
 import com.content.domain.review.ReviewWriteUseCase
 import com.content.domain.review.port.ReviewGroupQueryPort
-import com.content.domain.review.port.ReviewQueryPort
 import com.content.domain.user.User
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
@@ -30,7 +29,6 @@ class ReviewAndImageService(
 
         verifyInvalidReviewWrite(
             user = user,
-            review = review,
             reviewGroup = reviewGroup,
         )
 
@@ -49,12 +47,11 @@ class ReviewAndImageService(
             )
     }
 
-    private fun verifyInvalidReviewWrite(user: User, review: Review, reviewGroup: ReviewGroup) {
+    private fun verifyInvalidReviewWrite(user: User, reviewGroup: ReviewGroup) {
         verifyReviewGroupOwner(reviewGroup.userId, user.userId)
 
         verifyInvalidReviewCourse(
             courseGroupId = reviewGroup.courseGroupId,
-            courseId = review.courseId,
         )
     }
 
@@ -62,12 +59,13 @@ class ReviewAndImageService(
         require(reviewGroupUserId == userId) { throw ContentException(ContentExceptionCode.USER_INVALID) }
     }
 
-    private fun verifyInvalidReviewCourse(courseGroupId: Long, courseId: Long) {
+    /* A 코스 리뷰를 쓰려면, 동일한 코스 그룹에 있는 B, C 모두 리뷰를 쓸 수 있는 상태여야 해요!*/
+    private fun verifyInvalidReviewCourse(courseGroupId: Long) {
         val courses = courseQueryPort
             .getCoursesByGroupId(courseGroupId)
 
         require(
-            courses.any { courseId == it.courseId && it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH }
+            courses.any { it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH }
         ) {
             throw ContentException(ContentExceptionCode.BAD_REQUEST_REVIEW)
         }

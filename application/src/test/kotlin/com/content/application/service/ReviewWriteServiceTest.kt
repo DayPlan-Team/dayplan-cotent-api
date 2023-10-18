@@ -37,7 +37,6 @@ class ReviewWriteServiceTest(
 
         val courseA = Course(
             courseId = 1L,
-            userId = userId,
             step = 1,
             placeId = 1L,
             courseStage = CourseStage.PLACE_FINISH,
@@ -48,7 +47,6 @@ class ReviewWriteServiceTest(
 
         val courseB = Course(
             courseId = 2L,
-            userId = userId,
             step = 2,
             placeId = 1L,
             courseStage = CourseStage.PLACE_FINISH,
@@ -89,10 +87,8 @@ class ReviewWriteServiceTest(
         `when`("courseId = 2L는 리뷰 작성한 목록이 주어지면") {
             val review = Review(
                 reviewId = 1L,
-                userId = 1L,
                 reviewGroupId = 1L,
                 courseId = 2L,
-                title = "ReviewA",
                 content = "contentA",
                 createdAt = LocalDateTime.now(),
                 modifiedAt = LocalDateTime.now(),
@@ -115,10 +111,8 @@ class ReviewWriteServiceTest(
         `when`("모두 리뷰 작성한 목록이 주어지면") {
             val reviewA = Review(
                 reviewId = 1L,
-                userId = 1L,
                 reviewGroupId = 1L,
                 courseId = 1L,
-                title = "ReviewA",
                 content = "contentB",
                 createdAt = LocalDateTime.now(),
                 modifiedAt = LocalDateTime.now(),
@@ -126,10 +120,8 @@ class ReviewWriteServiceTest(
 
             val reviewB = Review(
                 reviewId = 2L,
-                userId = 1L,
                 reviewGroupId = 1L,
                 courseId = 2L,
-                title = "ReviewB",
                 content = "contentB",
                 createdAt = LocalDateTime.now(),
                 modifiedAt = LocalDateTime.now(),
