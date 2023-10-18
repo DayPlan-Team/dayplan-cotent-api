@@ -12,11 +12,9 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-        working-directory: ./client
 
       - name: Build
         run: yarn vite build
-        working-directory: ./client
 
       - name: Sync Bucket
         env:
@@ -28,4 +26,3 @@ jobs:
             --region ap-northeast-2 \
             build/libs/content-0.0.1-SNAPSHOT.jar s3://dayplan \
             --delete
-        working-directory: ./client
