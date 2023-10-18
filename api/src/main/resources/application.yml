@@ -54,6 +54,7 @@ spring:
 
   jackson:
     property-naming-strategy: SNAKE_CASE
+
 ---
 spring:
   config:
@@ -66,3 +67,6 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
+s3:
+  key-prefix: ${S3_KEY}
+  bucket-name: ${BUCKET_NAME}
