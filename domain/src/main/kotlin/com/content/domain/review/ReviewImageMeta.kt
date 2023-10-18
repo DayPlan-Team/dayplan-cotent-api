@@ -8,7 +8,7 @@ data class ReviewImageMeta(
     val originalName: String,
     val reviewImageHashCode: Int,
     val reviewImageId: Long,
-    val imageName: String = "${RENAME_DEFAULT}_${UUID.randomUUID()}_${originalName.parseExtension()}",
+    val imageName: String = "${RENAME_DEFAULT}-${UUID.randomUUID()}.${originalName.parseExtension()}",
     val imageUrl: String = "/$reviewId/$sequence/$imageName",
 ) {
     companion object {
