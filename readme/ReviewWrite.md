@@ -172,7 +172,7 @@
     ): ResponseEntity<Unit> {
         val user = userVerifyService.verifyNormalUserAndGet(userId)
 
-        val review = createReview(reviewWriteApiRequest, user.userId, reviewGroupId)
+        val review = createReview(reviewWriteApiRequest, reviewGroupId)
 
         val reviewImages = createReviewImages(reviewWriteApiRequest.reviewImages)
 
@@ -181,29 +181,36 @@
             reviewWriteApiRequest = reviewWriteApiRequest,
         )
 
-        reviewAndImageService.writeReviewAndImage(
+        val reviewImageStorageDatas = reviewAndReviewImageService.writeReviewAndGetReviewImageStorageData(
+            user = user,
             review = review,
             reviewImages = reviewImages,
-            reviewImageMetas = reviewImageMetas
+            reviewImageMetas = reviewImageMetas,
         )
+
+        if (reviewImageStorageDatas.isNotEmpty()) {
+            reviewImageStoragePort.saveReviewImage(reviewImageStorageDatas)
+        }
 
         return ResponseEntity.ok().build()
     }
 ```
 - 앞 서 정의한 함수를 바탕으로, 유저 검증(공통된 함수라 설명에서는 제외하였어요!), 리뷰 및 리뷰 이미지, 리뷰 메타정보를 생성하고 서비스에 인자로 넣어 서비스를 호출해요!
+- 리뷰 이미지 관련 정보를 리턴받고, 최종적으로 이미지를 저장해요.
 
 <br/>
 
-## 6. ReviewAndImageService
+## 6. ReviewAndReviewImageService
 
 ``` kotlin
   @Service
   @Transactional
-  class ReviewAndImageService(
-      private val reviewGroupQueryPort: ReviewGroupQueryPort,
-      private val courseQueryPort: CourseQueryPort,
-      private val reviewWriteUseCase: ReviewWriteUseCase,
-      private val reviewImageMetaCommandUseCase: ReviewImageMetaCommandUseCase,
+  class ReviewAndReviewImageService(
+    private val reviewGroupQueryPort: ReviewGroupQueryPort,
+    private val reviewQueryPort: ReviewQueryPort,
+    private val courseQueryPort: CourseQueryPort,
+    private val reviewWriteUseCase: ReviewWriteUseCase,
+    private val reviewImageMetaCommandUseCase: ReviewImageMetaCommandUseCase,
   ) {
 ```
 - 리뷰와 이미지를 저장하는 역할을 수행하는 서비스에요!
@@ -255,23 +262,30 @@
 <br/>
 
 ``` kotlin
-  fun writeReviewAndSaveImage(user: User, review: Review, reviewImages: List<ReviewImage>, reviewImageMetas: List<ReviewImageMeta>) {
+  fun writeReviewAndGetReviewImageStorageData(
+        user: User,
+        review: Review,
+        reviewImages: List<ReviewImage>,
+        reviewImageMetas: List<ReviewImageMeta>,
+    ): List<ReviewImageStorageData> {
         val reviewGroup = getReviewGroup(review.reviewGroupId)
 
         verifyInvalidReviewWrite(
             user = user,
+            review = review,
             reviewGroup = reviewGroup,
         )
 
         reviewWriteUseCase.writeReview(review = review)
 
-        reviewImageMetaCommandUseCase.upsertReviewImageMeta(
+        return reviewImageMetaCommandUseCase.upsertReviewImageMeta(
             reviewImages = reviewImages,
             reviewImageMetas = reviewImageMetas
         )
     }
 ```
 - 이를 바탕으로 리뷰를 쓰고, 이미지 및 메타 데이터를 호출해요!
+- 리뷰와 이미지 메타 정보가 트랜잭션으로 저장되면, 실제 이미지 파일을 저장하기 위해 이미지 관련 바이트 코드와, 메타데이터를 포함한 ReviewImageStorageData를 리턴해요. 
 
 <br/>
 
@@ -282,26 +296,25 @@
   class ReviewImageMetaCommandService(
       private val reviewImageMetaCommandPort: ReviewImageMetaCommandPort,
       private val reviewImageMetaQueryPort: ReviewImageMetaQueryPort,
-      private val reviewImageStoragePort: ReviewImageStoragePort,
-  ) : ReviewImageMetaCommandUseCase {
+  ) : ReviewImageMetaCommandUseCase 
 
 ```
-- ReviewImageMetaCommandService는 리뷰 이미지의 메타정보를 저장하고, 스토리지에 이미지를 저장하는 역할을 수행해요.
+- ReviewImageMetaCommandService는 리뷰 이미지의 메타정보를 저장하는 역할을 수행해요!
 
 <br/>
 
 ``` kotlin
-  override fun upsertReviewImageMeta(
+    override fun upsertReviewImageMeta(
         reviewImages: List<ReviewImage>,
         reviewImageMetas: List<ReviewImageMeta>,
-    ) {
+    ): List<ReviewImageStorageData> {
 
-        if (reviewImageMetas.isNotEmpty()) {
+        return if (reviewImageMetas.isNotEmpty()) {
             processReviewImageByReviewId(
                 reviewImages = reviewImages,
                 reviewImageMetas = reviewImageMetas,
             )
-        }
+        } else emptyList()
     }
 ```
 - 만약 이미지가 비어있지 않다면, ReviewMetas를 저장하는 로직을 수행해요!
@@ -312,8 +325,8 @@
   fun processReviewImageByReviewId(
         reviewImages: List<ReviewImage>,
         reviewImageMetas: List<ReviewImageMeta>,
-    ) {
-        when (reviewImageMetas.first().reviewId) {
+    ): List<ReviewImageStorageData> {
+        return when (reviewImageMetas.first().reviewId) {
             0L -> {
                 saveReviewImageAndMetas(
                     reviewImages = reviewImages,
@@ -342,15 +355,17 @@
         reviewImageMetas: List<ReviewImageMeta>,
         findReviewImageMetas: List<ReviewImageMeta>,
         reviewImages: List<ReviewImage>
-    ) {
+    ): List<ReviewImageStorageData> {
         if (!reviewImageMetas.isEqual(findReviewImageMetas)) {
             deleteReviewImageMetaIfNotEmpty(findReviewImageMetas)
 
-            saveReviewImageAndMetas(
+            return saveReviewImageAndMetas(
                 reviewImages = reviewImages,
                 reviewImageMetas = reviewImageMetas,
             )
         }
+
+        return emptyList()
     }
 
 ```
@@ -379,36 +394,96 @@
         }
     }
 
-    fun saveReviewImageAndMetas(reviewImages: List<ReviewImage>, reviewImageMetas: List<ReviewImageMeta>) {
-        reviewImageMetaCommandPort.upsertReviewImageMetas(reviewImageMetas)
-        saveReviewImage(reviewImages = reviewImages, reviewImageMetas = reviewImageMetas)
+    fun deleteReviewImageMetaIfNotEmpty(reviewImageMetas: List<ReviewImageMeta>) {
+        if (reviewImageMetas.isNotEmpty()) {
+            reviewImageMetaCommandPort.deleteReviewImageMetas(reviewImageMetas)
+        }
     }
 
-    fun saveReviewImage(
-        reviewImages: List<ReviewImage>,
-        reviewImageMetas: List<ReviewImageMeta>
-    ) {
-        reviewImageStoragePort.saveReviewImageAndGetImageUrl(
-            reviewImages = reviewImages,
-            reviewImageStorages = reviewImageMetas.map {
-                ReviewImageStorage(
-                    name = it.imageName,
-                    imageUrl = it.imageUrl,
-                )
-            }
-        )
+    fun saveReviewImageAndMetas(reviewImages: List<ReviewImage>, reviewImageMetas: List<ReviewImageMeta>): List<ReviewImageStorageData> {
+        reviewImageMetaCommandPort.upsertReviewImageMetas(reviewImageMetas)
+
+        return reviewImages.zip(reviewImageMetas) { image, meta ->
+            ReviewImageStorageData(
+                reviewImage = image,
+                reviewImageMeta = meta,
+            )
+        }
     }
 ```
-- 이를 바탕으로 리뷰 이미지와 메타 정보를 저장할 수 있어요.!
+- 이를 바탕으로 리뷰 이미지 메타정보를 저장해요.
 
 <br/>
 
-## 8. 테스트
+## 8. 리뷰 이미지 저장 
+``` kotlin
+  val reviewImageStorageDatas = reviewAndReviewImageService.writeReviewAndGetReviewImageStorageData(
+      user = user,
+      review = review,
+      reviewImages = reviewImages,
+      reviewImageMetas = reviewImageMetas,
+  )
+
+  if (reviewImageStorageDatas.isNotEmpty()) {
+      reviewImageStoragePort.saveReviewImage(reviewImageStorageDatas)
+  }
+```
+- 리뷰와 리뷰 이미지 메타 정보가 트랜잭션으로 하나의 묶음으로 완성이 되면,
+- 리뷰 이미지 스토리지에 저장이 되어야 해요!
+
+<br/>
+
+``` kotlin
+  @Profile("dev | prod")
+  @Component
+  class ReviewImageStorageAdapter(
+      private val s3Client: S3Client,
+      private val reviewImageMetaCommandUseCase: ReviewImageMetaCommandUseCase,
+  ) : ReviewImageStoragePort {
+  
+      @Value("\${s3.key-prefix}")
+      private lateinit var s3KeyPrefix: String
+  
+      @Value("\${s3.bucket-name}")
+      private lateinit var bucketName: String
+  
+      override fun saveReviewImage(reviewImageStorageDatas: List<ReviewImageStorageData>) {
+          try {
+              reviewImageStorageDatas.map {
+  
+                  val fullS3Key = s3KeyPrefix + it.reviewImageMeta.imageUrl
+  
+                  val putObjectRequest = PutObjectRequest.builder()
+                      .bucket(bucketName)
+                      .key(fullS3Key)
+                      .build()
+  
+                  val requestBody = RequestBody.fromBytes(it.reviewImage.image)
+                  s3Client.putObject(putObjectRequest, requestBody)
+              }
+          } catch (e: Exception) {
+              reviewImageMetaCommandUseCase.deleteReviewImageMeta(
+                  reviewImageMetas = reviewImageStorageDatas.map { it.reviewImageMeta }
+              )
+          }
+      }
+```
+- 해당 코드는 s3에 저장하는 로직이에요.
+- 중점 사항은 리뷰와 메타 데이터를 먼저 선행 트랜잭션 처리를 완료하였어요.
+- 리뷰 이미지가 저장될 때 문제가 발생하면, 리뷰 이미지 메타 정보에 대한 삭제 요청을 수행해 주어야 해요!
+- 여기서 리뷰는 삭제 요청 하지 않는 이유는 다음과 같아요!
+  - 리뷰 이미지 메타 정보와 리뷰 이미지는 서로 연관성이 커요 (하나만 존재 불가)
+  - 리뷰 이미지 에러가 발생하더라도 리뷰의 글 내용은 영향을 받게 해서는 안되요!
+
+
+<br/>
+
+## 9. 테스트
 - 각 테스트는 BehaviorSpec을 활용하여 모킹하여 테스트를 진행하였어요!
 - [ReviewAndImageServiceTest](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/application/src/test/kotlin/com/content/application/service/ReviewAndImageServiceTest.kt)
 - [ReviewImageMetaCommandServiceTest](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/application/src/test/kotlin/com/content/application/service/ReviewImageMetaCommandServiceTest.kt)
 
 <br/>
 
-## 9. TODO
+## 10. TODO
 - 리뷰가 작성된 코스는 더 이상 수정 불가하도록 제약 조건을 추가해주어야 해요!
