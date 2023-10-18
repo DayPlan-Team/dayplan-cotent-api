@@ -63,7 +63,7 @@
 
 - > #### [Course의 편집 가능 범위를 정의해요](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/DateCourseEditRange.md)
   
-- > #### [리뷰 작성을 정의해요!](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/ReviewWrite.md)
+- > #### [리뷰 작성 및 저장을 정의해요!](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/ReviewWrite.md)
 
 - > #### [코스와 리뷰에 유저아이디 삭제(반정규화 수정)을 설명해요! 작성 중 입니다!]()
   
