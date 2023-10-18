@@ -14,9 +14,6 @@ import jakarta.persistence.Table
 data class ReviewEntity(
 
     @Column
-    val userId: Long,
-
-    @Column
     val courseId: Long,
 
     @Column
@@ -33,7 +30,6 @@ data class ReviewEntity(
     fun toDomainModel(): Review {
         return Review(
             reviewGroupId = reviewGroupId,
-            userId = userId,
             courseId = courseId,
             reviewId = id,
             content = content,
@@ -46,7 +42,6 @@ data class ReviewEntity(
         fun from(review: Review): ReviewEntity {
             return ReviewEntity(
                 reviewGroupId = review.reviewId,
-                userId = review.userId,
                 courseId = review.courseId,
                 content = review.content,
                 id = review.reviewId,

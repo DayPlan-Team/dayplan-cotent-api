@@ -61,17 +61,6 @@ class ReviewWriteService(
     }
 
     override fun writeReview(review: Review): Review {
-        val reviewGroup = getReviewGroupAndVerify(
-            userId = review.userId,
-            reviewGroupId = review.reviewGroupId,
-        )
-        verifyPossibleReviewCourse(reviewGroup.courseGroupId)
-
         return reviewCommandPort.upsertReview(review)
     }
-
-    private fun verifyPossibleReviewCourse(courseGroupId: Long) {
-        PossibleReviewVerifier.verifyPossibleReviewCourses(courseQueryPort.getCoursesByGroupId(courseGroupId))
-    }
-
 }

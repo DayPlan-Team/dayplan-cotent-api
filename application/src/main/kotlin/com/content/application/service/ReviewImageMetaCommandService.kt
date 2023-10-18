@@ -41,7 +41,7 @@ class ReviewImageMetaCommandService(
             deleteReviewImageMetaIfNotEmpty(findReviewImageMetas)
 
             reviewImageMetaCommandPort.upsertReviewImageMetas(reviewImageMetas)
-            saveReviewImageAndGetImageUrl(reviewImages = reviewImages, reviewImageMetas = reviewImageMetas)
+            saveReviewImage(reviewImages = reviewImages, reviewImageMetas = reviewImageMetas)
         }
     }
 
@@ -51,7 +51,7 @@ class ReviewImageMetaCommandService(
         }
     }
 
-    private fun saveReviewImageAndGetImageUrl(
+    private fun saveReviewImage(
         reviewImages: List<ReviewImage>,
         reviewImageMetas: List<ReviewImageMeta>
     ) {
