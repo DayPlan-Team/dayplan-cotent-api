@@ -2,7 +2,6 @@ package com.content.application.service
 
 import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewImageMeta
-import com.content.domain.review.ReviewImageMetaRequest
 import com.content.domain.review.ReviewImageMetaCommandUseCase
 import com.content.domain.review.ReviewImageStorage
 import com.content.domain.review.isEqual
@@ -21,18 +20,17 @@ class ReviewImageMetaCommandService(
 ) : ReviewImageMetaCommandUseCase {
     override fun upsertReviewImageMeta(
         reviewImages: List<ReviewImage>,
-        reviewImageMetaRequests: List<ReviewImageMetaRequest>,
+        reviewImageMetas: List<ReviewImageMeta>,
     ) {
 
-        val reviewImageMetas = ReviewImageMeta
-            .from(reviewImages, reviewImageMetaRequests)
-            .sortedBy { it.sequence }
+        if (reviewImageMetas.isNotEmpty()) {
+            val findReviewImageMetas = reviewImageMetaQueryPort
+                .getReviewImageMetasByReviewId(reviewImageMetas.first().reviewId)
+                .sortedBy { it.sequence }
 
-        val findReviewImageMetas = reviewImageMetaQueryPort
-            .getReviewImageMetasByReviewId(reviewImageMetas.first().reviewId)
-            .sortedBy { it.sequence }
+            upsertIfNotEqualBefore(reviewImageMetas, findReviewImageMetas, reviewImages)
+        }
 
-        upsertIfNotEqualBefore(reviewImageMetas, findReviewImageMetas, reviewImages)
     }
 
     private fun upsertIfNotEqualBefore(
