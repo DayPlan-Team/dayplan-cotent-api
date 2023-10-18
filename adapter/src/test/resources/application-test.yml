@@ -1,0 +1,42 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+jwt:
+  access-expiration-time: 1296000
+  refresh-expiration-time: 2592000
+  secret-key: gslQJkmrazoY1ytKUji6V0Qd49dWiCXxXVFMFQLezNuxEoFTQ7Xl6A1F7piKFybsZnoE06nnvaMbpAbPcKoeBg==
+
+logging:
+  level:
+    root: info
+
+encryption:
+  secret-key: gslQJkmrazoY1ytKUji6V0Qd49dWiCXxXVFMFQLezNuxEoFTQ7Xl6A1F7piKFybsZnoE06nnvaMbpAbPcKoeBg==
+  salt: gslQJkmrazoY1ytKUji6V0Qd49dWiCXxXVFMFQLezNuxEoFTQ7Xl6A1F7piKFybsZnoE06nnvaMbpAbPcKoeBg==
