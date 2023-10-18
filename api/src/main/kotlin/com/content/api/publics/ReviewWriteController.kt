@@ -1,12 +1,13 @@
 package com.content.api.publics
 
-import com.content.application.service.ReviewAndImageService
+import com.content.application.service.ReviewAndReviewImageService
 import com.content.application.service.UserVerifyService
 import com.content.domain.review.CourseWithPossibleReview
 import com.content.domain.review.Review
 import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewImageMeta
 import com.content.domain.review.ReviewWriteUseCase
+import com.content.domain.review.port.ReviewImageStoragePort
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -25,7 +26,8 @@ import org.springframework.web.multipart.MultipartFile
 class ReviewWriteController(
     private val userVerifyService: UserVerifyService,
     private val reviewWriteUseCase: ReviewWriteUseCase,
-    private val reviewAndImageService: ReviewAndImageService,
+    private val reviewAndReviewImageService: ReviewAndReviewImageService,
+    private val reviewImageStoragePort: ReviewImageStoragePort,
 ) {
 
     @GetMapping
@@ -64,12 +66,16 @@ class ReviewWriteController(
             reviewWriteApiRequest = reviewWriteApiRequest,
         )
 
-        reviewAndImageService.writeReviewAndSaveImage(
+        val reviewImageStorageDatas = reviewAndReviewImageService.writeReviewAndGetReviewImageStorageData(
             user = user,
             review = review,
             reviewImages = reviewImages,
-            reviewImageMetas = reviewImageMetas
+            reviewImageMetas = reviewImageMetas,
         )
+
+        if (reviewImageStorageDatas.isNotEmpty()) {
+            reviewImageStoragePort.saveReviewImage(reviewImageStorageDatas)
+        }
 
         return ResponseEntity.ok().build()
     }
