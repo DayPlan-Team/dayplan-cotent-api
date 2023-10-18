@@ -43,6 +43,9 @@ dependencies {
     implementation("io.grpc:grpc-protobuf:1.58.0")
     implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
 
+    /* S3 */
+    implementation("software.amazon.awssdk:s3:2.21.0")
+
     implementation(project(":util"))
     implementation(project(":domain"))
     implementation(project(":application"))
