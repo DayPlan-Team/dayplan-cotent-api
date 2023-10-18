@@ -64,8 +64,9 @@
 
 - > #### [Course의 편집 가능 범위를 정의해요](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/DateCourseEditRange.md)
   
+- > #### [리뷰 작성을 정의해요!](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/ReviewWriteFlow.md)
+  
 <br/>
 
 ## 5. TODO
-- 리뷰 작성 기능 개발 중이에요!
 - DateCourse 조회 과정을 재정의 해야해요!
