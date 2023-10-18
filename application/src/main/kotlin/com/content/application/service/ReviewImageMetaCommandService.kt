@@ -30,7 +30,6 @@ class ReviewImageMetaCommandService(
 
             upsertIfNotEqualBefore(reviewImageMetas, findReviewImageMetas, reviewImages)
         }
-
     }
 
     private fun upsertIfNotEqualBefore(
