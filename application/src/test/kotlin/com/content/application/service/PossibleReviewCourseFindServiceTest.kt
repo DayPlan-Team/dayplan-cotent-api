@@ -39,7 +39,6 @@ class PossibleReviewCourseFindServiceTest(
             val courses = listOf(
                 Course(
                     courseId = 1L,
-                    userId = 1L,
                     step = 1,
                     placeId = 1L,
                     courseStage = CourseStage.PLACE_FINISH,
@@ -49,7 +48,6 @@ class PossibleReviewCourseFindServiceTest(
                 ),
                 Course(
                     courseId = 2L,
-                    userId = 1L,
                     step = 2,
                     placeId = 1L,
                     courseStage = CourseStage.PLACE_FINISH,
@@ -75,7 +73,6 @@ class PossibleReviewCourseFindServiceTest(
             val courses = listOf(
                 Course(
                     courseId = 1L,
-                    userId = 1L,
                     step = 1,
                     placeId = 1L,
                     courseStage = CourseStage.PLACE_FINISH,
@@ -85,7 +82,6 @@ class PossibleReviewCourseFindServiceTest(
                 ),
                 Course(
                     courseId = 2L,
-                    userId = 1L,
                     step = 2,
                     placeId = 1L,
                     courseStage = CourseStage.START,

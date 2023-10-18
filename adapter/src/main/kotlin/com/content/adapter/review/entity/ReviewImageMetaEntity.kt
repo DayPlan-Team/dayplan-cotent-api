@@ -26,7 +26,7 @@ data class ReviewImageMetaEntity(
     val originalName: String,
 
     @Column
-    val rename: String,
+    val imageName: String,
 
     @Column
     val reviewImageHashCode: Int,
@@ -45,7 +45,7 @@ data class ReviewImageMetaEntity(
             imageUrl = imageUrl,
             reviewId = reviewId,
             originalName = originalName,
-            rename = rename,
+            imageName = imageName,
             reviewImageHashCode = reviewImageHashCode,
             reviewImageId = id,
         )
@@ -58,7 +58,7 @@ data class ReviewImageMetaEntity(
                 imageUrl = reviewImageMeta.imageUrl,
                 reviewId = reviewImageMeta.reviewId,
                 originalName = reviewImageMeta.originalName,
-                rename = reviewImageMeta.rename,
+                imageName = reviewImageMeta.imageName,
                 reviewImageHashCode = reviewImageMeta.reviewImageHashCode,
                 status = Status.NORMAL,
                 id = reviewImageMeta.reviewImageId
@@ -71,7 +71,7 @@ data class ReviewImageMetaEntity(
                 imageUrl = reviewImageMeta.imageUrl,
                 reviewId = reviewImageMeta.reviewId,
                 originalName = reviewImageMeta.originalName,
-                rename = reviewImageMeta.rename,
+                imageName = reviewImageMeta.imageName,
                 reviewImageHashCode = reviewImageMeta.reviewImageHashCode,
                 status = Status.NORMAL,
                 id = reviewImageMeta.reviewImageId

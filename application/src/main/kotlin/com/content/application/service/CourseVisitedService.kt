@@ -39,7 +39,6 @@ class CourseVisitedService(
                         Course(
                             groupId = course.groupId,
                             courseId = course.courseId,
-                            userId = course.userId,
                             step = course.step,
                             courseStage = course.courseStage,
                             placeId = place.placeId,

@@ -59,7 +59,7 @@ class ReviewImageMetaCommandService(
             reviewImages = reviewImages,
             reviewImageStorages = reviewImageMetas.map {
                 ReviewImageStorage(
-                    name = it.rename,
+                    name = it.imageName,
                     imageUrl = it.imageUrl,
                 )
             }

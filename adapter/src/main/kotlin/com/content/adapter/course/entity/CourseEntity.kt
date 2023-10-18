@@ -21,16 +21,12 @@ import org.hibernate.annotations.DynamicUpdate
     name = "course",
     indexes = [
         Index(name = "idx_course_groupId", columnList = "groupId"),
-        Index(name = "idx_course_userId", columnList = "userId"),
     ]
 )
 data class CourseEntity(
 
     @Column
     val groupId: Long,
-
-    @Column
-    val userId: Long,
 
     @Column
     val step: Int,
@@ -57,7 +53,6 @@ data class CourseEntity(
         return Course(
             courseId = id,
             groupId = groupId,
-            userId = userId,
             step = step,
             placeId = placeId,
             placeCategory = placeCategory,
@@ -70,7 +65,6 @@ data class CourseEntity(
         fun fromCourse(course: Course): CourseEntity {
             return CourseEntity(
                 groupId = course.groupId,
-                userId = course.userId,
                 step = course.step,
                 placeId = course.placeId,
                 placeCategory = course.placeCategory,

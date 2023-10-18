@@ -5,9 +5,10 @@ import org.springframework.stereotype.Component
 
 @Component
 interface CourseGroupQueryPort {
-    fun getCourseGroupByGroupIdAndUserId(groupId: Long, userId: Long): CourseGroup
 
     fun getCourseGroupByUserId(userId: Long): List<CourseGroup>
 
     fun getCourseGroupByIds(courseGroupIds: List<Long>): List<CourseGroup>
+
+    fun getCourseGroupById(courseGroupId: Long): CourseGroup
 }
