@@ -2,13 +2,11 @@ package com.content.application.service
 
 import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewImageMeta
-import com.content.domain.review.ReviewImageMetaCommandUseCase
 import com.content.domain.review.port.ReviewImageMetaCommandPort
 import com.content.domain.review.port.ReviewImageMetaQueryPort
 import com.content.domain.review.port.ReviewImageStoragePort
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -38,7 +36,7 @@ class ReviewImageMetaCommandServiceTest(
             image = "world".toByteArray()
         )
 
-        every { reviewImageStoragePort.saveReviewImageAndGetImageUrl(any(), any()) } just Runs
+        every { reviewImageStoragePort.saveReviewImage(any(), any()) } just Runs
 
         `when`("reviewId == 0L인 메타 정보가 주어질 떄") {
 
@@ -59,7 +57,7 @@ class ReviewImageMetaCommandServiceTest(
             )
 
             every { reviewImageMetaCommandPort.upsertReviewImageMetas(any()) } just Runs
-            every { reviewImageStoragePort.saveReviewImageAndGetImageUrl(any(), any()) } just Runs
+            every { reviewImageStoragePort.saveReviewImage(any(), any()) } just Runs
 
             sut.upsertReviewImageMeta(
                 reviewImages = listOf(
@@ -137,7 +135,7 @@ class ReviewImageMetaCommandServiceTest(
 
             every { reviewImageMetaCommandPort.deleteReviewImageMetas(any()) } just Runs
             every { reviewImageMetaCommandPort.upsertReviewImageMetas(any()) } just Runs
-            every { reviewImageStoragePort.saveReviewImageAndGetImageUrl(any(), any()) } just Runs
+            every { reviewImageStoragePort.saveReviewImage(any(), any()) } just Runs
 
             sut.upsertReviewImageMeta(
                 reviewImages = listOf(
@@ -153,7 +151,7 @@ class ReviewImageMetaCommandServiceTest(
             then("reviewImageMeta는 업데이트 되어야 해요") {
                 verify(exactly = 1) { reviewImageMetaCommandPort.deleteReviewImageMetas(any()) }
                 verify(exactly = 1) { reviewImageMetaCommandPort.upsertReviewImageMetas(any()) }
-                verify(exactly = 1) { reviewImageStoragePort.saveReviewImageAndGetImageUrl(any(), any()) }
+                verify(exactly = 1) { reviewImageStoragePort.saveReviewImage(any(), any()) }
             }
         }
     }

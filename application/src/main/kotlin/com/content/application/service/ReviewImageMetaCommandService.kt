@@ -3,7 +3,6 @@ package com.content.application.service
 import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewImageMeta
 import com.content.domain.review.ReviewImageMetaCommandUseCase
-import com.content.domain.review.ReviewImageStorage
 import com.content.domain.review.isEqual
 import com.content.domain.review.port.ReviewImageMetaCommandPort
 import com.content.domain.review.port.ReviewImageMetaQueryPort
@@ -31,7 +30,7 @@ class ReviewImageMetaCommandService(
         }
     }
 
-    private fun processReviewImageByReviewId(
+    fun processReviewImageByReviewId(
         reviewImages: List<ReviewImage>,
         reviewImageMetas: List<ReviewImageMeta>,
     ) {
@@ -53,7 +52,7 @@ class ReviewImageMetaCommandService(
         }
     }
 
-    private fun upsertIfNotEqualBefore(
+    fun upsertIfNotEqualBefore(
         reviewImageMetas: List<ReviewImageMeta>,
         findReviewImageMetas: List<ReviewImageMeta>,
         reviewImages: List<ReviewImage>
@@ -68,28 +67,25 @@ class ReviewImageMetaCommandService(
         }
     }
 
-    private fun deleteReviewImageMetaIfNotEmpty(reviewImageMetas: List<ReviewImageMeta>) {
+    fun deleteReviewImageMetaIfNotEmpty(reviewImageMetas: List<ReviewImageMeta>) {
         if (reviewImageMetas.isNotEmpty()) {
             reviewImageMetaCommandPort.deleteReviewImageMetas(reviewImageMetas)
         }
     }
 
-    private fun saveReviewImageAndMetas(reviewImages: List<ReviewImage>, reviewImageMetas: List<ReviewImageMeta>) {
+    fun saveReviewImageAndMetas(reviewImages: List<ReviewImage>, reviewImageMetas: List<ReviewImageMeta>) {
         reviewImageMetaCommandPort.upsertReviewImageMetas(reviewImageMetas)
         saveReviewImage(reviewImages = reviewImages, reviewImageMetas = reviewImageMetas)
     }
 
-    private fun saveReviewImage(
+    fun saveReviewImage(
         reviewImages: List<ReviewImage>,
         reviewImageMetas: List<ReviewImageMeta>
     ) {
-        reviewImageStoragePort.saveReviewImageAndGetImageUrl(
+        reviewImageStoragePort.saveReviewImage(
             reviewImages = reviewImages,
-            reviewImageStorages = reviewImageMetas.map {
-                ReviewImageStorage(
-                    name = it.imageName,
-                    imageUrl = it.imageUrl,
-                )
+            imageUrls = reviewImageMetas.map {
+                it.imageUrl
             }
         )
     }

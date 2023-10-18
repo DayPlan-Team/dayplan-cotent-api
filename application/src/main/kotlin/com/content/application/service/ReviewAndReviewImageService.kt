@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
-class ReviewAndImageService(
+class ReviewAndReviewImageService(
     private val reviewGroupQueryPort: ReviewGroupQueryPort,
     private val reviewQueryPort: ReviewQueryPort,
     private val courseQueryPort: CourseQueryPort,
@@ -26,11 +26,11 @@ class ReviewAndImageService(
     private val reviewImageMetaCommandUseCase: ReviewImageMetaCommandUseCase,
 ) {
 
-    fun writeReviewAndSaveImage(
+    fun writeReviewAndImages(
         user: User,
         review: Review,
         reviewImages: List<ReviewImage>,
-        reviewImageMetas: List<ReviewImageMeta>
+        reviewImageMetas: List<ReviewImageMeta>,
     ) {
         val reviewGroup = getReviewGroup(review.reviewGroupId)
 
