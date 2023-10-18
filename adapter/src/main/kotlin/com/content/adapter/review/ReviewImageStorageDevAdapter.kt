@@ -15,7 +15,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest
 
 @Profile("dev | prod")
 @Component
-class ReviewImageStorageAdapter(
+class ReviewImageStorageDevAdapter(
     private val s3Client: S3Client,
     private val reviewImageMetaCommandUseCase: ReviewImageMetaCommandUseCase,
 ) : ReviewImageStoragePort {
