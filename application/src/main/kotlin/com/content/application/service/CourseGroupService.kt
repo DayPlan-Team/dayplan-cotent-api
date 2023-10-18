@@ -3,6 +3,8 @@ package com.content.application.service
 import com.content.domain.course.port.CourseGroupCommandPort
 import com.content.domain.course.port.CourseGroupQueryPort
 import com.content.domain.course.CourseGroup
+import com.content.util.exception.ContentException
+import com.content.util.exceptioncode.ContentExceptionCode
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -17,10 +19,10 @@ class CourseGroupService(
     }
 
     fun getCourseGroup(userId: Long, groupId: Long): CourseGroup {
-        return courseGroupQueryPort.getCourseGroupByGroupIdAndUserId(
-            userId = userId,
-            groupId = groupId,
-        )
+        val courseGroup = courseGroupQueryPort.getCourseGroupById(groupId)
+        require(courseGroup.userId == userId) { throw ContentException(ContentExceptionCode.USER_INVALID) }
+
+        return courseGroup
     }
 
     fun getCourseGroups(userId: Long): List<CourseGroup> {

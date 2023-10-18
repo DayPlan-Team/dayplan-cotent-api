@@ -7,6 +7,7 @@ import com.content.application.request.CourseUpsertRequest
 import com.content.application.response.DetailCourse
 import com.content.domain.course.Course
 import com.content.domain.course.CourseStage
+import com.content.domain.course.port.CourseGroupQueryPort
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
 import org.springframework.stereotype.Service
@@ -15,12 +16,17 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class CourseService(
     private val courseQueryPort: CourseQueryPort,
+    private val courseGroupQueryPort: CourseGroupQueryPort,
     private val courseCommandPort: CourseCommandPort,
     private val placePort: PlacePort,
 ) {
 
     @Transactional
     fun upsertCourse(request: CourseUpsertRequest) {
+        verifyCourseGroupOwner(
+            courseGroupId = request.groupId,
+            userId = request.userId
+        )
 
         val course = when {
             request.courseId == 0L && request.placeId == 0L -> createCurseStageStart(request)
@@ -32,9 +38,15 @@ class CourseService(
         courseCommandPort.upsertCourse(course)
     }
 
+    private fun verifyCourseGroupOwner(courseGroupId: Long, userId: Long) {
+        require(courseGroupQueryPort.getCourseGroupById(courseGroupId = courseGroupId).userId == userId) {
+            throw ContentException(ContentExceptionCode.USER_INVALID)
+        }
+
+    }
+
     private fun createCurseStageStart(request: CourseUpsertRequest): Course {
         return Course(
-            userId = request.userId,
             courseId = 0L,
             groupId = request.groupId,
             step = request.step,
@@ -45,10 +57,7 @@ class CourseService(
     }
 
     private fun createCourseCategoryFinish(request: CourseUpsertRequest): Course {
-        verifyCourseByUser(request.courseId, request.userId)
-
         return Course(
-            userId = request.userId,
             courseId = 0L,
             groupId = request.groupId,
             step = request.step,
@@ -58,16 +67,10 @@ class CourseService(
         )
     }
 
-    private fun verifyCourseByUser(courseId: Long, userId: Long) {
-        require(courseQueryPort.getCourseById(courseId).userId == userId) { throw ContentException(ContentExceptionCode.USER_INVALID) }
-    }
-
     private fun createCoursePlaceFinish(request: CourseUpsertRequest): Course {
-        verifyCourseByUser(request.courseId, request.userId)
         verifyPlaceId(request.groupId)
 
         return Course(
-            userId = request.userId,
             courseId = request.courseId,
             groupId = request.groupId,
             step = request.step,

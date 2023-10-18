@@ -11,15 +11,6 @@ import org.springframework.stereotype.Component
 class CourseGroupQueryAdapter(
     private val courseGroupEntityRepository: CourseGroupEntityRepository,
 ) : CourseGroupQueryPort {
-    override fun getCourseGroupByGroupIdAndUserId(groupId: Long, userId: Long): CourseGroup {
-        val courseGroupEntity = courseGroupEntityRepository.findById(groupId)
-            .orElseThrow { throw ContentException(ContentExceptionCode.CONTENT_GROUP_INVALID) }
-
-        if (courseGroupEntity.userId == userId) {
-            return courseGroupEntity.toDomainModel()
-        }
-        throw ContentException(ContentExceptionCode.CONTENT_GROUP_USER_ID_NOT_MATCH)
-    }
 
     override fun getCourseGroupByUserId(userId: Long): List<CourseGroup> {
         return courseGroupEntityRepository.findCourseGroupEntitiesByUserId(userId)
@@ -32,5 +23,11 @@ class CourseGroupQueryAdapter(
     override fun getCourseGroupByIds(courseGroupIds: List<Long>): List<CourseGroup> {
         return courseGroupEntityRepository.findCourseGroupEntitiesByIdIn(courseGroupIds)
             .map { it.toDomainModel() }
+    }
+
+    override fun getCourseGroupById(courseGroupId: Long): CourseGroup {
+        return courseGroupEntityRepository.findById(courseGroupId)
+            .orElseThrow { throw ContentException(ContentExceptionCode.CONTENT_COURSE_BAD_REQUEST) }
+            .toDomainModel()
     }
 }

@@ -4,7 +4,6 @@ import com.content.domain.share.PlaceCategory
 
 data class Course(
     val courseId: Long,
-    val userId: Long,
     val step: Int,
     val placeId: Long,
     val courseStage: CourseStage,

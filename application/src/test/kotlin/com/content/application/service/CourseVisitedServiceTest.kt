@@ -45,7 +45,6 @@ class CourseVisitedServiceTest(
         val courses = listOf(
             Course(
                 courseId = 1L,
-                userId = userId,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -55,7 +54,6 @@ class CourseVisitedServiceTest(
             ),
             Course(
                 courseId = 2L,
-                userId = userId,
                 step = 1,
                 placeId = 2L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -65,7 +63,6 @@ class CourseVisitedServiceTest(
             ),
             Course(
                 courseId = 3L,
-                userId = userId,
                 step = 1,
                 placeId = 3L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -75,7 +72,6 @@ class CourseVisitedServiceTest(
             ),
             Course(
                 courseId = 4L,
-                userId = userId,
                 step = 1,
                 placeId = 4L,
                 courseStage = CourseStage.PLACE_FINISH,

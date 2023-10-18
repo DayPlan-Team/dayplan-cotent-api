@@ -5,10 +5,14 @@ import com.content.domain.course.port.CourseQueryPort
 import com.content.application.port.PlacePort
 import com.content.application.request.CourseUpsertRequest
 import com.content.domain.course.Course
+import com.content.domain.course.CourseGroup
 import com.content.domain.course.CourseStage
+import com.content.domain.course.port.CourseGroupQueryPort
 import com.content.domain.place.Place
 import com.content.domain.share.PlaceCategory
 import com.content.util.exception.ContentException
+import com.user.util.address.CityCode
+import com.user.util.address.DistrictCode
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
@@ -22,6 +26,7 @@ class CourseServiceTest(
     private val courseQueryPort: CourseQueryPort = mockk(),
     private val courseCommandPort: CourseCommandPort = mockk(),
     private val placePort: PlacePort = mockk(),
+    private val courseGroupQueryPort: CourseGroupQueryPort = mockk(),
 ) : BehaviorSpec({
 
     isolationMode = IsolationMode.InstancePerTest
@@ -30,6 +35,7 @@ class CourseServiceTest(
         courseQueryPort = courseQueryPort,
         courseCommandPort = courseCommandPort,
         placePort = placePort,
+        courseGroupQueryPort = courseGroupQueryPort,
     )
 
     given("courseId = 0, placeId = 0인 저장 요청이 주어져요") {
@@ -43,6 +49,13 @@ class CourseServiceTest(
         )
 
         `when`("코스 저장 요청을 수행하면") {
+            every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
+                userId = 1L,
+                groupId = 1L,
+                groupName = "그룹",
+                cityCode = CityCode.SEOUL,
+                districtCode = DistrictCode.SEOUL_DOBONG,
+            )
             every { courseCommandPort.upsertCourse(any()) } just Runs
 
             sut.upsertCourse(courseUpsertRequest)
@@ -66,6 +79,14 @@ class CourseServiceTest(
         )
 
         `when`("코스 저장 요청을 수행하면") {
+            every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
+                userId = 1L,
+                groupId = 1L,
+                groupName = "그룹",
+                cityCode = CityCode.SEOUL,
+                districtCode = DistrictCode.SEOUL_DOBONG,
+            )
+
             every { courseCommandPort.upsertCourse(any()) } just Runs
 
             then("에러가 발생해야 해요") {
@@ -88,9 +109,16 @@ class CourseServiceTest(
         every { courseCommandPort.upsertCourse(any()) } just Runs
 
         `when`("코스를 만든 유저와 동일한 userId면") {
+            every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
+                userId = 1L,
+                groupId = 1L,
+                groupName = "그룹",
+                cityCode = CityCode.SEOUL,
+                districtCode = DistrictCode.SEOUL_DOBONG,
+            )
+
             every { courseQueryPort.getCourseById(any()) } returns Course(
                 courseId = 1L,
-                userId = 1L,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.CATEGORY_FINISH,
@@ -109,9 +137,16 @@ class CourseServiceTest(
         }
 
         `when`("코스를 만든 유저와 userId가 다르면") {
+            every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
+                userId = 2L,
+                groupId = 1L,
+                groupName = "그룹",
+                cityCode = CityCode.SEOUL,
+                districtCode = DistrictCode.SEOUL_DOBONG,
+            )
+
             every { courseQueryPort.getCourseById(any()) } returns Course(
                 courseId = 1L,
-                userId = 2L,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.CATEGORY_FINISH,
@@ -140,9 +175,17 @@ class CourseServiceTest(
         every { courseCommandPort.upsertCourse(any()) } just Runs
 
         `when`("코스를 만든 유저와 동일한 userId고, place 정보가 존재해요") {
+
+            every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
+                userId = 1L,
+                groupId = 1L,
+                groupName = "그룹",
+                cityCode = CityCode.SEOUL,
+                districtCode = DistrictCode.SEOUL_DOBONG,
+            )
+
             every { courseQueryPort.getCourseById(any()) } returns Course(
                 courseId = 1L,
-                userId = 1L,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.CATEGORY_FINISH,
@@ -173,9 +216,16 @@ class CourseServiceTest(
         }
 
         `when`("코스를 만든 유저와 userId가 다르면") {
+            every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
+                userId = 2L,
+                groupId = 1L,
+                groupName = "그룹",
+                cityCode = CityCode.SEOUL,
+                districtCode = DistrictCode.SEOUL_DOBONG,
+            )
+
             every { courseQueryPort.getCourseById(any()) } returns Course(
                 courseId = 1L,
-                userId = 2L,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.CATEGORY_FINISH,
@@ -194,13 +244,20 @@ class CourseServiceTest(
         `when`("코스를 만든 유저와 userId같은데, 플레이스 정보가 비어있으면") {
             every { courseQueryPort.getCourseById(any()) } returns Course(
                 courseId = 1L,
-                userId = 1L,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.CATEGORY_FINISH,
                 placeCategory = PlaceCategory.CAFE,
                 visitedStatus = false,
                 groupId = 1L,
+            )
+
+            every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
+                userId = 1L,
+                groupId = 1L,
+                groupName = "그룹",
+                cityCode = CityCode.SEOUL,
+                districtCode = DistrictCode.SEOUL_DOBONG,
             )
 
             every { placePort.getPlaceByPlaceId(any()) } returns emptyList()

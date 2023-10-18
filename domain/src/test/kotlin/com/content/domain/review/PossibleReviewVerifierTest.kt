@@ -11,12 +11,10 @@ import io.kotest.core.spec.style.BehaviorSpec
 class PossibleReviewVerifierTest : BehaviorSpec({
 
     given("유저 아이디가 주어져요") {
-        val userId = 1L
 
         `when`("모두 방문, 완성된 코스가 주어지면") {
             val courseA = Course(
                 courseId = 1L,
-                userId = userId,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -27,7 +25,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
 
             val courseB = Course(
                 courseId = 2L,
-                userId = userId,
                 step = 2,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -46,7 +43,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
         `when`("하나라도 방문 하지 않고, 완성된 코스가 주어지면") {
             val courseA = Course(
                 courseId = 1L,
-                userId = userId,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -57,7 +53,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
 
             val courseB = Course(
                 courseId = 2L,
-                userId = userId,
                 step = 2,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -76,7 +71,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
         `when`("모두 방문 하지 않고, 완성된 코스가 주어지면") {
             val courseA = Course(
                 courseId = 1L,
-                userId = userId,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -87,7 +81,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
 
             val courseB = Course(
                 courseId = 2L,
-                userId = userId,
                 step = 2,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -106,7 +99,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
         `when`("모두 방문 하지 않고, 하나라도 완성되지 않은 코스가 주어지면") {
             val courseA = Course(
                 courseId = 1L,
-                userId = userId,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.CATEGORY_FINISH,
@@ -117,7 +109,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
 
             val courseB = Course(
                 courseId = 2L,
-                userId = userId,
                 step = 2,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -136,7 +127,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
         `when`("모두 방문 하지 않고, 모두 완성되지 않은 코스가 주어지면") {
             val courseA = Course(
                 courseId = 1L,
-                userId = userId,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.CATEGORY_FINISH,
@@ -147,7 +137,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
 
             val courseB = Course(
                 courseId = 2L,
-                userId = userId,
                 step = 2,
                 placeId = 1L,
                 courseStage = CourseStage.CATEGORY_FINISH,
@@ -166,7 +155,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
         `when`("하나만 방문 하지 않고, 하나만 완성되지 않은 코스가 주어지면") {
             val courseA = Course(
                 courseId = 1L,
-                userId = userId,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.CATEGORY_FINISH,
@@ -177,7 +165,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
 
             val courseB = Course(
                 courseId = 2L,
-                userId = userId,
                 step = 2,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -196,7 +183,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
         `when`("하나만 방문 하지 않고, 하나만 완성되지 않은 코스가 주어지면") {
             val courseA = Course(
                 courseId = 1L,
-                userId = userId,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.CATEGORY_FINISH,
@@ -207,7 +193,6 @@ class PossibleReviewVerifierTest : BehaviorSpec({
 
             val courseB = Course(
                 courseId = 2L,
-                userId = userId,
                 step = 2,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,

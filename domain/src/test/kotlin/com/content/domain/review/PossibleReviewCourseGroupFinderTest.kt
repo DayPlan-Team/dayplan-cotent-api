@@ -13,7 +13,6 @@ class PossibleReviewCourseGroupFinderTest : BehaviorSpec({
         val courses = listOf(
             Course(
                 courseId = 1L,
-                userId = 1L,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -23,7 +22,6 @@ class PossibleReviewCourseGroupFinderTest : BehaviorSpec({
             ),
             Course(
                 courseId = 2L,
-                userId = 1L,
                 step = 2,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -34,7 +32,6 @@ class PossibleReviewCourseGroupFinderTest : BehaviorSpec({
             /* 거점: courseStage not Place Finish */
             Course(
                 courseId = 3L,
-                userId = 1L,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.START,
@@ -44,7 +41,6 @@ class PossibleReviewCourseGroupFinderTest : BehaviorSpec({
             ),
             Course(
                 courseId = 2L,
-                userId = 1L,
                 step = 2,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -55,7 +51,6 @@ class PossibleReviewCourseGroupFinderTest : BehaviorSpec({
             /* 거점: VisitedStatus */
             Course(
                 courseId = 5L,
-                userId = 1L,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -65,7 +60,6 @@ class PossibleReviewCourseGroupFinderTest : BehaviorSpec({
             ),
             Course(
                 courseId = 6L,
-                userId = 1L,
                 step = 2,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -75,7 +69,6 @@ class PossibleReviewCourseGroupFinderTest : BehaviorSpec({
             ),
             Course(
                 courseId = 7L,
-                userId = 1L,
                 step = 1,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
@@ -85,7 +78,6 @@ class PossibleReviewCourseGroupFinderTest : BehaviorSpec({
             ),
             Course(
                 courseId = 8L,
-                userId = 1L,
                 step = 2,
                 placeId = 1L,
                 courseStage = CourseStage.PLACE_FINISH,
