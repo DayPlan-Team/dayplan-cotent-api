@@ -11,11 +11,10 @@
   - 흔히 "오늘 어디로 갈까?"를 의미하는 것으로 장소나 행동(액티비티) 등이 코스에 포함이 돼요.
     - "스타벅스 갔다가 영화보러 가자!"
     - "스타벅스", "영화"는 개별적인 장소나 행동을 의미하므로 각각 코스로 정의할 수 있어요.
-  - 코스는 작성자, 몇 번째 코스, 코스 완성 단계, 카테고리, 방문 여부 등으로 구성돼요.
+  - 코스는 몇 번째 코스, 코스 완성 단계, 카테고리, 방문 여부 등으로 구성돼요.
 ``` kotlin
   data class Course(
       val courseId: Long,
-      val userId: Long,
       val step: Int,
       val placeId: Long,
       val courseStage: CourseStage,
@@ -65,6 +64,8 @@
 - > #### [Course의 편집 가능 범위를 정의해요](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/DateCourseEditRange.md)
   
 - > #### [리뷰 작성을 정의해요!](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/readme/ReviewWriteFlow.md)
+
+- > #### [코스와 리뷰에 유저아이디 삭제(반정규화 수정)을 설명해요! 작성 중 입니다!]()
   
 <br/>
 
