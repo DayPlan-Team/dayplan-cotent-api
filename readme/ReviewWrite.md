@@ -309,7 +309,7 @@
 <br/>
 
 ``` kotlin
-  private fun processReviewImageByReviewId(
+  fun processReviewImageByReviewId(
         reviewImages: List<ReviewImage>,
         reviewImageMetas: List<ReviewImageMeta>,
     ) {
@@ -338,7 +338,7 @@
 
 ``` kotlin
 
-  private fun upsertIfNotEqualBefore(
+  fun upsertIfNotEqualBefore(
         reviewImageMetas: List<ReviewImageMeta>,
         findReviewImageMetas: List<ReviewImageMeta>,
         reviewImages: List<ReviewImage>
@@ -373,18 +373,18 @@
 <br/>
 
 ``` kotlin
-  private fun deleteReviewImageMetaIfNotEmpty(reviewImageMetas: List<ReviewImageMeta>) {
+  fun deleteReviewImageMetaIfNotEmpty(reviewImageMetas: List<ReviewImageMeta>) {
         if (reviewImageMetas.isNotEmpty()) {
             reviewImageMetaCommandPort.deleteReviewImageMetas(reviewImageMetas)
         }
     }
 
-    private fun saveReviewImageAndMetas(reviewImages: List<ReviewImage>, reviewImageMetas: List<ReviewImageMeta>) {
+    fun saveReviewImageAndMetas(reviewImages: List<ReviewImage>, reviewImageMetas: List<ReviewImageMeta>) {
         reviewImageMetaCommandPort.upsertReviewImageMetas(reviewImageMetas)
         saveReviewImage(reviewImages = reviewImages, reviewImageMetas = reviewImageMetas)
     }
 
-    private fun saveReviewImage(
+    fun saveReviewImage(
         reviewImages: List<ReviewImage>,
         reviewImageMetas: List<ReviewImageMeta>
     ) {

@@ -34,7 +34,7 @@ class ReviewAndImageServiceTest(
 
     isolationMode = IsolationMode.InstancePerLeaf
 
-    val sut = ReviewAndImageService(
+    val sut = ReviewAndReviewImageService(
         reviewGroupQueryPort = reviewGroupQueryPort,
         courseQueryPort = courseQueryPort,
         reviewWriteUseCase = reviewWriteUseCase,
@@ -71,7 +71,7 @@ class ReviewAndImageServiceTest(
 
             then("예외가 발생해요!") {
                 shouldThrow<ContentException> {
-                    sut.writeReviewAndSaveImage(
+                    sut.writeReviewAndImages(
                         user = user,
                         review = review,
                         reviewImages = reviewImages,
@@ -104,7 +104,7 @@ class ReviewAndImageServiceTest(
 
             then("예외가 발생해요!") {
                 shouldThrow<ContentException> {
-                    sut.writeReviewAndSaveImage(
+                    sut.writeReviewAndImages(
                         user = user,
                         review = review,
                         reviewImages = reviewImages,
@@ -137,7 +137,7 @@ class ReviewAndImageServiceTest(
 
             then("예외가 발생해요!") {
                 shouldThrow<ContentException> {
-                    sut.writeReviewAndSaveImage(
+                    sut.writeReviewAndImages(
                         user = user,
                         review = review,
                         reviewImages = reviewImages,
@@ -186,7 +186,7 @@ class ReviewAndImageServiceTest(
 
             then("예외가 발생해요!") {
                 shouldThrow<ContentException> {
-                    sut.writeReviewAndSaveImage(
+                    sut.writeReviewAndImages(
                         user = user,
                         review = review,
                         reviewImages = reviewImages,
@@ -237,7 +237,7 @@ class ReviewAndImageServiceTest(
             every { reviewImageMetaCommandUseCase.upsertReviewImageMeta(any(), any()) } just Runs
 
             then("예외 발생 없이 정상 실행 되어야 해요") {
-                sut.writeReviewAndSaveImage(
+                sut.writeReviewAndImages(
                     user = user,
                     review = review,
                     reviewImages = reviewImages,
