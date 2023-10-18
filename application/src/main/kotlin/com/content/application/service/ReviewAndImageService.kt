@@ -1,5 +1,6 @@
 package com.content.application.service
 
+import com.content.domain.course.CourseStage
 import com.content.domain.course.port.CourseQueryPort
 import com.content.domain.review.Review
 import com.content.domain.review.ReviewGroup
@@ -48,6 +49,8 @@ class ReviewAndImageService(
     }
 
     private fun verifyInvalidReviewWrite(review: Review, reviewGroup: ReviewGroup) {
+        verifyReviewGroupOwner(reviewGroup.userId, review.userId)
+
         verifyReviewOwner(
             reviewId = review.reviewId,
             userId = review.userId,
@@ -56,6 +59,10 @@ class ReviewAndImageService(
             courseGroupId = reviewGroup.courseGroupId,
             courseId = review.courseId,
         )
+    }
+
+    private fun verifyReviewGroupOwner(reviewGroupUserId: Long, userId: Long) {
+        require(reviewGroupUserId == userId) { throw ContentException(ContentExceptionCode.USER_INVALID) }
     }
 
     private fun verifyReviewOwner(reviewId: Long, userId: Long) {
@@ -69,8 +76,12 @@ class ReviewAndImageService(
     }
 
     private fun verifyInvalidReviewCourse(courseGroupId: Long, courseId: Long) {
-        require(courseQueryPort
-            .getCoursesByGroupId(courseGroupId).any { courseId == it.courseId }) {
+        val courses = courseQueryPort
+            .getCoursesByGroupId(courseGroupId)
+
+        require(
+            courses.any { courseId == it.courseId && it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH }
+        ) {
             throw ContentException(ContentExceptionCode.BAD_REQUEST_REVIEW)
         }
     }
