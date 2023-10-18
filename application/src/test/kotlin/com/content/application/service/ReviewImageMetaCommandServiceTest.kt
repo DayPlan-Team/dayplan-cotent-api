@@ -4,7 +4,6 @@ import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewImageMeta
 import com.content.domain.review.port.ReviewImageMetaCommandPort
 import com.content.domain.review.port.ReviewImageMetaQueryPort
-import com.content.domain.review.port.ReviewImageStoragePort
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.Runs

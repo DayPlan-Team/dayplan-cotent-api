@@ -8,7 +8,6 @@ import com.content.domain.review.ReviewGroup
 import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewImageMeta
 import com.content.domain.review.ReviewImageMetaCommandUseCase
-import com.content.domain.review.ReviewImageStorageData
 import com.content.domain.review.ReviewWriteUseCase
 import com.content.domain.review.port.ReviewGroupQueryPort
 import com.content.domain.review.port.ReviewQueryPort
