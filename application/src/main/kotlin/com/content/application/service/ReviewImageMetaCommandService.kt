@@ -3,7 +3,7 @@ package com.content.application.service
 import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewImageMeta
 import com.content.domain.review.ReviewImageMetaRequest
-import com.content.domain.review.ReviewImageMetaWriteUseCase
+import com.content.domain.review.ReviewImageMetaCommandUseCase
 import com.content.domain.review.ReviewImageStorage
 import com.content.domain.review.isEqual
 import com.content.domain.review.port.ReviewImageMetaCommandPort
@@ -14,12 +14,12 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
-class ReviewImageMetaWriteService(
+class ReviewImageMetaCommandService(
     private val reviewImageMetaCommandPort: ReviewImageMetaCommandPort,
     private val reviewImageMetaQueryPort: ReviewImageMetaQueryPort,
     private val reviewImageStoragePort: ReviewImageStoragePort,
-) : ReviewImageMetaWriteUseCase {
-    override fun writeReviewImageMeta(
+) : ReviewImageMetaCommandUseCase {
+    override fun upsertReviewImageMeta(
         reviewImages: List<ReviewImage>,
         reviewImageMetaRequests: List<ReviewImageMetaRequest>,
     ) {
@@ -32,10 +32,10 @@ class ReviewImageMetaWriteService(
             .getReviewImageMetasByReviewId(reviewImageMetas.first().reviewId)
             .sortedBy { it.sequence }
 
-        writeReviewIfNotEqualBefore(reviewImageMetas, findReviewImageMetas, reviewImages)
+        upsertIfNotEqualBefore(reviewImageMetas, findReviewImageMetas, reviewImages)
     }
 
-    private fun writeReviewIfNotEqualBefore(
+    private fun upsertIfNotEqualBefore(
         reviewImageMetas: List<ReviewImageMeta>,
         findReviewImageMetas: List<ReviewImageMeta>,
         reviewImages: List<ReviewImage>
