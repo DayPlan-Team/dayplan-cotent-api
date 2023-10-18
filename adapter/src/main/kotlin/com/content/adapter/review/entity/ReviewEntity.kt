@@ -17,9 +17,6 @@ data class ReviewEntity(
     val userId: Long,
 
     @Column
-    val title: String,
-
-    @Column
     val courseId: Long,
 
     @Column
@@ -37,7 +34,6 @@ data class ReviewEntity(
         return Review(
             reviewGroupId = reviewGroupId,
             userId = userId,
-            title = title,
             courseId = courseId,
             reviewId = id,
             content = content,
@@ -51,7 +47,6 @@ data class ReviewEntity(
             return ReviewEntity(
                 reviewGroupId = review.reviewId,
                 userId = review.userId,
-                title = review.title,
                 courseId = review.courseId,
                 content = review.content,
                 id = review.reviewId,

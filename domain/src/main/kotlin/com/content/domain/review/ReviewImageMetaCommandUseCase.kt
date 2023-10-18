@@ -5,5 +5,5 @@ import org.springframework.stereotype.Component
 @Component
 interface ReviewImageMetaCommandUseCase {
 
-    fun upsertReviewImageMeta(reviewImages: List<ReviewImage>, reviewImageMetaRequests: List<ReviewImageMetaRequest>)
+    fun upsertReviewImageMeta(reviewImages: List<ReviewImage>, reviewImageMetas: List<ReviewImageMeta>)
 }

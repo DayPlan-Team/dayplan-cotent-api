@@ -21,6 +21,8 @@ enum class ContentExceptionCode(
     DEFAULT_BAD_REQUEST(400, "COTR-012", "올바르지 않은 요청입니다."),
     NOT_FOUND_REVIEW(400, "COTR-013", "리뷰를 찾을 수 없습니다."),
     NOT_FOUND_REVIEW_IMAGE(400, "COTR-014", "리뷰 이미지를 찾을 수 없습니다."),
-    BAD_REQUEST_REVIEW_IMAGE(400, "COTR-015", "잘못된 리뷰 정보입니다"),
+    BAD_REQUEST_REVIEW_IMAGE(400, "COTR-015", "잘못된 리뷰 이미지 정보입니다"),
+    BAD_REQUEST_REVIEW_IMAGE_SIZE(400, "COTR-016", "이미지 사이즈 총합은 10MB를 넘을 수 없습니다."),
+    BAD_REQUEST_REVIEW(400, "COTR-016", "잘못된 리뷰 요청입니다."),
 }
 
