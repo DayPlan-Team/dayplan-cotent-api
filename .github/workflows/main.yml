@@ -6,15 +6,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: --entrypoint redis-server
+
     steps:
       - name: Checkout source code.
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Build
-        run: yarn vite build
+      - name: Run Tests with H2 Database
+        run: mvn test -Dspring.profiles.active=test
 
       - name: Sync Bucket
         env:
