@@ -59,7 +59,6 @@ class ReviewWriteController(
     data class CourseWithPossibleApiReview(
         @JsonProperty("courseId") val courseId: Long,
         @JsonProperty("reviewId") val reviewId: Long,
-        @JsonProperty("reviewTitle") val reviewTitle: String,
         @JsonProperty("createdAt") val createdAt: String,
         @JsonProperty("modifiedAt") val modifiedAt: String,
     ) {
@@ -68,7 +67,6 @@ class ReviewWriteController(
                 return CourseWithPossibleApiReview(
                     courseId = courseWithPossibleReview.courseId,
                     reviewId = courseWithPossibleReview.reviewId,
-                    reviewTitle = courseWithPossibleReview.reviewTitle,
                     createdAt = courseWithPossibleReview.createdAt,
                     modifiedAt = courseWithPossibleReview.modifiedAt,
                 )
@@ -77,10 +75,13 @@ class ReviewWriteController(
     }
 
     data class ReviewWriteApiRequest(
-        @JsonProperty("content") val content: String,
-        @JsonProperty("title") val title: String,
+        @JsonProperty("reviewId") val reviewId: Long,
         @JsonProperty("courseId") val courseId: Long,
-        val reviewImages: List<MultipartFile>
+        @JsonProperty("content") val content: String,
+        @JsonProperty("originalNames") val originalNames: List<String>,
+        @JsonProperty("reviewImageIds") val reviewImageIds: List<Long>,
+        val reviewImages: List<MultipartFile>,
     )
+
 
 }
