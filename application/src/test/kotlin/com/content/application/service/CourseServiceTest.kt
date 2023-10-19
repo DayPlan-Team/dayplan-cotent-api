@@ -9,6 +9,8 @@ import com.content.domain.course.CourseGroup
 import com.content.domain.course.CourseStage
 import com.content.domain.course.port.CourseGroupQueryPort
 import com.content.domain.place.Place
+import com.content.domain.review.Review
+import com.content.domain.review.port.ReviewQueryPort
 import com.content.domain.share.PlaceCategory
 import com.content.util.exception.ContentException
 import com.user.util.address.CityCode
@@ -27,6 +29,7 @@ class CourseServiceTest(
     private val courseCommandPort: CourseCommandPort = mockk(),
     private val placePort: PlacePort = mockk(),
     private val courseGroupQueryPort: CourseGroupQueryPort = mockk(),
+    private val reviewQueryPort: ReviewQueryPort = mockk(),
 ) : BehaviorSpec({
 
     isolationMode = IsolationMode.InstancePerLeaf
@@ -36,6 +39,7 @@ class CourseServiceTest(
         courseCommandPort = courseCommandPort,
         placePort = placePort,
         courseGroupQueryPort = courseGroupQueryPort,
+        reviewQueryPort = reviewQueryPort,
     )
 
     given("courseId = 0, placeId = 0인 저장 요청이 주어져요") {
@@ -47,6 +51,8 @@ class CourseServiceTest(
             placeCategory = PlaceCategory.CAFE,
             placeId = 0L,
         )
+
+        every { reviewQueryPort.getReviewsByCourseGroupId(any()) } returns emptyList()
 
         `when`("코스 저장 요청을 수행하면") {
             every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
@@ -78,6 +84,8 @@ class CourseServiceTest(
             placeId = 1L,
         )
 
+        every { reviewQueryPort.getReviewsByCourseGroupId(any()) } returns emptyList()
+
         `when`("코스 저장 요청을 수행하면") {
             every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
                 userId = 1L,
@@ -107,6 +115,8 @@ class CourseServiceTest(
             placeId = 0L,
         )
         every { courseCommandPort.upsertCourse(any()) } just Runs
+
+        every { reviewQueryPort.getReviewsByCourseGroupId(any()) } returns emptyList()
 
         `when`("코스를 만든 유저와 동일한 userId면") {
             every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
@@ -175,6 +185,8 @@ class CourseServiceTest(
 
         `when`("코스를 만든 유저와 동일한 userId고, place 정보가 존재해요") {
 
+            every { reviewQueryPort.getReviewsByCourseGroupId(any()) } returns emptyList()
+
             every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
                 userId = 1L,
                 groupId = 1L,
@@ -213,7 +225,36 @@ class CourseServiceTest(
             }
         }
 
+        `when`("코스를 만든 유저와 동일한 userId고, place 정보가 존재하지만, 이미 리뷰가 작성되었어요") {
+
+            every { reviewQueryPort.getReviewsByCourseGroupId(any()) } returns listOf(
+                Review(
+                    reviewId = 1L,
+                    reviewGroupId = 1L,
+                    courseId = 1L,
+                    content = "리뷰를 작성해요!",
+                )
+            )
+
+            every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
+                userId = 1L,
+                groupId = 1L,
+                groupName = "그룹",
+                cityCode = CityCode.SEOUL,
+                districtCode = DistrictCode.SEOUL_DOBONG,
+            )
+
+            then("이미 리뷰가 작성된 코스는 코스 수정이 불가해요!") {
+                shouldThrow<ContentException> {
+                    sut.upsertCourse(courseUpsertRequest)
+                }
+            }
+        }
+
         `when`("코스를 만든 유저와 userId가 다르면") {
+
+            every { reviewQueryPort.getReviewsByCourseGroupId(any()) } returns emptyList()
+
             every { courseGroupQueryPort.getCourseGroupById(any()) } returns CourseGroup(
                 userId = 2L,
                 groupId = 1L,
@@ -240,6 +281,9 @@ class CourseServiceTest(
         }
 
         `when`("코스를 만든 유저와 userId같은데, 플레이스 정보가 비어있으면") {
+
+            every { reviewQueryPort.getReviewsByCourseGroupId(any()) } returns emptyList()
+
             every { courseQueryPort.getCourseById(any()) } returns Course(
                 courseId = 1L,
                 step = 1,
