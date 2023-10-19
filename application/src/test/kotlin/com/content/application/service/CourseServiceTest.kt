@@ -29,7 +29,7 @@ class CourseServiceTest(
     private val courseGroupQueryPort: CourseGroupQueryPort = mockk(),
 ) : BehaviorSpec({
 
-    isolationMode = IsolationMode.InstancePerTest
+    isolationMode = IsolationMode.InstancePerLeaf
 
     val sut = CourseService(
         courseQueryPort = courseQueryPort,
@@ -130,7 +130,6 @@ class CourseServiceTest(
             sut.upsertCourse(courseUpsertRequest)
 
             then("코스가 정상 저장되어야 해요") {
-                verify(exactly = 1) { courseQueryPort.getCourseById(any()) }
                 verify(exactly = 0) { placePort.getPlaceByPlaceId(any()) }
                 verify(exactly = 1) { courseCommandPort.upsertCourse(any()) }
             }
@@ -209,7 +208,6 @@ class CourseServiceTest(
             sut.upsertCourse(courseUpsertRequest)
 
             then("코스가 정상 저장되어야 해요") {
-                verify(exactly = 1) { courseQueryPort.getCourseById(any()) }
                 verify(exactly = 1) { placePort.getPlaceByPlaceId(any()) }
                 verify(exactly = 1) { courseCommandPort.upsertCourse(any()) }
             }

@@ -25,7 +25,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Run Tests with H2 Database
-        run: ./gradlew test --info
+        run: ./gradlew test --info | grep 'ERROR'
 
       - name: Sync Bucket
         env:

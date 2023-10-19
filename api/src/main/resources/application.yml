@@ -7,8 +7,12 @@ jwt:
   secret-key: ${JWT_SECRET_KEY}
 
 grpc:
-  server:
-    port: 50052
+  content:
+    server:
+      port: 50052
+  user:
+    server:
+      port: 50051
 
 naver:
   develop-client-id: fZDbnomZT2TEeFgejPuJ

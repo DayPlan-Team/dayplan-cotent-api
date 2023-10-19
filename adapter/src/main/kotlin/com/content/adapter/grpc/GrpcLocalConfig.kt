@@ -4,20 +4,25 @@ import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import jakarta.annotation.PreDestroy
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
 import java.util.concurrent.TimeUnit
 
-@Profile("default | local | test")
 @Configuration
 class GrpcLocalConfig {
+
+    @Value("\${grpc.content.server.port}")
+    private lateinit var grpcContent: String
+
+    @Value("\${grpc.user.server.port}")
+    private lateinit var grpcUser: String
 
     /* 운영 배포시 address 설정 필요함 */
     @Bean
     @Qualifier("userManagedChannel")
     fun userManagedChannel(): ManagedChannel {
-        return ManagedChannelBuilder.forAddress("localhost", 50051)
+        return ManagedChannelBuilder.forAddress("localhost", grpcUser.toInt())
             .usePlaintext()
             .build()
     }
@@ -25,7 +30,7 @@ class GrpcLocalConfig {
     @Bean
     @Qualifier("contentManagedChannel")
     fun contentManagedChannel(): ManagedChannel {
-        return ManagedChannelBuilder.forAddress("localhost", 50052)
+        return ManagedChannelBuilder.forAddress("localhost", grpcContent.toInt())
             .usePlaintext()
             .build()
     }

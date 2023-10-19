@@ -42,5 +42,11 @@ encryption:
   salt: gslQJkmrazoY1ytKUji6V0Qd49dWiCXxXVFMFQLezNuxEoFTQ7Xl6A1F7piKFybsZnoE06nnvaMbpAbPcKoeBg==
 
 grpc:
+  content:
+    server:
+      port: 0
+  user:
+    server:
+      port: 0
   server:
-    port: 0
+    port: ${random.int[9000,9900]}

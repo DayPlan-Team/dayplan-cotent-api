@@ -81,10 +81,11 @@ class ReviewGroupUpsertControllerTest : FunSpec() {
             test("올바른 json 요청으로 리뷰 그룹 생성 응답을 검증을 성공해요") {
                 val reviewCreateGroupApiRequest = "{\"courseGroupId\": 12345}"
 
-                val mockHttpServletRequestBuilder = MockMvcRequestBuilders.post("https://localhost:8078/content/reviewgroups")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("UserId", userId)
-                    .content(reviewCreateGroupApiRequest)
+                val mockHttpServletRequestBuilder =
+                    MockMvcRequestBuilders.post("https://localhost:8078/content/reviewgroups")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("UserId", userId)
+                        .content(reviewCreateGroupApiRequest)
 
                 mockMvc.perform(mockHttpServletRequestBuilder)
                     .andExpect(status().isOk)
@@ -96,10 +97,11 @@ class ReviewGroupUpsertControllerTest : FunSpec() {
             test("잘못된 json 요청으로 리뷰 그룹 생성 응답을 검증을 실패해요") {
                 val request = "{\"courseGroupId2\": 12345}"
 
-                val mockHttpServletRequestBuilder = MockMvcRequestBuilders.post("https://localhost:8078/content/reviewgroups")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("UserId", userId)
-                    .content(request)
+                val mockHttpServletRequestBuilder =
+                    MockMvcRequestBuilders.post("https://localhost:8078/content/reviewgroups")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("UserId", userId)
+                        .content(request)
 
                 mockMvc.perform(mockHttpServletRequestBuilder)
                     .andExpect(status().is4xxClientError)
@@ -127,10 +129,11 @@ class ReviewGroupUpsertControllerTest : FunSpec() {
             test("올바른 json 요청으로 리뷰 그룹 생성 응답을 검증을 성공해요") {
                 val request = "{\"reviewGroupName\": \"ReviewA\"}"
 
-                val mockHttpServletRequestBuilder = MockMvcRequestBuilders.put("https://localhost:8078/content/reviewgroups/1")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("UserId", userId)
-                    .content(request)
+                val mockHttpServletRequestBuilder =
+                    MockMvcRequestBuilders.put("https://localhost:8078/content/reviewgroups/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("UserId", userId)
+                        .content(request)
 
                 mockMvc.perform(mockHttpServletRequestBuilder)
                     .andExpect(status().isOk)
@@ -142,10 +145,11 @@ class ReviewGroupUpsertControllerTest : FunSpec() {
             test("잘못된 json 요청으로 리뷰 그룹 생성 응답을 검증을 실패해요") {
                 val request = "{\"reviewGroupName2\": \"ReviewA\"}"
 
-                val mockHttpServletRequestBuilder = MockMvcRequestBuilders.put("https://localhost:8078/content/reviewgroups/1")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("UserId", userId)
-                    .content(request)
+                val mockHttpServletRequestBuilder =
+                    MockMvcRequestBuilders.put("https://localhost:8078/content/reviewgroups/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("UserId", userId)
+                        .content(request)
 
                 mockMvc.perform(mockHttpServletRequestBuilder)
                     .andExpect(status().is4xxClientError)
@@ -153,5 +157,4 @@ class ReviewGroupUpsertControllerTest : FunSpec() {
         }
 
     }
-
 }
