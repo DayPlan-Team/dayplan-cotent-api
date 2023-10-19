@@ -1,4 +1,4 @@
-package com.user.util.address
+package com.content.util.address
 
 data class AddressCode(
     val cityCode: CityCode = CityCode.DEFAULT,

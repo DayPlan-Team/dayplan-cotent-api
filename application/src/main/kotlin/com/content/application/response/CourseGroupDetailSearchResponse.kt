@@ -1,7 +1,7 @@
 package com.content.application.response
 
-import com.user.util.address.CityCode
-import com.user.util.address.DistrictCode
+import com.content.util.address.CityCode
+import com.content.util.address.DistrictCode
 
 data class CourseGroupDetailSearchResponse(
     val groupName: String,

@@ -1,4 +1,4 @@
-package com.user.util.address
+package com.content.util.address
 
 enum class CityCode(
     val code: Long,

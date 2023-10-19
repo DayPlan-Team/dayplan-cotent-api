@@ -3,10 +3,10 @@ package com.content.api.publics
 import com.content.application.service.CourseGroupService
 import com.content.application.service.UserVerifyService
 import com.content.domain.course.CourseGroup
+import com.content.util.address.AddressUtil
 import com.content.util.share.DateTimeCustomFormatter
 import com.content.util.share.Logger
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.user.util.address.AddressUtil
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

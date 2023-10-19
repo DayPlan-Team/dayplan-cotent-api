@@ -1,4 +1,4 @@
-package com.user.util.address
+package com.content.util.address
 
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
@@ -6,16 +6,6 @@ import org.springframework.stereotype.Component
 
 @Component
 object AddressUtil {
-
-    private val citiesByKoreanName = CityCode
-        .values()
-        .filter { it != CityCode.DEFAULT }
-        .groupBy { it.koreanName }
-
-    private val districtsByKoreanName = DistrictCode
-        .values()
-        .filter { it != DistrictCode.DEFAULT }
-        .groupBy { it.koreanName }
 
     private val districtsByCityCode = DistrictCode
         .values()
