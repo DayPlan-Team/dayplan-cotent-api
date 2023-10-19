@@ -5,10 +5,10 @@ import com.content.application.response.CourseGroupListSearchResponse
 import com.content.application.response.CourseGroupWithUserNicknameResponse
 import com.content.application.service.CourseGroupSearchService
 import com.content.application.service.UserVerifyService
+import com.content.util.address.AddressUtil
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
 import com.content.util.share.Logger
-import com.user.util.address.AddressUtil
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader

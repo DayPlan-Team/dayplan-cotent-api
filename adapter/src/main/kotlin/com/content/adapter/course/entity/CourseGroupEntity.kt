@@ -2,9 +2,9 @@ package com.content.adapter.course.entity
 
 import com.content.adapter.share.BaseEntity
 import com.content.domain.course.CourseGroup
+import com.content.util.address.CityCode
+import com.content.util.address.DistrictCode
 import com.content.util.share.DateTimeCustomFormatter
-import com.user.util.address.CityCode
-import com.user.util.address.DistrictCode
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType

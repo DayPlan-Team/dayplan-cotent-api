@@ -1,6 +1,6 @@
-package com.user.util.address
+package com.content.util.address
 
-import com.user.util.address.CityCode.*
+import com.content.util.address.CityCode.*
 
 enum class DistrictCode(
     val code: Long,

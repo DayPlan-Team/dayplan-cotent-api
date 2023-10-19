@@ -1,7 +1,7 @@
 package com.content.domain.course
 
-import com.user.util.address.CityCode
-import com.user.util.address.DistrictCode
+import com.content.util.address.CityCode
+import com.content.util.address.DistrictCode
 
 data class CourseGroup(
     val userId: Long,

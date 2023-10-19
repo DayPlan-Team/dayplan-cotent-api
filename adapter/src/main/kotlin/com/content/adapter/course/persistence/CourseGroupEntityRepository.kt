@@ -1,8 +1,8 @@
 package com.content.adapter.course.persistence
 
 import com.content.adapter.course.entity.CourseGroupEntity
-import com.user.util.address.CityCode
-import com.user.util.address.DistrictCode
+import com.content.util.address.CityCode
+import com.content.util.address.DistrictCode
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.data.jpa.repository.JpaRepository

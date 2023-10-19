@@ -40,7 +40,6 @@ class UserQueryAdapter(
             val call = userClient.getUserResponses(userIds)
 
             val response = call.execute()
-            log.info("response = ${response}")
             if (response.isSuccessful) {
                 val result = response.body()?.users.let {
                     it?.map { user ->
