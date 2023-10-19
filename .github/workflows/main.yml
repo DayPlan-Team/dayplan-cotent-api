@@ -25,7 +25,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Run Tests with H2 Database
-        run: ./gradlew test --info | grep 'ERROR'
+        run: ./gradlew build --info | grep 'ERROR'
 
       - name: List JAR files
         run: |
