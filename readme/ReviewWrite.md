@@ -484,6 +484,3 @@
 - [ReviewImageMetaCommandServiceTest](https://github.com/DayPlan-Team/dayplan-cotent-api/blob/main/application/src/test/kotlin/com/content/application/service/ReviewImageMetaCommandServiceTest.kt)
 
 <br/>
-
-## 10. TODO
-- 리뷰가 작성된 코스는 더 이상 수정 불가하도록 제약 조건을 추가해주어야 해요!

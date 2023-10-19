@@ -13,4 +13,6 @@ interface ReviewQueryPort {
     fun getReviewsByCourseIds(courseIds: List<Long>): List<Review>
 
     fun getReviewByCourseId(courseId: Long): Review?
+
+    fun getReviewsByCourseGroupId(courseGroupId: Long): List<Review>
 }

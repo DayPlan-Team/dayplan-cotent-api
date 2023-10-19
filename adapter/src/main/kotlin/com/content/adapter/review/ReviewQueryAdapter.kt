@@ -1,6 +1,7 @@
 package com.content.adapter.review
 
 import com.content.adapter.review.persistence.ReviewEntityRepository
+import com.content.adapter.review.persistence.ReviewGroupEntityRepository
 import com.content.domain.review.port.ReviewQueryPort
 import com.content.domain.review.Review
 import com.content.util.exception.ContentException
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component
 @Component
 class ReviewQueryAdapter(
     private val reviewEntityRepository: ReviewEntityRepository,
+    private val reviewGroupEntityRepository: ReviewGroupEntityRepository,
 ) : ReviewQueryPort {
     override fun getReviewsByReviewGroupId(reviewGroupId: Long): List<Review> {
         return reviewEntityRepository.findReviewEntitiesByReviewGroupId(reviewGroupId = reviewGroupId)
@@ -29,5 +31,16 @@ class ReviewQueryAdapter(
 
     override fun getReviewByCourseId(courseId: Long): Review? {
         return reviewEntityRepository.findReviewEntityByCourseId(courseId)?.toDomainModel()
+    }
+
+    override fun getReviewsByCourseGroupId(courseGroupId: Long): List<Review> {
+        return reviewGroupEntityRepository
+            .findReviewGroupEntityByCourseGroupId(courseGroupId)?.let { reviewGroupEntity ->
+                reviewEntityRepository
+                    .findReviewEntitiesByReviewGroupId(reviewGroupEntity.id)
+                    .map { reviewEntity ->
+                        reviewEntity.toDomainModel()
+                    }
+            } ?: emptyList()
     }
 }
