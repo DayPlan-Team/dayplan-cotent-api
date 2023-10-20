@@ -15,12 +15,12 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest
 
 @Profile("dev | prod")
 @Component
-class ReviewImageStorageDevAdapter(
+class ReviewImageStorageProdAdapter(
     private val s3Client: S3Client,
     private val reviewImageMetaCommandUseCase: ReviewImageMetaCommandUseCase,
 ) : ReviewImageStoragePort {
 
-    @Value("\${s3.key-prefix}")
+    @Value("\${s3.key}")
     private lateinit var s3KeyPrefix: String
 
     @Value("\${s3.bucket-name}")
