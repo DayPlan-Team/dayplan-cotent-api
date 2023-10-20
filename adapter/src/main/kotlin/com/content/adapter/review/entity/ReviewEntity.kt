@@ -7,10 +7,17 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.Index
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "review")
+@Table(
+    name = "review",
+    indexes = [
+        Index(name = "idx_review_courseId", columnList = "courseId"),
+        Index(name = "idx_review_reviewGroupId", columnList = "reviewGroupId"),
+    ]
+)
 data class ReviewEntity(
 
     @Column
