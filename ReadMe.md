@@ -3,6 +3,8 @@
 ## 1. 서버의 역할 및 설명
 - Content Server는 유저가 데이트 코스를 작성 및 조회, 리뷰를 작성 및 조회할 수 있는 서버에요.
 
+![img.png](readme/image/ServerStructure.png)
+
 <br/>
 
 ## 2. 주요 도메인
