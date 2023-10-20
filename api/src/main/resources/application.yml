@@ -2,23 +2,6 @@ server:
   port: 8078
   shutdown: graceful
 
-jwt:
-  access-expiration-time: 1296000
-  refresh-expiration-time: 2592000
-  secret-key: ${JWT_SECRET_KEY}
-
-grpc:
-  content:
-    server:
-      port: 50052
-  user:
-    server:
-      port: 50051
-
-naver:
-  develop-client-id: fZDbnomZT2TEeFgejPuJ
-  develop-client-secret: ${NAVER_DEVELOP_SECRET_KEY}
-
 logging:
   level:
     root: info
@@ -88,3 +71,39 @@ spring:
 s3:
   key-prefix: ${S3_KEY}
   bucket-name: ${BUCKET_NAME}
+
+user:
+  server:
+    url: ${USER_SERVER_URL}
+
+server:
+  port: ${SERVER_PORT}
+  shutdown: graceful
+
+grpc:
+  content:
+    server:
+      port: 50052
+  user:
+    server:
+      port: 50051
+  server:
+    port: 9090
+
+logging:
+  level:
+    root: info
+
+encryption:
+  secret-key: ${ENCRYPTION_SECRET_KEY}
+  salt: ${SALT}
+
+springdoc:
+  packages-to-scan: com.content.api
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha

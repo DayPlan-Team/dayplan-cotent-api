@@ -15,7 +15,6 @@ interface UserClient {
         @Query("userId") userId: Long,
     ): Call<UserResponse>
 
-
     @Headers(ApiClientUtil.CONTENT_TYPE_APPLICATION_JSON)
     @GET("/user/internal/users")
     fun getUserResponses(
