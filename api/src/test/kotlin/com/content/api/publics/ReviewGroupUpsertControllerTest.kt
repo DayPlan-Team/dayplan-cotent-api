@@ -8,9 +8,9 @@ import com.content.domain.review.ReviewGroup
 import com.content.domain.review.ReviewGroupCommandUseCase
 import com.content.domain.user.User
 import com.content.domain.user.UserAccountStatus
+import com.content.util.address.CityCode
+import com.content.util.address.DistrictCode
 import com.ninjasquad.springmockk.MockkBean
-import com.user.util.address.CityCode
-import com.user.util.address.DistrictCode
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.spring.SpringExtension

@@ -6,9 +6,9 @@ import com.content.domain.course.Course
 import com.content.domain.course.CourseGroup
 import com.content.domain.course.CourseStage
 import com.content.domain.share.PlaceCategory
+import com.content.util.address.CityCode
+import com.content.util.address.DistrictCode
 import com.content.util.exception.ContentException
-import com.user.util.address.CityCode
-import com.user.util.address.DistrictCode
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
