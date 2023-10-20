@@ -5,8 +5,8 @@ import com.content.adapter.review.persistence.ReviewGroupEntityRepository
 import com.content.application.ApplicationTestConfiguration
 import com.content.domain.course.CourseGroup
 import com.content.domain.review.ReviewGroupUpdateRequest
-import com.user.util.address.CityCode
-import com.user.util.address.DistrictCode
+import com.content.util.address.CityCode
+import com.content.util.address.DistrictCode
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

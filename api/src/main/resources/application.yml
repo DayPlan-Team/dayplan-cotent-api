@@ -1,5 +1,6 @@
 server:
   port: 8078
+  shutdown: graceful
 
 jwt:
   access-expiration-time: 1296000
