@@ -83,7 +83,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: false
+      ddl-auto: none
 
 s3:
   key-prefix: ${S3_KEY}
