@@ -8,10 +8,16 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.Index
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "review_image_meta")
+@Table(
+    name = "review_image_meta",
+    indexes = [
+        Index(name = "idx_reviewImageMeta_reviewId", columnList = "reviewId"),
+    ]
+)
 data class ReviewImageMetaEntity(
     @Column
     val sequence: Int,
