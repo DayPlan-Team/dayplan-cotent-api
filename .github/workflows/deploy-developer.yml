@@ -29,12 +29,19 @@ jobs:
 
       - name: Archive deployment files
         run: |
+          
+          cp build/libs/content-0.0.1-SNAPSHOT.jar ./
+          cp deploy/application_start.sh ./
+          cp deploy/before_install.sh ./
+          cp deploy/appspec.yml ./
+          
           tar -cvf dayplan-content-app.tar \
-            -C . \
-            build/libs/content-0.0.1-SNAPSHOT.jar \
-            deploy/application_start.sh \
-            deploy/before_install.sh \
-            deploy/appspec.yml
+            content-0.0.1-SNAPSHOT.jar \
+            application_start.sh \
+            before_install.sh \
+            appspec.yml
+          
+          rm content-0.0.1-SNAPSHOT.jar application_start.sh before_install.sh appspec.yml
 
       - name: Upload TAR to S3
         run: |
