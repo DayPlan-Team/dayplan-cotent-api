@@ -10,3 +10,7 @@ else
         sudo yum install -y java-17-amazon-corretto
     fi
 fi
+
+if ! type jq > /dev/null 2>&1; then
+    sudo yum install jq -y
+fi
