@@ -21,4 +21,5 @@ export USER_SERVER_URL=$USER_SERVER_URL
 export SPRING_PROFILES_ACTIVE=prod
 
 # 애플리케이션 실행
-java -jar /home/ec2-user/content-0.0.1-SNAPSHOT.jar
+nohup java -jar /home/ec2-user/content-0.0.1-SNAPSHOT.jar > /dev/null 2>&
+
