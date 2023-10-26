@@ -9,25 +9,25 @@ files:
     destination: /home/ec2-user/application_start.sh
 
 permissions:
-  - object: /home/ec2-user/content-0.0.1-SNAPSHOT.jar
+  - object: content-0.0.1-SNAPSHOT.jar
     mode: "755"
     owner: ec2-user
     group: ec2-user
-  - object: /home/ec2-user/before_install.sh
+  - object: before_install.sh
     mode: "755"
     owner: ec2-user
     group: ec2-user
-  - object: /home/ec2-user/application_start.sh
+  - object: application_start.sh
     mode: "755"
     owner: ec2-user
     group: ec2-user
 
 hooks:
   BeforeInstall:
-    - location: /home/ec2-user/before_install.sh
+    - location: before_install.sh
       timeout: 300
       runas: ec2-user
   ApplicationStart:
-    - location: /home/ec2-user/application_start.sh
+    - location: application_start.sh
       timeout: 300
       runas: ec2-user
