@@ -31,7 +31,7 @@ export SERVER_PORT=$NEW_PORT
 nohup java -jar /home/ec2-user/content-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
 
 # 헬스 체크 수행
-sleep 500
+sleep 200
 HEALTH_STATUS=$(curl -s http://localhost:$NEW_PORT/content/health | grep '"status": true')
 if [ -z "$HEALTH_STATUS" ]; then
     echo "New application health check failed"
