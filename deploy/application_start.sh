@@ -15,11 +15,13 @@ export DB_URL=$DB_URL
 export DB_USERNAME=$DB_USERNAME
 export REDIS_HOST=$REDIS_HOST
 export S3_KEY=$S3_KEY
-export SERVER_PORT=$SERVER_PORT
+export USER_SERVER_URL=$USER_SERVER_URL
 export SPRING_PROFILES_ACTIVE=prod
 
-CURRENT_PORT=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/content/health || echo "8081")
-if [ $CURRENT_PORT = "8081" ]; then
+HEALTH_STATUS_8080=$(curl -s http://localhost:8080/content/health | grep '{"status":true}')
+
+if [ -z "$HEALTH_STATUS_8080" ]; then
+    # 8080 상태가 0이라면, 해당 포트 사용 안하는 중
     NEW_PORT=8080
     OLD_PORT=8081
 else
@@ -27,22 +29,40 @@ else
     OLD_PORT=8080
 fi
 
+echo "new port: $NEW_PORT, old port: $OLD_PORT"
+
 export SERVER_PORT=$NEW_PORT
-nohup java -jar /home/ec2-user/content-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
+nohup java -jar /home/ec2-user/content-0.0.1-SNAPSHOT.jar &
 
 # 헬스 체크 수행
-sleep 200
-HEALTH_STATUS=$(curl -s http://localhost:$NEW_PORT/content/health | grep '"status": true')
+echo "health check!!!"
+
+sleep 50
+HEALTH_STATUS=$(curl -s http://localhost:$NEW_PORT/content/health | grep '{"status":true}')
 if [ -z "$HEALTH_STATUS" ]; then
-    echo "New application health check failed"
-    exit 1
+  echo "health_status = $HEALTH_STATUS"
+  echo "New application health check failed"
+  exit 1
 fi
 
-sed -i "s/listen $OLD_PORT/listen $NEW_PORT/g" /etc/nginx/sites-available/default
-nginx -s reload
+echo "old port: $OLD_PORT remove"
 
 OLD_PID=$(pgrep -f "java -jar /home/ec2-user/content-0.0.1-SNAPSHOT.jar --server.port=$OLD_PORT")
 if [ -n "$OLD_PID" ]; then
     kill $OLD_PID
 fi
 
+HEALTH_STATUS=$(curl -s http://localhost:8080/content/health | grep '{"status":true}')
+if [ -z "$HEALTH_STATUS" ]; then
+        echo "port running: 8081"
+        IDLE_PORT=8081
+else
+        echo "port running: 8080"
+        IDLE_PORT=8080
+fi
+
+echo "switch port: $IDLE_PORT"
+echo "set \$service_url http://127.0.0.1:${IDLE_PORT};" | sudo tee /etc/nginx/conf.d/service-url.inc
+
+echo "> Nginx Reload"
+sudo service nginx reload
