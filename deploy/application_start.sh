@@ -45,9 +45,6 @@ if [ -z "$HEALTH_STATUS" ]; then
   exit 1
 fi
 
-#sed -i "s/listen $OLD_PORT/listen $NEW_PORT/g" /etc/nginx/sites-available/default
-#nginx -s reload
-
 echo "old port: $OLD_PORT remove"
 
 OLD_PID=$(pgrep -f "java -jar /home/ec2-user/content-0.0.1-SNAPSHOT.jar --server.port=$OLD_PORT")
