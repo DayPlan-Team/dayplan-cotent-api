@@ -3,7 +3,7 @@ package com.content.application.service
 import com.content.domain.course.port.CourseCommandPort
 import com.content.domain.course.port.CourseQueryPort
 import com.content.application.port.PlacePort
-import com.content.application.request.CourseUpsertRequest
+import com.content.domain.course.CourseUpsertRequest
 import com.content.domain.course.Course
 import com.content.domain.course.CourseGroup
 import com.content.domain.course.CourseStage

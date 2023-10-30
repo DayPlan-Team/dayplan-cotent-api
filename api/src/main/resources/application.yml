@@ -6,10 +6,6 @@ logging:
   level:
     root: info
 
-encryption:
-  secret-key: ${ENCRYPTION_SECRET_KEY}
-  salt: ${SALT}
-
 springdoc:
   packages-to-scan: com.content.api
   default-consumes-media-type: application/json;charset=UTF-8
@@ -33,7 +29,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -93,10 +89,6 @@ grpc:
 logging:
   level:
     root: info
-
-encryption:
-  secret-key: ${ENCRYPTION_SECRET_KEY}
-  salt: ${SALT}
 
 springdoc:
   packages-to-scan: com.content.api

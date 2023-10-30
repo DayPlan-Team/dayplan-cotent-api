@@ -1,4 +1,4 @@
-package com.content.application.request
+package com.content.domain.course
 
 import com.content.domain.share.PlaceCategory
 
