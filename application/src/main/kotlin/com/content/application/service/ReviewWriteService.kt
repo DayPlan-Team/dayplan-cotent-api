@@ -61,7 +61,7 @@ class ReviewWriteService(
         }
     }
 
-    override fun writeReview(review: Review) {
-        reviewCommandPort.upsertReview(review)
+    override fun writeReview(review: Review): Review {
+        return reviewCommandPort.upsertReview(review)
     }
 }

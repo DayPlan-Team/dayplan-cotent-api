@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component
 interface ReviewWriteUseCase {
     fun getAllPossibleReviewToWrite(userId: Long, reviewGroupId: Long): List<CourseWithPossibleReview>
 
-    fun writeReview(review: Review)
+    fun writeReview(review: Review): Review
 }

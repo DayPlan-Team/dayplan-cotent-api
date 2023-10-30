@@ -3,6 +3,7 @@ package com.content.application.service
 import com.content.domain.course.CourseStage
 import com.content.domain.course.port.CourseQueryPort
 import com.content.domain.review.Review
+import com.content.domain.review.ReviewCreationRequest
 import com.content.domain.review.ReviewGroup
 import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewImageMeta
@@ -27,22 +28,29 @@ class ReviewAndReviewImageService(
     private val reviewImageMetaCommandUseCase: ReviewImageMetaCommandUseCase,
 ) {
 
-    fun writeReviewAndGetReviewImageStorageData(
+    fun writeReview(
         user: User,
-        review: Review,
-        reviewImages: List<ReviewImage>,
-        reviewImageMetas: List<ReviewImageMeta>,
-    ): List<ReviewImageStorageData> {
-        val reviewGroup = getReviewGroup(review.reviewGroupId)
+        reviewCreationRequest: ReviewCreationRequest,
+    ): Review {
+        val reviewGroup = getReviewGroup(reviewCreationRequest.reviewGroupId)
 
         verifyInvalidReviewWrite(
             user = user,
-            review = review,
             reviewGroup = reviewGroup,
+            courseId = reviewCreationRequest.courseId
         )
 
-        reviewWriteUseCase.writeReview(review = review)
+        val review = reviewCreationRequest.toReview(
+            review = reviewQueryPort.getReviewByCourseId(courseId = reviewCreationRequest.courseId),
+        )
 
+        return reviewWriteUseCase.writeReview(review = review)
+    }
+
+    fun saveReviewImageMetas(
+        reviewImages: List<ReviewImage>,
+        reviewImageMetas: List<ReviewImageMeta>,
+    ): List<ReviewImageStorageData> {
         return reviewImageMetaCommandUseCase.upsertReviewImageMeta(
             reviewImages = reviewImages,
             reviewImageMetas = reviewImageMetas
@@ -56,13 +64,16 @@ class ReviewAndReviewImageService(
             )
     }
 
-    private fun verifyInvalidReviewWrite(user: User, review: Review, reviewGroup: ReviewGroup) {
+    private fun verifyInvalidReviewWrite(
+        user: User,
+        reviewGroup: ReviewGroup,
+        courseId: Long,
+    ) {
         verifyReviewGroupOwner(reviewGroup.userId, user.userId)
-
-        verifyReviewToCourse(review)
 
         verifyInvalidReviewCourse(
             courseGroupId = reviewGroup.courseGroupId,
+            courseId = courseId,
         )
     }
 
@@ -71,23 +82,15 @@ class ReviewAndReviewImageService(
     }
 
     /* A 코스 리뷰를 쓰려면, 동일한 코스 그룹에 있는 B, C 모두 리뷰를 쓸 수 있는 상태여야 해요!*/
-    private fun verifyInvalidReviewCourse(courseGroupId: Long) {
+    private fun verifyInvalidReviewCourse(courseGroupId: Long, courseId: Long) {
         val courses = courseQueryPort
             .getCoursesByGroupId(courseGroupId)
 
         require(
-            courses.any { it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH }
+            courses.all { it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH }
+                    && courses.any { it.courseId == courseId }
         ) {
             throw ContentException(ContentExceptionCode.BAD_REQUEST_REVIEW)
-        }
-    }
-
-    private fun verifyReviewToCourse(review: Review) {
-
-        reviewQueryPort.getReviewByCourseId(review.courseId)?.let {
-            require(it.reviewId == review.reviewId) { throw ContentException(ContentExceptionCode.BAD_REQUEST_REVIEW) }
-        } ?: run {
-            require(review.reviewId == 0L) { throw ContentException(ContentExceptionCode.BAD_REQUEST_REVIEW) }
         }
     }
 }
