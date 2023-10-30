@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional
 class ReviewCommandAdapter(
     private val reviewEntityRepository: ReviewEntityRepository,
 ) : ReviewCommandPort {
-    override fun upsertReview(review: Review) {
-        reviewEntityRepository.save(ReviewEntity.from(review))
+    override fun upsertReview(review: Review): Review {
+        return reviewEntityRepository
+            .save(ReviewEntity.from(review))
+            .toDomainModel()
     }
 }

@@ -4,6 +4,7 @@ import com.content.application.service.ReviewAndReviewImageService
 import com.content.application.service.UserVerifyService
 import com.content.domain.review.CourseWithPossibleReview
 import com.content.domain.review.Review
+import com.content.domain.review.ReviewCreationRequest
 import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewImageMeta
 import com.content.domain.review.ReviewWriteUseCase
@@ -11,9 +12,6 @@ import com.content.domain.review.port.ReviewImageStoragePort
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -60,18 +58,22 @@ class ReviewWriteController(
     ): ResponseEntity<Unit> {
         val user = userVerifyService.verifyNormalUserAndGet(userId)
 
-        val review = createReview(reviewWriteApiRequest, reviewGroupId)
+        val reviewCreationRequest = createReviewCreationRequest(reviewWriteApiRequest, reviewGroupId)
 
         val reviewImages = createReviewImages(reviewWriteApiRequest.reviewImages)
 
+        val review = reviewAndReviewImageService.writeReview(
+            user = user,
+            reviewCreationRequest = reviewCreationRequest,
+        )
+
         val reviewImageMetas = createReviewImageMeta(
+            reviewId = review.reviewId,
             reviewImages = reviewImages,
             reviewWriteApiRequest = reviewWriteApiRequest,
         )
 
-        val reviewImageStorageDatas = reviewAndReviewImageService.writeReviewAndGetReviewImageStorageData(
-            user = user,
-            review = review,
+        val reviewImageStorageDatas = reviewAndReviewImageService.saveReviewImageMetas(
             reviewImages = reviewImages,
             reviewImageMetas = reviewImageMetas,
         )
@@ -92,13 +94,14 @@ class ReviewWriteController(
     }
 
     private fun createReviewImageMeta(
+        reviewId: Long,
         reviewImages: List<ReviewImage>,
         reviewWriteApiRequest: ReviewWriteApiRequest
     ): List<ReviewImageMeta> {
         return reviewImages.mapIndexed { index, reviewImage ->
             ReviewImageMeta(
                 sequence = index + 1,
-                reviewId = reviewWriteApiRequest.reviewId,
+                reviewId = reviewId,
                 originalName = reviewWriteApiRequest.originalNames[index],
                 reviewImageHashCode = reviewImage.hashCode(),
                 reviewImageId = reviewWriteApiRequest.reviewImageIds[index],
@@ -106,9 +109,11 @@ class ReviewWriteController(
         }
     }
 
-    private fun createReview(reviewWriteApiRequest: ReviewWriteApiRequest, reviewGroupId: Long): Review {
-        return Review.from(
-            reviewId = reviewWriteApiRequest.reviewId,
+    private fun createReviewCreationRequest(
+        reviewWriteApiRequest: ReviewWriteApiRequest,
+        reviewGroupId: Long
+    ): ReviewCreationRequest {
+        return ReviewCreationRequest.from(
             reviewGroupId = reviewGroupId,
             courseId = reviewWriteApiRequest.courseId,
             content = reviewWriteApiRequest.content,
@@ -138,7 +143,6 @@ class ReviewWriteController(
     }
 
     data class ReviewWriteApiRequest(
-        @JsonProperty("reviewId") val reviewId: Long,
         @JsonProperty("courseId") val courseId: Long,
         @JsonProperty("content") val content: String,
         @JsonProperty("originalNames") val originalNames: List<String>,
