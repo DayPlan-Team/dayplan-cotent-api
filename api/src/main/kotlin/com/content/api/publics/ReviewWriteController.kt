@@ -3,7 +3,6 @@ package com.content.api.publics
 import com.content.application.service.ReviewAndReviewImageService
 import com.content.application.service.UserVerifyService
 import com.content.domain.review.CourseWithPossibleReview
-import com.content.domain.review.Review
 import com.content.domain.review.ReviewCreationRequest
 import com.content.domain.review.ReviewImage
 import com.content.domain.review.ReviewImageMeta
