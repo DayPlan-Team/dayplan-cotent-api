@@ -36,13 +36,9 @@ class CourseVisitedService(
                 }
                 .flatMap { place ->
                     coursesMap[place.placeId]?.map { course ->
-                        Course(
-                            groupId = course.groupId,
-                            courseId = course.courseId,
-                            step = course.step,
-                            courseStage = course.courseStage,
-                            placeId = place.placeId,
-                            placeCategory = place.placeCategory,
+                        Course.from(
+                            course = course,
+                            place = place,
                             visitedStatus = true,
                         )
                     } ?: emptyList()

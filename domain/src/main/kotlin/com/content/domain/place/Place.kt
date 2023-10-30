@@ -10,10 +10,4 @@ data class Place(
     val address: String,
     val roadAddress: String,
     val placeId: Long = 0L,
-) {
-    companion object {
-        fun from(): Place {
-            TODO()
-        }
-    }
-}
+)

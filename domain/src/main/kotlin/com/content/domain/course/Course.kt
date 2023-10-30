@@ -44,6 +44,22 @@ data class Course(
                 courseStage = courseStage,
             )
         }
+
+        fun from(
+            course: Course,
+            place: Place,
+            visitedStatus: Boolean,
+        ): Course {
+            return Course(
+                groupId = course.groupId,
+                courseId = course.courseId,
+                step = course.step,
+                courseStage = course.courseStage,
+                placeId = place.placeId,
+                placeCategory = place.placeCategory,
+                visitedStatus = visitedStatus,
+            )
+        }
     }
 
 }
