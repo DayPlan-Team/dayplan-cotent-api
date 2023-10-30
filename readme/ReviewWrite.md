@@ -16,7 +16,6 @@
 - 유저는 글과 내용을 작성하여 요청해요.
 - 서버에서는 다음의 절차로 유저의 리뷰 작성 요청을 검증하고 저장해요.
   - 정상 유저를 검증해요(유저 서버로 유저의 상태를 요청한 후, 정상 유저만 플로우가 진행돼요!)
-  - 리뷰는 작성 시점에 식별자가 생성이 돼요. 따라서, reviewId는 존재하거나 하지 않을 수 있어요.
   - 리뷰는 데이트 코스와 1:1로 매핑이 돼요. 이를 활용하여 클라이언트로부터 courseId를 받아서, 현재 리뷰가 있는지 없는지를 파악해요.
   - 만약 기존에 작성한 리뷰가 있다면 업데이트하고, 없다면 새로 저장해요.
   - 리뷰 이미지는 최대 10MB 까지 저장할 수 있어요. 유저가 작성한 이미지를 SHA-256으로 해시한 후, 해시코드를 메타 데이터에 저장해요.
@@ -92,7 +91,6 @@
 
 ``` kotlin
     data class ReviewWriteApiRequest(
-        @JsonProperty("reviewId") val reviewId: Long,
         @JsonProperty("courseId") val courseId: Long,
         @JsonProperty("content") val content: String,
         @JsonProperty("originalNames") val originalNames: List<String>,
@@ -149,17 +147,19 @@
 <br/>
 
 ``` kotlin
-    private fun createReview(reviewWriteApiRequest: ReviewWriteApiRequest, userId: Long, reviewGroupId: Long): Review {
-        return Review.from(
-            reviewId = reviewWriteApiRequest.reviewId,
-            userId = userId,
+    private fun createReviewCreationRequest(
+        reviewWriteApiRequest: ReviewWriteApiRequest,
+        reviewGroupId: Long
+    ): ReviewCreationRequest {
+        return ReviewCreationRequest.from(
             reviewGroupId = reviewGroupId,
             courseId = reviewWriteApiRequest.courseId,
             content = reviewWriteApiRequest.content,
         )
     }
+
 ```
-- 마지막으로 리뷰의 내용에 해당하는 Review를 요청으로부터 생성해요.
+- 리뷰 생성에 필요한 ReviewCreationRequest를 생성해요!
 
 <br/>
 
@@ -170,20 +170,23 @@
         @PathVariable("reviewGroupId") reviewGroupId: Long,
         @ModelAttribute reviewWriteApiRequest: ReviewWriteApiRequest,
     ): ResponseEntity<Unit> {
+        
         val user = userVerifyService.verifyNormalUserAndGet(userId)
 
-        val review = createReview(reviewWriteApiRequest, reviewGroupId)
+        val reviewCreationRequest = createReviewCreationRequest(reviewWriteApiRequest, reviewGroupId)
+        val review = reviewAndReviewImageService.writeReview(
+            user = user,
+            reviewCreationRequest = reviewCreationRequest,
+        )
 
         val reviewImages = createReviewImages(reviewWriteApiRequest.reviewImages)
-
         val reviewImageMetas = createReviewImageMeta(
+            reviewId = review.reviewId,
             reviewImages = reviewImages,
             reviewWriteApiRequest = reviewWriteApiRequest,
         )
 
-        val reviewImageStorageDatas = reviewAndReviewImageService.writeReviewAndGetReviewImageStorageData(
-            user = user,
-            review = review,
+        val reviewImageStorageDatas = reviewAndReviewImageService.saveReviewImageMetas(
             reviewImages = reviewImages,
             reviewImageMetas = reviewImageMetas,
         )
@@ -219,13 +222,16 @@
 <br/>
 
 ``` kotlin
-  private fun verifyInvalidReviewWrite(user: User, review: Review, reviewGroup: ReviewGroup) {
+  private fun verifyInvalidReviewWrite(
+        user: User,
+        reviewGroup: ReviewGroup,
+        courseId: Long,
+    ) {
         verifyReviewGroupOwner(reviewGroup.userId, user.userId)
-
-        verifyReviewToCourse(review)
 
         verifyInvalidReviewCourse(
             courseGroupId = reviewGroup.courseGroupId,
+            courseId = courseId,
         )
     }
 
@@ -234,23 +240,15 @@
     }
 
     /* A 코스 리뷰를 쓰려면, 동일한 코스 그룹에 있는 B, C 모두 리뷰를 쓸 수 있는 상태여야 해요!*/
-    private fun verifyInvalidReviewCourse(courseGroupId: Long) {
+    private fun verifyInvalidReviewCourse(courseGroupId: Long, courseId: Long) {
         val courses = courseQueryPort
             .getCoursesByGroupId(courseGroupId)
 
         require(
-            courses.any { it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH }
+            courses.all { it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH }
+                    && courses.any { it.courseId == courseId }
         ) {
             throw ContentException(ContentExceptionCode.BAD_REQUEST_REVIEW)
-        }
-    }
-
-    private fun verifyReviewToCourse(review: Review) {
-
-        reviewQueryPort.getReviewByCourseId(review.courseId)?.let {
-            require(it.reviewId == review.reviewId) { throw ContentException(ContentExceptionCode.BAD_REQUEST_REVIEW) }
-        } ?: run {
-            require(review.reviewId == 0L) { throw ContentException(ContentExceptionCode.BAD_REQUEST_REVIEW) }
         }
     }
 ```
@@ -262,22 +260,29 @@
 <br/>
 
 ``` kotlin
-  fun writeReviewAndGetReviewImageStorageData(
+    fun writeReview(
         user: User,
-        review: Review,
-        reviewImages: List<ReviewImage>,
-        reviewImageMetas: List<ReviewImageMeta>,
-    ): List<ReviewImageStorageData> {
-        val reviewGroup = getReviewGroup(review.reviewGroupId)
+        reviewCreationRequest: ReviewCreationRequest,
+    ): Review {
+        val reviewGroup = getReviewGroup(reviewCreationRequest.reviewGroupId)
 
         verifyInvalidReviewWrite(
             user = user,
-            review = review,
             reviewGroup = reviewGroup,
+            courseId = reviewCreationRequest.courseId
         )
 
-        reviewWriteUseCase.writeReview(review = review)
+        val review = reviewCreationRequest.toReview(
+            review = reviewQueryPort.getReviewByCourseId(courseId = reviewCreationRequest.courseId),
+        )
 
+        return reviewWriteUseCase.writeReview(review = review)
+    }
+    
+    fun saveReviewImageMetas(
+        reviewImages: List<ReviewImage>,
+        reviewImageMetas: List<ReviewImageMeta>,
+    ): List<ReviewImageStorageData> {
         return reviewImageMetaCommandUseCase.upsertReviewImageMeta(
             reviewImages = reviewImages,
             reviewImageMetas = reviewImageMetas

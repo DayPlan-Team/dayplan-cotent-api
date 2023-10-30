@@ -55,17 +55,16 @@ class ReviewWriteController(
         @PathVariable("reviewGroupId") reviewGroupId: Long,
         @ModelAttribute reviewWriteApiRequest: ReviewWriteApiRequest,
     ): ResponseEntity<Unit> {
+
         val user = userVerifyService.verifyNormalUserAndGet(userId)
 
         val reviewCreationRequest = createReviewCreationRequest(reviewWriteApiRequest, reviewGroupId)
-
-        val reviewImages = createReviewImages(reviewWriteApiRequest.reviewImages)
-
         val review = reviewAndReviewImageService.writeReview(
             user = user,
             reviewCreationRequest = reviewCreationRequest,
         )
 
+        val reviewImages = createReviewImages(reviewWriteApiRequest.reviewImages)
         val reviewImageMetas = createReviewImageMeta(
             reviewId = review.reviewId,
             reviewImages = reviewImages,
