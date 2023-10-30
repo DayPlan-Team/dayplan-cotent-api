@@ -3,11 +3,12 @@ package com.content.application.service
 import com.content.domain.course.port.CourseCommandPort
 import com.content.domain.course.port.CourseQueryPort
 import com.content.application.port.PlacePort
-import com.content.application.request.CourseUpsertRequest
+import com.content.domain.course.CourseUpsertRequest
 import com.content.application.response.DetailCourse
 import com.content.domain.course.Course
 import com.content.domain.course.CourseStage
 import com.content.domain.course.port.CourseGroupQueryPort
+import com.content.domain.place.Place
 import com.content.domain.review.port.ReviewQueryPort
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
@@ -64,44 +65,39 @@ class CourseService(
     }
 
     private fun createCurseStageStart(request: CourseUpsertRequest): Course {
-        return Course(
+        return Course.from(
             courseId = 0L,
-            groupId = request.groupId,
-            step = request.step,
-            placeCategory = request.placeCategory,
             placeId = 0L,
             courseStage = CourseStage.START,
+            courseUpsertRequest = request,
         )
     }
 
     private fun createCourseCategoryFinish(request: CourseUpsertRequest): Course {
-        return Course(
+        return Course.from(
             courseId = 0L,
-            groupId = request.groupId,
-            step = request.step,
-            placeCategory = request.placeCategory,
             placeId = request.placeId,
             courseStage = CourseStage.CATEGORY_FINISH,
+            courseUpsertRequest = request,
         )
     }
 
     private fun createCoursePlaceFinish(request: CourseUpsertRequest): Course {
-        verifyPlaceId(request.groupId)
+        val place = verifyAndGetPlace(request.groupId)
 
-        return Course(
-            courseId = request.courseId,
-            groupId = request.groupId,
-            step = request.step,
-            placeCategory = request.placeCategory,
-            placeId = request.placeId,
+        return Course.from(
+            place = place,
             courseStage = CourseStage.PLACE_FINISH,
+            courseUpsertRequest = request,
         )
     }
 
-    private fun verifyPlaceId(placeId: Long) {
-        require(
-            placePort.getPlaceByPlaceId(listOf(placeId)).isNotEmpty()
-        ) { throw ContentException(ContentExceptionCode.CONTENT_COURSE_BAD_REQUEST) }
+    private fun verifyAndGetPlace(placeId: Long): Place {
+        val places = placePort.getPlaceByPlaceId(listOf(placeId))
+
+        require(places.isNotEmpty()) { throw ContentException(ContentExceptionCode.CONTENT_COURSE_BAD_REQUEST) }
+
+        return places.first()
     }
 
     fun getDetailCoursesByGroup(groupId: Long): List<DetailCourse> {
@@ -119,17 +115,9 @@ class CourseService(
 
             val place = placeMap[it.placeId]
 
-            DetailCourse(
-                step = it.step,
-                placeCategory = it.placeCategory,
-                latitude = place?.latitude,
-                longitude = place?.longitude,
-                courseId = it.courseId,
-                placeId = it.placeId,
-                courseStage = it.courseStage,
-                placeName = place?.placeName ?: "",
-                address = place?.address ?: "",
-                roadAddress = place?.roadAddress ?: "",
+            DetailCourse.from(
+                course = it,
+                place = place,
             )
         }
     }

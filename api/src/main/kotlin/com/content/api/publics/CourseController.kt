@@ -1,6 +1,6 @@
 package com.content.api.publics
 
-import com.content.application.request.CourseUpsertRequest
+import com.content.domain.course.CourseUpsertRequest
 import com.content.application.service.CourseService
 import com.content.application.service.UserVerifyService
 import com.content.domain.course.CourseStage

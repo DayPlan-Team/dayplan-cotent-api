@@ -1,5 +1,6 @@
 package com.content.domain.course
 
+import com.content.domain.place.Place
 import com.content.domain.share.PlaceCategory
 
 data class Course(
@@ -10,4 +11,39 @@ data class Course(
     val placeCategory: PlaceCategory,
     val visitedStatus: Boolean = false,
     val groupId: Long = 0L,
-)
+) {
+
+    companion object {
+        fun from(
+            courseId: Long,
+            placeId: Long,
+            courseStage: CourseStage,
+            courseUpsertRequest: CourseUpsertRequest
+        ): Course {
+            return Course(
+                courseId = courseId,
+                groupId = courseUpsertRequest.groupId,
+                step = courseUpsertRequest.step,
+                placeCategory = courseUpsertRequest.placeCategory,
+                placeId = placeId,
+                courseStage = courseStage,
+            )
+        }
+
+        fun from(
+            place: Place,
+            courseStage: CourseStage,
+            courseUpsertRequest: CourseUpsertRequest
+        ): Course {
+            return Course(
+                courseId = courseUpsertRequest.courseId,
+                groupId = courseUpsertRequest.groupId,
+                step = courseUpsertRequest.step,
+                placeCategory = place.placeCategory,
+                placeId = place.placeId,
+                courseStage = courseStage,
+            )
+        }
+    }
+
+}
