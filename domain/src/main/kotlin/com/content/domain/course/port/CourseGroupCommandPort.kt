@@ -6,5 +6,4 @@ import org.springframework.stereotype.Component
 @Component
 interface CourseGroupCommandPort {
     fun upsertCourseGroup(courseGroup: CourseGroup): CourseGroup
-
 }

@@ -11,14 +11,17 @@ class CourseGroupSearchService(
     private val courseGroupSearchPort: CourseGroupSearchPort,
     private val userVerifyService: UserVerifyService,
 ) {
-    fun searchCourseGroupsWithCourseBy(courseGroupAdministrativeSearchRequest: CourseGroupAdministrativeSearchRequest): CourseGroupListSearchResponse {
+    fun searchCourseGroupsWithCourseBy(
+        courseGroupAdministrativeSearchRequest: CourseGroupAdministrativeSearchRequest,
+    ): CourseGroupListSearchResponse {
         return courseGroupSearchPort.findCourseGroupBy(courseGroupAdministrativeSearchRequest)
     }
 
     fun searchCourseGroupWithNickNameBy(courseGroupIds: List<Long>): List<CourseGroupWithUserNicknameResponse> {
-        val courseGroupMapByUserId = courseGroupSearchPort
-            .findCourseGroupByGroupIds(courseGroupIds)
-            .groupBy { it.userId }
+        val courseGroupMapByUserId =
+            courseGroupSearchPort
+                .findCourseGroupByGroupIds(courseGroupIds)
+                .groupBy { it.userId }
 
         val users = userVerifyService.getNormalUsersAndGet(courseGroupMapByUserId.keys.toList())
 

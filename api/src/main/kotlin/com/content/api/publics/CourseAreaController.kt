@@ -15,22 +15,21 @@ import org.springframework.web.bind.annotation.RestController
 class CourseAreaController(
     private val userVerifyService: UserVerifyService,
 ) {
-
     @GetMapping("/city")
     fun getCity(
         @RequestHeader("UserId") userId: Long,
     ): ResponseEntity<LocationOuterResponse<List<LocationResponse>>> {
-
         userVerifyService.verifyNormalUserAndGet(userId)
 
         return ResponseEntity.ok(
             LocationOuterResponse(
-                results = AddressUtil.cities.map {
-                    LocationResponse(
-                        name = it.koreanName,
-                        code = it.code,
-                    )
-                }
+                results =
+                    AddressUtil.cities.map {
+                        LocationResponse(
+                            name = it.koreanName,
+                            code = it.code,
+                        )
+                    },
             ),
         )
     }
@@ -40,24 +39,24 @@ class CourseAreaController(
         @RequestHeader("UserId") userId: Long,
         @PathVariable("cityCode") cityCode: Long,
     ): ResponseEntity<LocationOuterResponse<List<LocationResponse>>> {
-
         userVerifyService.verifyNormalUserAndGet(userId)
 
         return ResponseEntity.ok(
             LocationOuterResponse(
-                results = AddressUtil.getDistrictByCityCode(cityCode)
-                    .map {
-                        LocationResponse(
-                            name = it.koreanName,
-                            code = it.code,
-                        )
-                    },
-            )
+                results =
+                    AddressUtil.getDistrictByCityCode(cityCode)
+                        .map {
+                            LocationResponse(
+                                name = it.koreanName,
+                                code = it.code,
+                            )
+                        },
+            ),
         )
     }
 
     data class LocationOuterResponse<T>(
-        val results: T
+        val results: T,
     )
 
     data class LocationResponse(
@@ -66,5 +65,4 @@ class CourseAreaController(
     )
 
     companion object : Logger()
-
 }

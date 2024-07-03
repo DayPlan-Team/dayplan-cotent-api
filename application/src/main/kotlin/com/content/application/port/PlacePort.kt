@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component
 
 @Component
 interface PlacePort {
-
     fun getPlaceByPlaceId(placeIds: List<Long>): List<Place>
 
     suspend fun getSuspendPlaceByPlaceId(placeIds: List<Long>): List<Place>

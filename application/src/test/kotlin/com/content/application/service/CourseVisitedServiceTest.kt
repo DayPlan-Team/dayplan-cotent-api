@@ -1,11 +1,11 @@
 package com.content.application.service
 
-import com.content.domain.course.port.CourseCommandPort
-import com.content.domain.course.port.CourseQueryPort
 import com.content.application.port.PlacePort
 import com.content.domain.course.Course
 import com.content.domain.course.CourseStage
 import com.content.domain.course.LocationRectangleRangeCreator
+import com.content.domain.course.port.CourseCommandPort
+import com.content.domain.course.port.CourseQueryPort
 import com.content.domain.location.UserLocation
 import com.content.domain.place.Place
 import com.content.domain.share.PlaceCategory
@@ -28,126 +28,128 @@ class CourseVisitedServiceTest(
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default),
 ) : BehaviorSpec({
 
-    val sut = CourseVisitedService(
-        courseCommandPort = courseCommandPort,
-        courseQueryPort = courseQueryPort,
-        placePort = placePort,
-        coroutineScope = coroutineScope,
-    )
+        val sut =
+            CourseVisitedService(
+                courseCommandPort = courseCommandPort,
+                courseQueryPort = courseQueryPort,
+                placePort = placePort,
+                coroutineScope = coroutineScope,
+            )
 
-    given("유저가 등록한 코스와 가게 정보가 주어져요") {
-        val userId = 1L
-        val latitude = 3.0000
-        val longitude = 4.0000
-        val latitudeError = LocationRectangleRangeCreator.LATITUDE_ERROR
-        val longitudeError = LocationRectangleRangeCreator.LONGITUDE_ERROR
+        given("유저가 등록한 코스와 가게 정보가 주어져요") {
+            val userId = 1L
+            val latitude = 3.0000
+            val longitude = 4.0000
+            val latitudeError = LocationRectangleRangeCreator.LATITUDE_ERROR
+            val longitudeError = LocationRectangleRangeCreator.LONGITUDE_ERROR
 
-        val courses = listOf(
-            Course(
-                courseId = 1L,
-                step = 1,
-                placeId = 1L,
-                courseStage = CourseStage.PLACE_FINISH,
-                placeCategory = PlaceCategory.CAFE,
-                visitedStatus = false,
-                groupId = 1,
-            ),
-            Course(
-                courseId = 2L,
-                step = 1,
-                placeId = 2L,
-                courseStage = CourseStage.PLACE_FINISH,
-                placeCategory = PlaceCategory.CAFE,
-                visitedStatus = false,
-                groupId = 2,
-            ),
-            Course(
-                courseId = 3L,
-                step = 1,
-                placeId = 3L,
-                courseStage = CourseStage.PLACE_FINISH,
-                placeCategory = PlaceCategory.CAFE,
-                visitedStatus = false,
-                groupId = 3,
-            ),
-            Course(
-                courseId = 4L,
-                step = 1,
-                placeId = 4L,
-                courseStage = CourseStage.PLACE_FINISH,
-                placeCategory = PlaceCategory.CAFE,
-                visitedStatus = false,
-                groupId = 4,
-            ),
-        )
+            val courses =
+                listOf(
+                    Course(
+                        courseId = 1L,
+                        step = 1,
+                        placeId = 1L,
+                        courseStage = CourseStage.PLACE_FINISH,
+                        placeCategory = PlaceCategory.CAFE,
+                        visitedStatus = false,
+                        groupId = 1,
+                    ),
+                    Course(
+                        courseId = 2L,
+                        step = 1,
+                        placeId = 2L,
+                        courseStage = CourseStage.PLACE_FINISH,
+                        placeCategory = PlaceCategory.CAFE,
+                        visitedStatus = false,
+                        groupId = 2,
+                    ),
+                    Course(
+                        courseId = 3L,
+                        step = 1,
+                        placeId = 3L,
+                        courseStage = CourseStage.PLACE_FINISH,
+                        placeCategory = PlaceCategory.CAFE,
+                        visitedStatus = false,
+                        groupId = 3,
+                    ),
+                    Course(
+                        courseId = 4L,
+                        step = 1,
+                        placeId = 4L,
+                        courseStage = CourseStage.PLACE_FINISH,
+                        placeCategory = PlaceCategory.CAFE,
+                        visitedStatus = false,
+                        groupId = 4,
+                    ),
+                )
 
-        val places = listOf(
-            /* 접점 */
-            Place(
-                placeName = "스타벅스",
-                placeCategory = PlaceCategory.CAFE,
-                latitude = latitude - latitudeError,
-                longitude = longitude - longitudeError,
-                address = "중랑구",
-                roadAddress = "중랑구",
-                placeId = 1L,
-            ),
-            /* 거점 */
-            Place(
-                placeName = "이디야",
-                placeCategory = PlaceCategory.CAFE,
-                latitude = latitude - latitudeError - 0.0001,
-                longitude = longitude - longitudeError - 0.0001,
-                address = "강남구",
-                roadAddress = "강남구",
-                placeId = 2L,
-            ),
-            /* 접점 */
-            Place(
-                placeName = "엔젤리너스",
-                placeCategory = PlaceCategory.CAFE,
-                latitude = latitude + latitudeError,
-                longitude = longitude + longitudeError,
-                address = "중랑구",
-                roadAddress = "중랑구",
-                placeId = 3L,
-            ),
-            /* 거점 */
-            Place(
-                placeName = "탐앤탐스",
-                placeCategory = PlaceCategory.CAFE,
-                latitude = latitude + latitudeError + 0.0001,
-                longitude = longitude + longitudeError + 0.0001,
-                address = "중랑구",
-                roadAddress = "중랑구",
-                placeId = 4L,
-            ),
-        )
+            val places =
+                listOf(
+                    // 접점
+                    Place(
+                        placeName = "스타벅스",
+                        placeCategory = PlaceCategory.CAFE,
+                        latitude = latitude - latitudeError,
+                        longitude = longitude - longitudeError,
+                        address = "중랑구",
+                        roadAddress = "중랑구",
+                        placeId = 1L,
+                    ),
+                    // 거점
+                    Place(
+                        placeName = "이디야",
+                        placeCategory = PlaceCategory.CAFE,
+                        latitude = latitude - latitudeError - 0.0001,
+                        longitude = longitude - longitudeError - 0.0001,
+                        address = "강남구",
+                        roadAddress = "강남구",
+                        placeId = 2L,
+                    ),
+                    // 접점
+                    Place(
+                        placeName = "엔젤리너스",
+                        placeCategory = PlaceCategory.CAFE,
+                        latitude = latitude + latitudeError,
+                        longitude = longitude + longitudeError,
+                        address = "중랑구",
+                        roadAddress = "중랑구",
+                        placeId = 3L,
+                    ),
+                    // 거점
+                    Place(
+                        placeName = "탐앤탐스",
+                        placeCategory = PlaceCategory.CAFE,
+                        latitude = latitude + latitudeError + 0.0001,
+                        longitude = longitude + longitudeError + 0.0001,
+                        address = "중랑구",
+                        roadAddress = "중랑구",
+                        placeId = 4L,
+                    ),
+                )
 
-        `when`("유저 위치 기반 유효 구간 경계와 밖에 있는 가게가 주어지면") {
-            every { courseQueryPort.getCursesByUserIdAndVisitedStatus(any(), false) } returns courses
-            coEvery { placePort.getSuspendPlaceByPlaceId(any()) } returns places
+            `when`("유저 위치 기반 유효 구간 경계와 밖에 있는 가게가 주어지면") {
+                every { courseQueryPort.getCursesByUserIdAndVisitedStatus(any(), false) } returns courses
+                coEvery { placePort.getSuspendPlaceByPlaceId(any()) } returns places
 
-            val capturedCourses = mutableListOf<List<Course>>()
-            every { courseCommandPort.upsertCourses(capture(capturedCourses)) } just Runs
+                val capturedCourses = mutableListOf<List<Course>>()
+                every { courseCommandPort.upsertCourses(capture(capturedCourses)) } just Runs
 
-            runBlocking {
-                async {
-                    sut.updateCourseVisitedStatus(
-                        UserLocation(
-                            userId = userId,
-                            latitude = latitude,
-                            longitude = longitude,
+                runBlocking {
+                    async {
+                        sut.updateCourseVisitedStatus(
+                            UserLocation(
+                                userId = userId,
+                                latitude = latitude,
+                                longitude = longitude,
+                            ),
                         )
-                    )
+                    }
+                }
+
+                then("유효 구간 경계 내에 있는 courseId = 1, 3만 방문 처리가 되어야 해요") {
+                    val updatedCourses = capturedCourses.flatten()
+                    updatedCourses.all { it.courseId in listOf(1L, 3L) } shouldBe true
                 }
             }
-
-            then("유효 구간 경계 내에 있는 courseId = 1, 3만 방문 처리가 되어야 해요") {
-                val updatedCourses = capturedCourses.flatten()
-                updatedCourses.all { it.courseId in listOf(1L, 3L) } shouldBe true
-            }
         }
-    }
-
-})
+    })

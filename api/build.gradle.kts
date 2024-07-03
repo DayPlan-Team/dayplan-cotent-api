@@ -8,7 +8,7 @@ jar.enabled = true
 
 dependencies {
 
-    /* API */
+    // API
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.retrofit2:adapter-java8:2.9.0")
@@ -41,5 +41,13 @@ sourceSets {
 kapt {
     arguments {
         arg("querydsl.generated", "src/main/generated")
+    }
+}
+
+ktlint {
+    filter {
+        exclude { element ->
+            element.file.path.contains("generated")
+        }
     }
 }

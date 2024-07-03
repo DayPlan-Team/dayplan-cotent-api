@@ -4,7 +4,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 object DateTimeCustomFormatter {
-
     private val defaultFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     private val dateMinuteFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
 
@@ -15,6 +14,4 @@ object DateTimeCustomFormatter {
     fun timeToDateMinuteFormat(localDateTime: LocalDateTime): String {
         return localDateTime.format(dateMinuteFormatter)
     }
-
-
 }

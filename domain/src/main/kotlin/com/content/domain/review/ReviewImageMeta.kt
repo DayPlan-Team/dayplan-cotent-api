@@ -1,6 +1,6 @@
 package com.content.domain.review
 
-import java.util.*
+import java.util.UUID
 
 data class ReviewImageMeta(
     val sequence: Int,

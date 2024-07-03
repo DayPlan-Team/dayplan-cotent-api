@@ -9,7 +9,6 @@ import software.amazon.awssdk.services.s3.S3Client
 @Profile("dev | prod")
 @Configuration
 class S3Config {
-
     @Bean
     fun applyS3Client(): S3Client {
         return S3Client.builder().region(Region.AP_NORTHEAST_2).build()

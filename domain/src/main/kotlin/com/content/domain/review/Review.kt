@@ -15,7 +15,7 @@ data class Review(
             reviewId: Long,
             reviewGroupId: Long,
             courseId: Long,
-            content: String
+            content: String,
         ): Review {
             return Review(
                 reviewId = reviewId,

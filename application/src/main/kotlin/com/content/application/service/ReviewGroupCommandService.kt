@@ -1,11 +1,11 @@
 package com.content.application.service
 
-import com.content.domain.review.port.ReviewGroupCommandPort
-import com.content.domain.review.port.ReviewGroupQueryPort
 import com.content.domain.course.CourseGroup
 import com.content.domain.review.ReviewGroup
 import com.content.domain.review.ReviewGroupCommandUseCase
 import com.content.domain.review.ReviewGroupUpdateRequest
+import com.content.domain.review.port.ReviewGroupCommandPort
+import com.content.domain.review.port.ReviewGroupQueryPort
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
 import com.content.util.lock.DistributeLock
@@ -19,8 +19,7 @@ import java.time.LocalDateTime
 class ReviewGroupCommandService(
     private val reviewGroupCommandPort: ReviewGroupCommandPort,
     private val reviewGroupQueryPort: ReviewGroupQueryPort,
-    private val distributeLock: DistributeLock<ReviewGroup>
-
+    private val distributeLock: DistributeLock<ReviewGroup>,
 ) : ReviewGroupCommandUseCase {
     override fun createReviewGroupOrGet(courseGroup: CourseGroup): ReviewGroup {
         return distributeLock.withLockAtomic(
@@ -32,14 +31,14 @@ class ReviewGroupCommandService(
                 reviewGroupQueryPort.getReviewGroupByCourseGroupId(courseGroupId = courseGroup.groupId) ?: run {
                     reviewGroupCommandPort.createReviewGroup(courseGroup)
                 }
-            }
+            },
         )
     }
 
     override fun updateReviewGroup(
         userId: Long,
         reviewGroupId: Long,
-        reviewGroupUpdateRequest: ReviewGroupUpdateRequest
+        reviewGroupUpdateRequest: ReviewGroupUpdateRequest,
     ): ReviewGroup {
         return distributeLock.withLockAtomic(
             distributeLockType = DistributeLockType.REVIEW_GROUP_CREATION,
@@ -53,10 +52,9 @@ class ReviewGroupCommandService(
                         reviewGroupId = reviewGroupId,
                         reviewGroupName = reviewGroupUpdateRequest.reviewGroupName,
                         modifiedAt = LocalDateTime.now(),
-                    )
+                    ),
                 )
-            }
+            },
         )
     }
-
 }

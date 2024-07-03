@@ -22,7 +22,6 @@ class CourseSearchController(
     private val userVerifyService: UserVerifyService,
     private val courseSearchService: CourseSearchService,
 ) {
-
     @GetMapping
     fun searchCourse(
         @RequestHeader("UserId") userId: Long,
@@ -32,12 +31,13 @@ class CourseSearchController(
         validatePage(pageable.pageNumber.toLong())
 
         userVerifyService.verifyNormalUserAndGet(userId)
-        val sliceData = courseSearchService.searchCourses(
-            CourseSearchRequest(
-                addressCategory = addressCategory,
-                pageable = pageable,
-            ),
-        )
+        val sliceData =
+            courseSearchService.searchCourses(
+                CourseSearchRequest(
+                    addressCategory = addressCategory,
+                    pageable = pageable,
+                ),
+            )
 
         return ResponseEntity.ok(sliceData)
     }

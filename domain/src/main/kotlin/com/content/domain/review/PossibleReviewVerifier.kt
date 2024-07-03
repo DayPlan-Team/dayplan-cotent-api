@@ -8,15 +8,13 @@ import org.springframework.stereotype.Component
 
 @Component
 object PossibleReviewVerifier {
-
     fun verifyPossibleReviewCourses(courses: List<Course>) {
         require(
-            courses.all { it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH }
+            courses.all { it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH },
         ) {
             throw ContentException(
-                ContentExceptionCode.NOT_POSSIBLE_REVIEW_COURSE_GROUP
+                ContentExceptionCode.NOT_POSSIBLE_REVIEW_COURSE_GROUP,
             )
         }
     }
-
 }

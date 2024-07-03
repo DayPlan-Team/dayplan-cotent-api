@@ -46,12 +46,13 @@ class ReviewGroupUpsertControllerMockMvcTest : FunSpec() {
     private lateinit var mockMvc: MockMvc
 
     override suspend fun beforeSpec(spec: Spec) {
-        val reviewGroupUpsertController = ReviewGroupUpsertController(
-            userVerifyService = userVerifyService,
-            courseGroupService = courseGroupService,
-            possibleReviewCourseFindService = possibleReviewCourseFindService,
-            reviewGroupCommandUseCase = reviewGroupCommandUseCase
-        )
+        val reviewGroupUpsertController =
+            ReviewGroupUpsertController(
+                userVerifyService = userVerifyService,
+                courseGroupService = courseGroupService,
+                possibleReviewCourseFindService = possibleReviewCourseFindService,
+                reviewGroupCommandUseCase = reviewGroupCommandUseCase,
+            )
 
         mockMvc = MockMvcBuilders.standaloneSetup(reviewGroupUpsertController).build()
     }
@@ -60,28 +61,31 @@ class ReviewGroupUpsertControllerMockMvcTest : FunSpec() {
         context("ReviewGroup 생성에 대한 mockk 스텁 결과가 주어져요") {
             val userId = 1L
 
-            every { userVerifyService.verifyNormalUserAndGet(any()) } returns User(
-                userId = userId,
-                userAccountStatus = UserAccountStatus.NORMAL,
-                nickName = "UserA"
-            )
+            every { userVerifyService.verifyNormalUserAndGet(any()) } returns
+                User(
+                    userId = userId,
+                    userAccountStatus = UserAccountStatus.NORMAL,
+                    nickName = "UserA",
+                )
 
-            every { courseGroupService.getCourseGroup(any(), any()) } returns CourseGroup(
-                userId = userId,
-                groupId = 1L,
-                groupName = "A",
-                cityCode = CityCode.SEOUL,
-                districtCode = DistrictCode.SEOUL_DOBONG,
-            )
+            every { courseGroupService.getCourseGroup(any(), any()) } returns
+                CourseGroup(
+                    userId = userId,
+                    groupId = 1L,
+                    groupName = "A",
+                    cityCode = CityCode.SEOUL,
+                    districtCode = DistrictCode.SEOUL_DOBONG,
+                )
 
-            every { reviewGroupCommandUseCase.createReviewGroupOrGet(any()) } returns ReviewGroup(
-                courseGroupId = userId,
-                reviewGroupId = 1L,
-                reviewGroupName = "ReviewA",
-                userId = 1L,
-                createdAt = LocalDateTime.now(),
-                modifiedAt = LocalDateTime.now(),
-            )
+            every { reviewGroupCommandUseCase.createReviewGroupOrGet(any()) } returns
+                ReviewGroup(
+                    courseGroupId = userId,
+                    reviewGroupId = 1L,
+                    reviewGroupName = "ReviewA",
+                    userId = 1L,
+                    createdAt = LocalDateTime.now(),
+                    modifiedAt = LocalDateTime.now(),
+                )
 
             every { possibleReviewCourseFindService.verifyPossibleReviewCourseGroup(any()) } just Runs
 
@@ -97,7 +101,7 @@ class ReviewGroupUpsertControllerMockMvcTest : FunSpec() {
                 mockMvc.perform(mockHttpServletRequestBuilder)
                     .andExpect(status().isOk)
                     .andExpect(
-                        jsonPath("$.reviewGroupId").value("1")
+                        jsonPath("$.reviewGroupId").value("1"),
                     )
             }
 
@@ -118,20 +122,22 @@ class ReviewGroupUpsertControllerMockMvcTest : FunSpec() {
         context("ReviewGroup 업데이트에 대한 mockk 스텁 결과가 주어져요") {
             val userId = 1L
 
-            every { userVerifyService.verifyNormalUserAndGet(any()) } returns User(
-                userId = userId,
-                userAccountStatus = UserAccountStatus.NORMAL,
-                nickName = "UserA"
-            )
+            every { userVerifyService.verifyNormalUserAndGet(any()) } returns
+                User(
+                    userId = userId,
+                    userAccountStatus = UserAccountStatus.NORMAL,
+                    nickName = "UserA",
+                )
 
-            every { reviewGroupCommandUseCase.updateReviewGroup(any(), any(), any()) } returns ReviewGroup(
-                courseGroupId = userId,
-                reviewGroupId = 1L,
-                reviewGroupName = "ReviewA",
-                userId = 1L,
-                createdAt = LocalDateTime.now(),
-                modifiedAt = LocalDateTime.now(),
-            )
+            every { reviewGroupCommandUseCase.updateReviewGroup(any(), any(), any()) } returns
+                ReviewGroup(
+                    courseGroupId = userId,
+                    reviewGroupId = 1L,
+                    reviewGroupName = "ReviewA",
+                    userId = 1L,
+                    createdAt = LocalDateTime.now(),
+                    modifiedAt = LocalDateTime.now(),
+                )
 
             test("올바른 json 요청으로 리뷰 그룹 생성 응답을 검증을 성공해요") {
                 val request = "{\"reviewGroupName\": \"ReviewA\"}"
@@ -145,7 +151,7 @@ class ReviewGroupUpsertControllerMockMvcTest : FunSpec() {
                 mockMvc.perform(mockHttpServletRequestBuilder)
                     .andExpect(status().isOk)
                     .andExpect(
-                        jsonPath("$.reviewGroupId").value("1")
+                        jsonPath("$.reviewGroupId").value("1"),
                     )
             }
 

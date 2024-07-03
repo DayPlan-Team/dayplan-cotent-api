@@ -4,8 +4,10 @@ import org.springframework.stereotype.Component
 
 @Component
 interface ReviewImageMetaCommandUseCase {
-
-    fun upsertReviewImageMeta(reviewImages: List<ReviewImage>, reviewImageMetas: List<ReviewImageMeta>): List<ReviewImageStorageData>
+    fun upsertReviewImageMeta(
+        reviewImages: List<ReviewImage>,
+        reviewImageMetas: List<ReviewImageMeta>,
+    ): List<ReviewImageStorageData>
 
     fun deleteReviewImageMeta(reviewImageMetas: List<ReviewImageMeta>)
 }

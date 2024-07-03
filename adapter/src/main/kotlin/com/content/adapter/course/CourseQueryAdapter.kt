@@ -2,8 +2,8 @@ package com.content.adapter.course
 
 import com.content.adapter.course.persistence.CourseEntityRepository
 import com.content.adapter.course.persistence.CourseGroupEntityRepository
-import com.content.domain.course.port.CourseQueryPort
 import com.content.domain.course.Course
+import com.content.domain.course.port.CourseQueryPort
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
 import org.springframework.stereotype.Component
@@ -30,9 +30,11 @@ class CourseQueryAdapter(
             .map { it.toDomainModel() }
     }
 
-    override fun getCursesByUserIdAndVisitedStatus(userId: Long, visitedStatus: Boolean): List<Course> {
+    override fun getCursesByUserIdAndVisitedStatus(
+        userId: Long,
+        visitedStatus: Boolean,
+    ): List<Course> {
         val courseGroups = courseGroupEntityRepository.findCourseGroupEntitiesByUserId(userId)
-
 
         return courseEntityRepository.findCourseEntitiesByGroupIdInAndVisitedStatus(courseGroups.map { it.userId }, visitedStatus)
             .map {

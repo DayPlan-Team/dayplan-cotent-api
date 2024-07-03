@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component
 
 @Component
 interface ReviewQueryPort {
-
     fun getReviewsByReviewGroupId(reviewGroupId: Long): List<Review>
 
     fun getReviewById(id: Long): Review

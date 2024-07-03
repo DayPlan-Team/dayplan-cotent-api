@@ -18,33 +18,26 @@ import org.hibernate.annotations.DynamicUpdate
 @Entity
 @DynamicUpdate
 @Table(
-    name = "course",
+    name = "courses",
     indexes = [
-        Index(name = "idx_course_groupId", columnList = "groupId"),
-    ]
+        Index(name = "idx__courses_group_id", columnList = "course_group_id"),
+    ],
 )
 data class CourseEntity(
-
-    @Column
+    @Column(name = "course_group_id", columnDefinition = "bigint", nullable = false)
     val groupId: Long,
-
-    @Column
+    @Column(name = "step", columnDefinition = "bigint", nullable = false)
     val step: Int,
-
-    @Column
+    @Column(name = "course_stage", columnDefinition = "varchar(32)", nullable = false)
     @Enumerated(value = EnumType.STRING)
     val courseStage: CourseStage,
-
-    @Column
+    @Column(name = "place_category", columnDefinition = "varchar(32)", nullable = false)
     @Enumerated(value = EnumType.STRING)
     val placeCategory: PlaceCategory,
-
-    @Column
+    @Column(name = "place_id", columnDefinition = "bigint", nullable = false)
     val placeId: Long,
-
-    @Column
-    val visitedStatus: Boolean,
-
+    @Column(name = "is_visited", columnDefinition = "bit", nullable = false)
+    val isVisited: Boolean,
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
@@ -56,7 +49,7 @@ data class CourseEntity(
             step = step,
             placeId = placeId,
             placeCategory = placeCategory,
-            visitedStatus = visitedStatus,
+            visitedStatus = isVisited,
             courseStage = courseStage,
         )
     }
@@ -68,7 +61,7 @@ data class CourseEntity(
                 step = course.step,
                 placeId = course.placeId,
                 placeCategory = course.placeCategory,
-                visitedStatus = course.visitedStatus,
+                isVisited = course.visitedStatus,
                 courseStage = course.courseStage,
                 id = course.courseId,
             )

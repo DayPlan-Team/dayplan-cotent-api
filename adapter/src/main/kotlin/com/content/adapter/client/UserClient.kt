@@ -8,7 +8,6 @@ import retrofit2.http.Query
 
 @Component
 interface UserClient {
-
     @Headers(ApiClientUtil.CONTENT_TYPE_APPLICATION_JSON)
     @GET("/user/internal/verify")
     fun getUserResponse(
@@ -20,5 +19,4 @@ interface UserClient {
     fun getUserResponses(
         @Query("userId") userIds: List<Long>,
     ): Call<UserResponses>
-
 }

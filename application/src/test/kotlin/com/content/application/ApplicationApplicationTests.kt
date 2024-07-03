@@ -7,9 +7,7 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("test")
 @SpringBootTest(classes = [ApplicationTestConfiguration::class])
 class ApplicationApplicationTests {
-
     @Test
     fun contextLoads() {
     }
-
 }

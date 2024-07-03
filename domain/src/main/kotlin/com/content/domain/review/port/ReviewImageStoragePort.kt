@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component
 
 @Component
 interface ReviewImageStoragePort {
-
     fun saveReviewImage(reviewImageStorageDatas: List<ReviewImageStorageData>)
 
     fun getReviewImage(imageUrl: String): ReviewImage?

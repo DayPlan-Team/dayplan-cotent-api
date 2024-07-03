@@ -11,11 +11,11 @@ import java.util.concurrent.TimeUnit
 @Profile("!prod")
 @Configuration
 class ApiClientLocalConfig {
-
-    val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)    // 연결 타임아웃
-        .readTimeout(30, TimeUnit.SECONDS)       // 데이터 읽기 타임아웃
-        .build()
+    val okHttpClient =
+        OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS) // 연결 타임아웃
+            .readTimeout(30, TimeUnit.SECONDS) // 데이터 읽기 타임아웃
+            .build()
 
     @Bean
     fun applyUserClient(): UserClient {

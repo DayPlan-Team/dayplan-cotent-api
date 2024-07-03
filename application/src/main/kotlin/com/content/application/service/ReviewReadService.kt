@@ -1,8 +1,8 @@
 package com.content.application.service
 
-import com.content.domain.review.port.ReviewQueryPort
 import com.content.domain.review.Review
 import com.content.domain.review.ReviewReadUseCase
+import com.content.domain.review.port.ReviewQueryPort
 import org.springframework.stereotype.Service
 
 @Service

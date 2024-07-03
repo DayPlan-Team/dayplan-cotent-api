@@ -9,8 +9,6 @@ import retrofit2.http.Query
 
 @Component
 interface PlaceRetrofitClient {
-
-
     @Headers(ApiClientUtil.CONTENT_TYPE_APPLICATION_JSON)
     @GET("/user/internal/place")
     fun getPlaceResponse(
@@ -22,5 +20,4 @@ interface PlaceRetrofitClient {
     suspend fun getSuspendPlaceResponse(
         @Query("placeId") placeIds: List<Long>,
     ): Response<PlaceResponse>
-
 }

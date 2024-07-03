@@ -26,4 +26,3 @@ enum class ContentExceptionCode(
     BAD_REQUEST_REVIEW(400, "COTR-017", "잘못된 리뷰 요청입니다."),
     BAD_REQUEST_COURSE_NOT_UPDATE_ALREADY_REVIEW(400, "COTR-018", "이미 리뷰가 작성된 데이트 코스는 수정할 수 없습니다."),
 }
-

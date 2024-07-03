@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class ExceptionController {
-
     @ResponseStatus
     @ExceptionHandler(ContentException::class)
     fun handleUserException(exception: ContentException): ResponseEntity<ExceptionResponse> {
@@ -26,7 +25,8 @@ class ExceptionController {
                 status = exception.status,
                 code = exception.errorCode,
                 message = exception.message,
-            ), httpStatus
+            ),
+            httpStatus,
         )
     }
 
@@ -42,7 +42,8 @@ class ExceptionController {
                 status = exception.status,
                 code = exception.errorCode,
                 message = exception.message,
-            ), httpStatus
+            ),
+            httpStatus,
         )
     }
 
@@ -58,7 +59,8 @@ class ExceptionController {
                 status = httpStatus.value(),
                 code = ContentExceptionCode.DEFAULT_BAD_REQUEST.errorCode,
                 message = ContentExceptionCode.DEFAULT_BAD_REQUEST.message,
-            ), httpStatus
+            ),
+            httpStatus,
         )
     }
 

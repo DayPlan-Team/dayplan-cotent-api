@@ -18,29 +18,23 @@ import jakarta.persistence.Table
 @Table(
     name = "district_metrics",
     indexes = [
-        Index(name = "idx_districtMetrics_districtCode", columnList = "districtCode"),
-    ]
+        Index(name = "idx__district_metrics_district_code", columnList = "district_code"),
+    ],
 )
 data class DistrictMetricsEntity(
-
-    @Column
+    @Column(name = "district_code", columnDefinition = "varchar(32)", nullable = false)
     @Enumerated(EnumType.STRING)
     val districtCode: DistrictCode,
-
-    @Column
+    @Column(name = "visited_count", columnDefinition = "bigint", nullable = false)
     val visitedCount: Long = 0L,
-
-    @Column
+    @Column(name = "review_count", columnDefinition = "bigint", nullable = false)
     val reviewCount: Long = 0L,
-
-    @Column
+    @Column(name = "recommend_count", columnDefinition = "bigint", nullable = false)
     val recommendCount: Long = 0L,
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 ) : BaseEntity() {
-
     fun toDomainModel(): DistrictMetrics {
         return DistrictMetrics(
             districtCode = districtCode,
@@ -52,7 +46,7 @@ data class DistrictMetricsEntity(
     }
 
     fun updateDistrictMetrics(districtCountType: DistrictCountType): DistrictMetricsEntity {
-        return when(districtCountType) {
+        return when (districtCountType) {
             DistrictCountType.VISITED -> this.copy(visitedCount = this.visitedCount + 1)
             DistrictCountType.REVIEW -> this.copy(reviewCount = this.reviewCount + 1)
             DistrictCountType.RECOMMEND -> this.copy(recommendCount = this.recommendCount + 1)
@@ -70,5 +64,4 @@ data class DistrictMetricsEntity(
             )
         }
     }
-
 }

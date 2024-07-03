@@ -22,7 +22,6 @@ class CourseGroupController(
     private val userVerifyService: UserVerifyService,
     private val courseGroupService: CourseGroupService,
 ) {
-
     @PostMapping
     fun upsertCourseGroup(
         @RequestHeader("UserId") userId: Long,
@@ -30,64 +29,24 @@ class CourseGroupController(
     ): ResponseEntity<CourseGroupApiResponse> {
         val user = userVerifyService.verifyNormalUserAndGet(userId)
 
-        val address = AddressUtil.verifyAddressCodeAndGet(
-            cityCodeNumber = courseGroupRequest.cityCode,
-            districtCodeNumber = courseGroupRequest.districtCode,
-        )
-
-        val response = courseGroupService.upsertCourseGroup(
-            CourseGroup(
-                groupId = courseGroupRequest.groupId ?: 0L,
-                groupName = courseGroupRequest.groupName
-                    ?: (CourseGroup.DEFAULT_NAME + "_" + DateTimeCustomFormatter.nowToDefaultFormat()),
-                userId = user.userId,
-                cityCode = address.cityCode,
-                districtCode = address.districtCode,
+        val address =
+            AddressUtil.verifyAddressCodeAndGet(
+                cityCodeNumber = courseGroupRequest.cityCode,
+                districtCodeNumber = courseGroupRequest.districtCode,
             )
-        ).let {
-            CourseGroupApiResponse(
-                groupId = it.groupId,
-                groupName = it.groupName,
-                cityCode = it.cityCode.code,
-                cityName = it.cityCode.koreanName,
-                districtCode = it.districtCode.code,
-                districtName = it.districtCode.koreanName,
-            )
-        }
 
-        return ResponseEntity.ok(response)
-    }
-
-    @GetMapping("/{courseGroup}")
-    fun getCourseGroup(
-        @RequestHeader("UserId") userId: Long,
-        @PathVariable("courseGroup") courseGroupId: Long,
-    ): ResponseEntity<CourseGroupApiResponse> {
-        val user = userVerifyService.verifyNormalUserAndGet(userId)
-        val response = courseGroupService.getCourseGroup(
-            userId = user.userId,
-            groupId = courseGroupId,
-        ).let {
-            CourseGroupApiResponse(
-                groupId = it.groupId,
-                groupName = it.groupName,
-                cityCode = it.cityCode.code,
-                cityName = it.cityCode.koreanName,
-                districtCode = it.districtCode.code,
-                districtName = it.districtCode.koreanName,
-            )
-        }
-
-        return ResponseEntity.ok(response)
-    }
-
-    @GetMapping
-    fun getCourseGroups(
-        @RequestHeader("UserId") userId: Long,
-    ): ResponseEntity<CourseGroupsApiResponse> {
-        val user = userVerifyService.verifyNormalUserAndGet(userId)
-        val courseGroups = courseGroupService.getCourseGroups(user.userId)
-            .map {
+        val response =
+            courseGroupService.upsertCourseGroup(
+                CourseGroup(
+                    groupId = courseGroupRequest.groupId ?: 0L,
+                    groupName =
+                        courseGroupRequest.groupName
+                            ?: (CourseGroup.DEFAULT_NAME + "_" + DateTimeCustomFormatter.nowToDefaultFormat()),
+                    userId = user.userId,
+                    cityCode = address.cityCode,
+                    districtCode = address.districtCode,
+                ),
+            ).let {
                 CourseGroupApiResponse(
                     groupId = it.groupId,
                     groupName = it.groupName,
@@ -98,13 +57,57 @@ class CourseGroupController(
                 )
             }
 
-        return ResponseEntity.ok(
-            CourseGroupsApiResponse(
-                courseGroups = courseGroups
-            )
-        )
+        return ResponseEntity.ok(response)
     }
 
+    @GetMapping("/{courseGroup}")
+    fun getCourseGroup(
+        @RequestHeader("UserId") userId: Long,
+        @PathVariable("courseGroup") courseGroupId: Long,
+    ): ResponseEntity<CourseGroupApiResponse> {
+        val user = userVerifyService.verifyNormalUserAndGet(userId)
+        val response =
+            courseGroupService.getCourseGroup(
+                userId = user.userId,
+                groupId = courseGroupId,
+            ).let {
+                CourseGroupApiResponse(
+                    groupId = it.groupId,
+                    groupName = it.groupName,
+                    cityCode = it.cityCode.code,
+                    cityName = it.cityCode.koreanName,
+                    districtCode = it.districtCode.code,
+                    districtName = it.districtCode.koreanName,
+                )
+            }
+
+        return ResponseEntity.ok(response)
+    }
+
+    @GetMapping
+    fun getCourseGroups(
+        @RequestHeader("UserId") userId: Long,
+    ): ResponseEntity<CourseGroupsApiResponse> {
+        val user = userVerifyService.verifyNormalUserAndGet(userId)
+        val courseGroups =
+            courseGroupService.getCourseGroups(user.userId)
+                .map {
+                    CourseGroupApiResponse(
+                        groupId = it.groupId,
+                        groupName = it.groupName,
+                        cityCode = it.cityCode.code,
+                        cityName = it.cityCode.koreanName,
+                        districtCode = it.districtCode.code,
+                        districtName = it.districtCode.koreanName,
+                    )
+                }
+
+        return ResponseEntity.ok(
+            CourseGroupsApiResponse(
+                courseGroups = courseGroups,
+            ),
+        )
+    }
 
     data class CourseGroupApiRequest(
         @JsonProperty("groupId") val groupId: Long?,

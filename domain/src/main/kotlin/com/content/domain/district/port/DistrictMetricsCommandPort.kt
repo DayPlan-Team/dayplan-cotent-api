@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component
 
 @Component
 interface DistrictMetricsCommandPort {
-
-    fun upsertDistrict(districtCode: DistrictCode, districtCountType: DistrictCountType)
-
+    fun upsertDistrict(
+        districtCode: DistrictCode,
+        districtCountType: DistrictCountType,
+    )
 }

@@ -1,7 +1,7 @@
 package com.content.adapter.place
 
-import com.content.adapter.client.PlaceRetrofitClient
 import com.content.adapter.client.PlaceItem
+import com.content.adapter.client.PlaceRetrofitClient
 import com.content.adapter.grpc.PlaceGrpcClient
 import com.content.application.port.PlacePort
 import com.content.domain.place.Place
@@ -45,7 +45,9 @@ class PlaceAdapter(
             val response = call.execute()
             if (response.isSuccessful && response.body() != null) {
                 getPlaceItem(response.body()!!.places)
-            } else null
+            } else {
+                null
+            }
         } catch (e: Exception) {
             log.error("[PlaceAdapter Retrofit Exception]", e)
             null

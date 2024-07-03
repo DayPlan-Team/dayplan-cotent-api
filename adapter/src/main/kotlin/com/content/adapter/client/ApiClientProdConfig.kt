@@ -12,14 +12,14 @@ import java.util.concurrent.TimeUnit
 @Profile("prod")
 @Configuration
 class ApiClientProdConfig {
-
     @Value("\${user.server.url}")
     private lateinit var userServer: String
 
-    val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .build()
+    val okHttpClient =
+        OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
 
     @Bean
     fun applyUserClient(): UserClient {

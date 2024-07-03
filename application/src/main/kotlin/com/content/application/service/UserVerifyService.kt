@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service
 class UserVerifyService(
     private val userQueryPort: UserQueryPort,
 ) {
-
     fun verifyNormalUserAndGet(userId: Long): User {
         val user = userQueryPort.findUserByUserId(userId = userId)
         require(user.userAccountStatus == UserAccountStatus.NORMAL) { throw ContentException(ContentExceptionCode.USER_INVALID) }
@@ -22,5 +21,4 @@ class UserVerifyService(
         return userQueryPort.findUsersByUserIds(userIds = userIds)
             .filter { it.userAccountStatus == UserAccountStatus.NORMAL }
     }
-
 }

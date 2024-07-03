@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class HealthCheckController {
-
     @GetMapping("/content/health")
     fun checkHealth(): ResponseEntity<HealthCheck> {
         log.info("health check")

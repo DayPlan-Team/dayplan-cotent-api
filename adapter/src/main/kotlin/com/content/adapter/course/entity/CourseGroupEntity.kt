@@ -19,32 +19,27 @@ import org.hibernate.annotations.DynamicUpdate
 @Entity
 @DynamicUpdate
 @Table(
-    name = "course_group",
+    name = "course_groups",
     indexes = [
-        Index(name = "idx_course_group_userId", columnList = "userId"),
-        Index(name = "idx_course_group_city_district", columnList = "cityCode,districtCode"),
-    ]
+        Index(name = "idx__course_groups_user_id", columnList = "user_id"),
+        Index(name = "idx__course_groups_city_district", columnList = "city_code,district_code"),
+    ],
 )
 data class CourseGroupEntity(
-    @Column
+    @Column(name = "user_id", columnDefinition = "bigint", nullable = false)
     val userId: Long,
-
-    @Column
+    @Column(name = "group_name", columnDefinition = "varchar(255)", nullable = false)
     val groupName: String,
-
-    @Column
+    @Column(name = "city_code", columnDefinition = "varchar(32)", nullable = false)
     @Enumerated(value = EnumType.STRING)
     val cityCode: CityCode,
-
-    @Column
+    @Column(name = "district_code", columnDefinition = "varchar(32)", nullable = false)
     @Enumerated(value = EnumType.STRING)
     val districtCode: DistrictCode,
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 ) : BaseEntity() {
-
     fun toDomainModel(): CourseGroup {
         return CourseGroup(
             groupId = id,
@@ -57,11 +52,11 @@ data class CourseGroupEntity(
 
     companion object {
         fun fromCourseGroup(courseGroup: CourseGroup): CourseGroupEntity {
-
-            val groupName = when {
-                courseGroup.groupName.isBlank() -> "${CourseGroup.DEFAULT_NAME}_${DateTimeCustomFormatter.nowToDefaultFormat()}"
-                else -> courseGroup.groupName
-            }
+            val groupName =
+                when {
+                    courseGroup.groupName.isBlank() -> "${CourseGroup.DEFAULT_NAME}_${DateTimeCustomFormatter.nowToDefaultFormat()}"
+                    else -> courseGroup.groupName
+                }
 
             return CourseGroupEntity(
                 userId = courseGroup.userId,
@@ -72,5 +67,4 @@ data class CourseGroupEntity(
             )
         }
     }
-
 }

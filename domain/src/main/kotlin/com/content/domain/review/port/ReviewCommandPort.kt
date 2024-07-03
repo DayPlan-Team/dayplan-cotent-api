@@ -5,6 +5,5 @@ import org.springframework.stereotype.Component
 
 @Component
 interface ReviewCommandPort {
-
     fun upsertReview(review: Review): Review
 }

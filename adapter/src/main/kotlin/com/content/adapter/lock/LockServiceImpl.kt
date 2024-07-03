@@ -10,15 +10,19 @@ import java.util.concurrent.TimeUnit
 @Component
 class LockServiceImpl<R>(
     private val redissonClient: RedissonClient,
-    private val redisTemplate: RedisTemplate<String, String>
+    private val redisTemplate: RedisTemplate<String, String>,
 ) : LockService<R> {
-    override fun lockRetry(key: String, lockTime: Long, exception: Exception, action: () -> R): R {
+    override fun lockRetry(
+        key: String,
+        lockTime: Long,
+        exception: Exception,
+        action: () -> R,
+    ): R {
         val lock = redissonClient.getLock(key)
 
         try {
             val isLocked = lock.tryLock(lockTime, 3_000, TimeUnit.MILLISECONDS)
             log.info("lock try = $key, ${Thread.currentThread()}")
-
 
             if (!isLocked) {
                 log.info("lock try = $key")
@@ -34,7 +38,12 @@ class LockServiceImpl<R>(
         }
     }
 
-    override fun lockUnitRetry(key: String, lockTime: Long, exception: Exception, action: () -> Unit) {
+    override fun lockUnitRetry(
+        key: String,
+        lockTime: Long,
+        exception: Exception,
+        action: () -> Unit,
+    ) {
         val lock = redissonClient.getLock(key)
 
         try {
@@ -46,7 +55,6 @@ class LockServiceImpl<R>(
             }
 
             action()
-
         } finally {
             if (lock.isHeldByCurrentThread) {
                 log.info("lock unlock = $key, ${Thread.currentThread()}")
@@ -55,7 +63,12 @@ class LockServiceImpl<R>(
         }
     }
 
-    override fun lockUnitAtomic(key: String, lockTime: Long, exception: Exception, action: () -> Unit) {
+    override fun lockUnitAtomic(
+        key: String,
+        lockTime: Long,
+        exception: Exception,
+        action: () -> Unit,
+    ) {
         val isSet = redisTemplate.opsForValue().setIfAbsent(key, key, lockTime, TimeUnit.MILLISECONDS) ?: false
         if (isSet) {
             log.info("lock try = $key, ${Thread.currentThread()}")
@@ -65,7 +78,12 @@ class LockServiceImpl<R>(
         }
     }
 
-    override fun lockAtomic(key: String, lockTime: Long, exception: Exception, action: () -> R): R {
+    override fun lockAtomic(
+        key: String,
+        lockTime: Long,
+        exception: Exception,
+        action: () -> R,
+    ): R {
         val isSet = redisTemplate.opsForValue().setIfAbsent(key, key, lockTime, TimeUnit.MILLISECONDS) ?: false
         if (isSet) {
             log.info("lock try = $key, ${Thread.currentThread()}")

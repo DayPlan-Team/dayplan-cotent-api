@@ -5,10 +5,7 @@ data class ReviewCreationRequest(
     val courseId: Long,
     val content: String,
 ) {
-
-    fun toReview(
-        review: Review? = null,
-    ): Review {
+    fun toReview(review: Review? = null): Review {
         return Review.from(
             reviewId = review?.reviewId ?: 0L,
             reviewGroupId = review?.reviewGroupId ?: reviewGroupId,
@@ -18,11 +15,10 @@ data class ReviewCreationRequest(
     }
 
     companion object {
-
         fun from(
             reviewGroupId: Long,
             courseId: Long,
-            content: String
+            content: String,
         ): ReviewCreationRequest {
             return ReviewCreationRequest(
                 reviewGroupId = reviewGroupId,
@@ -30,6 +26,5 @@ data class ReviewCreationRequest(
                 content = content,
             )
         }
-
     }
 }

@@ -14,34 +14,29 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(
-    name = "review_group",
+    name = "review_groups",
     indexes = [
-        Index(name = "idx_reviewGroup_userId", columnList = "userId"),
-        Index(name = "idx_reviewGroup_courseGroupId", columnList = "courseGroupId"),
-    ]
+        Index(name = "idx__review_groups_user_id", columnList = "user_id"),
+        Index(name = "idx__review_groups_course_group_id", columnList = "course_group_id"),
+    ],
 )
 data class ReviewGroupEntity(
-
-    @Column
+    @Column(name = "user_id", columnDefinition = "bigint", nullable = false)
     val userId: Long,
-
-    @Column
+    @Column(name = "course_group_id", columnDefinition = "bigint", nullable = false)
     val courseGroupId: Long,
-
-    @Column
+    @Column(name = "review_group_name", columnDefinition = "varchar(255)", nullable = false)
     val reviewGroupName: String,
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 ) : BaseEntity() {
-
     companion object {
         fun from(courseGroup: CourseGroup): ReviewGroupEntity {
             return ReviewGroupEntity(
                 userId = courseGroup.userId,
                 courseGroupId = courseGroup.groupId,
-                reviewGroupName = "${ReviewGroup.DEFAULT_NAME}_${DateTimeCustomFormatter.nowToDefaultFormat()}"
+                reviewGroupName = "${ReviewGroup.DEFAULT_NAME}_${DateTimeCustomFormatter.nowToDefaultFormat()}",
             )
         }
 
@@ -65,5 +60,4 @@ data class ReviewGroupEntity(
             modifiedAt = modifiedAt,
         )
     }
-
 }

@@ -1,9 +1,9 @@
 package com.content.api.publics
 
-import com.content.domain.course.CourseUpsertRequest
 import com.content.application.service.CourseService
 import com.content.application.service.UserVerifyService
 import com.content.domain.course.CourseStage
+import com.content.domain.course.CourseUpsertRequest
 import com.content.domain.share.PlaceCategory
 import com.content.util.share.Logger
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -22,13 +22,11 @@ class CourseController(
     private val userVerifyService: UserVerifyService,
     private val courseService: CourseService,
 ) {
-
     @PostMapping
     fun upsertCourse(
         @RequestHeader("UserId") userId: Long,
         @RequestBody request: CourseUpsertApiRequest,
     ): ResponseEntity<Unit> {
-
         val user = userVerifyService.verifyNormalUserAndGet(userId)
 
         courseService.upsertCourse(
@@ -39,7 +37,7 @@ class CourseController(
                 step = request.step,
                 placeCategory = request.placeCategory,
                 placeId = request.placeId ?: 0L,
-            )
+            ),
         )
 
         return ResponseEntity.ok().build()
@@ -52,27 +50,29 @@ class CourseController(
     ): ResponseEntity<CourseApiResponse> {
         userVerifyService.verifyNormalUserAndGet(userId)
 
-        val courses = courseService.getDetailCoursesByGroup(
-            groupId = groupId,
-        )
+        val courses =
+            courseService.getDetailCoursesByGroup(
+                groupId = groupId,
+            )
 
         log.info("placeResponseSize = ${courses.size}")
 
         return ResponseEntity.ok(
             CourseApiResponse(
                 groupId = groupId,
-                courses = courses.map {
-                    CourseItem(
-                        courseId = it.courseId,
-                        placeId = it.placeId,
-                        step = it.step,
-                        placeCategory = it.placeCategory,
-                        placeName = it.placeName,
-                        address = it.address,
-                        courseStage = it.courseStage,
-                        roadAddress = it.roadAddress,
-                    )
-                },
+                courses =
+                    courses.map {
+                        CourseItem(
+                            courseId = it.courseId,
+                            placeId = it.placeId,
+                            step = it.step,
+                            placeCategory = it.placeCategory,
+                            placeName = it.placeName,
+                            address = it.address,
+                            courseStage = it.courseStage,
+                            roadAddress = it.roadAddress,
+                        )
+                    },
             ),
         )
     }

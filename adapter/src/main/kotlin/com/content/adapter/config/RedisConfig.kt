@@ -11,10 +11,8 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.serializer.StringRedisSerializer
 
-
 @Configuration
 class RedisConfig {
-
     @Value("\${spring.data.redis.host}")
     private lateinit var host: String
 

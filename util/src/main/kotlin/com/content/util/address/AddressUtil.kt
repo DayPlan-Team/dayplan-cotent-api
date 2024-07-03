@@ -6,32 +6,37 @@ import org.springframework.stereotype.Component
 
 @Component
 object AddressUtil {
+    private val districtsByCityCode =
+        DistrictCode
+            .values()
+            .filter { it != DistrictCode.DEFAULT }
+            .groupBy { it.city.code }
 
-    private val districtsByCityCode = DistrictCode
-        .values()
-        .filter { it != DistrictCode.DEFAULT }
-        .groupBy { it.city.code }
+    private val districtByDistrictCode =
+        DistrictCode
+            .values()
+            .filter { it != DistrictCode.DEFAULT }
+            .associateBy { it.code }
 
-    private val districtByDistrictCode = DistrictCode
-        .values()
-        .filter { it != DistrictCode.DEFAULT }
-        .associateBy { it.code }
+    private val cityByCityCode =
+        CityCode
+            .values()
+            .filter { it != CityCode.DEFAULT }
+            .associateBy { it.code }
 
-    private val cityByCityCode = CityCode
-        .values()
-        .filter { it != CityCode.DEFAULT }
-        .associateBy { it.code }
-
-    val cities = CityCode
-        .values()
-        .filter { it != CityCode.DEFAULT }
-
+    val cities =
+        CityCode
+            .values()
+            .filter { it != CityCode.DEFAULT }
 
     fun getDistrictByCityCode(cityCode: Long): List<DistrictCode> {
         return districtsByCityCode[cityCode] ?: throw ContentException(ContentExceptionCode.BAD_REQUEST_CITY_CODE)
     }
 
-    fun verifyAddressCodeAndGet(cityCodeNumber: Long, districtCodeNumber: Long): AddressCode {
+    fun verifyAddressCodeAndGet(
+        cityCodeNumber: Long,
+        districtCodeNumber: Long,
+    ): AddressCode {
         val cityCode = verifyCityCodeAndGet(cityCodeNumber)
         val districtCode = verifyDistrictCodeAndGet(districtCodeNumber)
         require(districtCode.city == cityCode) { throw ContentException(ContentExceptionCode.BAD_REQUEST_DISTRICT_CODE) }

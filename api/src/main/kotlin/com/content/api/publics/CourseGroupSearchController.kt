@@ -22,7 +22,6 @@ class CourseGroupSearchController(
     private val userVerifyService: UserVerifyService,
     private val courseGroupSearchService: CourseGroupSearchService,
 ) {
-
     @GetMapping("/district")
     fun getCourseGroups(
         @RequestHeader("UserId") userId: Long,
@@ -32,20 +31,22 @@ class CourseGroupSearchController(
     ): ResponseEntity<CourseGroupListSearchResponse> {
         userVerifyService.verifyNormalUserAndGet(userId)
 
-        val address = AddressUtil.verifyAddressCodeAndGet(
-            cityCodeNumber = cityCode,
-            districtCodeNumber = districtCode,
-        )
+        val address =
+            AddressUtil.verifyAddressCodeAndGet(
+                cityCodeNumber = cityCode,
+                districtCodeNumber = districtCode,
+            )
 
         verifyQuery(start)
 
-        val courseGroupSearchResponse = courseGroupSearchService.searchCourseGroupsWithCourseBy(
-            CourseGroupAdministrativeSearchRequest(
-                cityCode = address.cityCode,
-                districtCode = address.districtCode,
-                start = start,
+        val courseGroupSearchResponse =
+            courseGroupSearchService.searchCourseGroupsWithCourseBy(
+                CourseGroupAdministrativeSearchRequest(
+                    cityCode = address.cityCode,
+                    districtCode = address.districtCode,
+                    start = start,
+                ),
             )
-        )
 
         return ResponseEntity.ok(courseGroupSearchResponse)
     }
@@ -70,6 +71,4 @@ class CourseGroupSearchController(
     }
 
     companion object : Logger()
-
-
 }

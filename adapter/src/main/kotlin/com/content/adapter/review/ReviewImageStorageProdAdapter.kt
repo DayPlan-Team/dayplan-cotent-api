@@ -19,7 +19,6 @@ class ReviewImageStorageProdAdapter(
     private val s3Client: S3Client,
     private val reviewImageMetaCommandUseCase: ReviewImageMetaCommandUseCase,
 ) : ReviewImageStoragePort {
-
     @Value("\${s3.key}")
     private lateinit var s3KeyPrefix: String
 
@@ -29,20 +28,20 @@ class ReviewImageStorageProdAdapter(
     override fun saveReviewImage(reviewImageStorageDatas: List<ReviewImageStorageData>) {
         try {
             reviewImageStorageDatas.map {
-
                 val fullS3Key = s3KeyPrefix + it.reviewImageMeta.imageUrl
 
-                val putObjectRequest = PutObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(fullS3Key)
-                    .build()
+                val putObjectRequest =
+                    PutObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(fullS3Key)
+                        .build()
 
                 val requestBody = RequestBody.fromBytes(it.reviewImage.image)
                 s3Client.putObject(putObjectRequest, requestBody)
             }
         } catch (e: Exception) {
             reviewImageMetaCommandUseCase.deleteReviewImageMeta(
-                reviewImageMetas = reviewImageStorageDatas.map { it.reviewImageMeta }
+                reviewImageMetas = reviewImageStorageDatas.map { it.reviewImageMeta },
             )
         }
     }
@@ -51,14 +50,15 @@ class ReviewImageStorageProdAdapter(
         try {
             val fullS3Key = s3KeyPrefix + imageUrl
 
-            val getObjectRequest = GetObjectRequest.builder()
-                .bucket(bucketName)
-                .key(fullS3Key)
-                .build()
+            val getObjectRequest =
+                GetObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(fullS3Key)
+                    .build()
 
             val response = s3Client.getObject(getObjectRequest)
             return ReviewImage(
-                response.readAllBytes()
+                response.readAllBytes(),
             )
         } catch (e: Exception) {
             log.error(e.message)
@@ -70,13 +70,13 @@ class ReviewImageStorageProdAdapter(
         return imageUrls.map { imageUrl ->
             try {
                 val fullS3Key = s3KeyPrefix + imageUrl
-                val getObjectRequest = GetObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(fullS3Key)
-                    .build()
+                val getObjectRequest =
+                    GetObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(fullS3Key)
+                        .build()
                 val response = s3Client.getObject(getObjectRequest)
                 ReviewImage(response.readAllBytes())
-
             } catch (e: Exception) {
                 return emptyList()
             }

@@ -27,7 +27,6 @@ class ReviewAndReviewImageService(
     private val reviewWriteUseCase: ReviewWriteUseCase,
     private val reviewImageMetaCommandUseCase: ReviewImageMetaCommandUseCase,
 ) {
-
     fun writeReview(
         user: User,
         reviewCreationRequest: ReviewCreationRequest,
@@ -37,12 +36,13 @@ class ReviewAndReviewImageService(
         verifyInvalidReviewWrite(
             user = user,
             reviewGroup = reviewGroup,
-            courseId = reviewCreationRequest.courseId
+            courseId = reviewCreationRequest.courseId,
         )
 
-        val review = reviewCreationRequest.toReview(
-            review = reviewQueryPort.getReviewByCourseId(courseId = reviewCreationRequest.courseId),
-        )
+        val review =
+            reviewCreationRequest.toReview(
+                review = reviewQueryPort.getReviewByCourseId(courseId = reviewCreationRequest.courseId),
+            )
 
         return reviewWriteUseCase.writeReview(review = review)
     }
@@ -53,7 +53,7 @@ class ReviewAndReviewImageService(
     ): List<ReviewImageStorageData> {
         return reviewImageMetaCommandUseCase.upsertReviewImageMeta(
             reviewImages = reviewImages,
-            reviewImageMetas = reviewImageMetas
+            reviewImageMetas = reviewImageMetas,
         )
     }
 
@@ -77,18 +77,25 @@ class ReviewAndReviewImageService(
         )
     }
 
-    private fun verifyReviewGroupOwner(reviewGroupUserId: Long, userId: Long) {
+    private fun verifyReviewGroupOwner(
+        reviewGroupUserId: Long,
+        userId: Long,
+    ) {
         require(reviewGroupUserId == userId) { throw ContentException(ContentExceptionCode.USER_INVALID) }
     }
 
-    /* A 코스 리뷰를 쓰려면, 동일한 코스 그룹에 있는 B, C 모두 리뷰를 쓸 수 있는 상태여야 해요!*/
-    private fun verifyInvalidReviewCourse(courseGroupId: Long, courseId: Long) {
-        val courses = courseQueryPort
-            .getCoursesByGroupId(courseGroupId)
+    // A 코스 리뷰를 쓰려면, 동일한 코스 그룹에 있는 B, C 모두 리뷰를 쓸 수 있는 상태여야 해요!
+    private fun verifyInvalidReviewCourse(
+        courseGroupId: Long,
+        courseId: Long,
+    ) {
+        val courses =
+            courseQueryPort
+                .getCoursesByGroupId(courseGroupId)
 
         require(
-            courses.all { it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH }
-                    && courses.any { it.courseId == courseId }
+            courses.all { it.visitedStatus && it.courseStage == CourseStage.PLACE_FINISH } &&
+                courses.any { it.courseId == courseId },
         ) {
             throw ContentException(ContentExceptionCode.BAD_REQUEST_REVIEW)
         }

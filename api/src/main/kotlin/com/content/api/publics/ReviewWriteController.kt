@@ -29,7 +29,6 @@ class ReviewWriteController(
     private val reviewAndReviewImageService: ReviewAndReviewImageService,
     private val reviewImageStoragePort: ReviewImageStoragePort,
 ) {
-
     @GetMapping
     fun getAllPossibleReviewsToWrite(
         @RequestHeader("UserId") userId: Long,
@@ -45,7 +44,7 @@ class ReviewWriteController(
                 courseWithPossibleReviews.map {
                     CourseWithPossibleApiReview.of(it)
                 },
-            )
+            ),
         )
     }
 
@@ -55,26 +54,28 @@ class ReviewWriteController(
         @PathVariable("reviewGroupId") reviewGroupId: Long,
         @ModelAttribute reviewWriteApiRequest: ReviewWriteApiRequest,
     ): ResponseEntity<Unit> {
-
         val user = userVerifyService.verifyNormalUserAndGet(userId)
 
         val reviewCreationRequest = createReviewCreationRequest(reviewWriteApiRequest, reviewGroupId)
-        val review = reviewAndReviewImageService.writeReview(
-            user = user,
-            reviewCreationRequest = reviewCreationRequest,
-        )
+        val review =
+            reviewAndReviewImageService.writeReview(
+                user = user,
+                reviewCreationRequest = reviewCreationRequest,
+            )
 
         val reviewImages = createReviewImages(reviewWriteApiRequest.reviewImages)
-        val reviewImageMetas = createReviewImageMeta(
-            reviewId = review.reviewId,
-            reviewImages = reviewImages,
-            reviewWriteApiRequest = reviewWriteApiRequest,
-        )
+        val reviewImageMetas =
+            createReviewImageMeta(
+                reviewId = review.reviewId,
+                reviewImages = reviewImages,
+                reviewWriteApiRequest = reviewWriteApiRequest,
+            )
 
-        val reviewImageStorageDatas = reviewAndReviewImageService.saveReviewImageMetas(
-            reviewImages = reviewImages,
-            reviewImageMetas = reviewImageMetas,
-        )
+        val reviewImageStorageDatas =
+            reviewAndReviewImageService.saveReviewImageMetas(
+                reviewImages = reviewImages,
+                reviewImageMetas = reviewImageMetas,
+            )
 
         if (reviewImageStorageDatas.isNotEmpty()) {
             reviewImageStoragePort.saveReviewImage(reviewImageStorageDatas)
@@ -94,7 +95,7 @@ class ReviewWriteController(
     private fun createReviewImageMeta(
         reviewId: Long,
         reviewImages: List<ReviewImage>,
-        reviewWriteApiRequest: ReviewWriteApiRequest
+        reviewWriteApiRequest: ReviewWriteApiRequest,
     ): List<ReviewImageMeta> {
         return reviewImages.mapIndexed { index, reviewImage ->
             ReviewImageMeta(
@@ -109,7 +110,7 @@ class ReviewWriteController(
 
     private fun createReviewCreationRequest(
         reviewWriteApiRequest: ReviewWriteApiRequest,
-        reviewGroupId: Long
+        reviewGroupId: Long,
     ): ReviewCreationRequest {
         return ReviewCreationRequest.from(
             reviewGroupId = reviewGroupId,

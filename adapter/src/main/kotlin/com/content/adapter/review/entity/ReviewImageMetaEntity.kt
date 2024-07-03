@@ -5,6 +5,8 @@ import com.content.adapter.share.Status
 import com.content.domain.review.ReviewImageMeta
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -13,38 +15,31 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(
-    name = "review_image_meta",
+    name = "review_image_mets",
     indexes = [
-        Index(name = "idx_reviewImageMeta_reviewId", columnList = "reviewId"),
-    ]
+        Index(name = "idx__review_image_metas_review_id", columnList = "review_id"),
+    ],
 )
 data class ReviewImageMetaEntity(
-    @Column
+    @Column(name = "sequence", columnDefinition = "int", nullable = false)
     val sequence: Int,
-
-    @Column
+    @Column(name = "image_url", columnDefinition = "text", nullable = false)
     val imageUrl: String,
-
-    @Column
+    @Column(name = "review_id", columnDefinition = "bigint", nullable = false)
     val reviewId: Long,
-
-    @Column
+    @Column(name = "original_name", columnDefinition = "varchar(255)", nullable = false)
     val originalName: String,
-
-    @Column
+    @Column(name = "image_name", columnDefinition = "varchar(255)", nullable = false)
     val imageName: String,
-
-    @Column
+    @Column(name = "review_image_hash_code", columnDefinition = "int", nullable = false)
     val reviewImageHashCode: Int,
-
-    @Column
+    @Column(name = "status", columnDefinition = "varchar(32)", nullable = false)
+    @Enumerated(value = EnumType.STRING)
     val status: Status,
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 ) : BaseEntity() {
-
     fun toDomainModel(): ReviewImageMeta {
         return ReviewImageMeta(
             sequence = sequence,
@@ -67,7 +62,7 @@ data class ReviewImageMetaEntity(
                 imageName = reviewImageMeta.imageName,
                 reviewImageHashCode = reviewImageMeta.reviewImageHashCode,
                 status = Status.NORMAL,
-                id = reviewImageMeta.reviewImageId
+                id = reviewImageMeta.reviewImageId,
             )
         }
 
@@ -80,7 +75,7 @@ data class ReviewImageMetaEntity(
                 imageName = reviewImageMeta.imageName,
                 reviewImageHashCode = reviewImageMeta.reviewImageHashCode,
                 status = Status.NORMAL,
-                id = reviewImageMeta.reviewImageId
+                id = reviewImageMeta.reviewImageId,
             )
         }
     }

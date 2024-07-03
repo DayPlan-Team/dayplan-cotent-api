@@ -7,8 +7,8 @@ import com.content.domain.review.ReviewGroupCommandUseCase
 import com.content.domain.review.ReviewGroupUpdateRequest
 import com.content.util.share.Logger
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.springframework.validation.annotation.Validated
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -25,7 +25,6 @@ class ReviewGroupUpsertController(
     private val possibleReviewCourseFindService: PossibleReviewCourseFindService,
     private val reviewGroupCommandUseCase: ReviewGroupCommandUseCase,
 ) {
-
     @PostMapping
     fun createReviewGroup(
         @RequestHeader("UserId") userId: Long,
@@ -39,7 +38,7 @@ class ReviewGroupUpsertController(
         val reviewGroup = reviewGroupCommandUseCase.createReviewGroupOrGet(courseGroup)
 
         return ResponseEntity.ok().body(
-            ReviewGroupResponse(reviewGroup.reviewGroupId)
+            ReviewGroupResponse(reviewGroup.reviewGroupId),
         )
     }
 
@@ -51,19 +50,20 @@ class ReviewGroupUpsertController(
     ): ResponseEntity<ReviewGroupResponse> {
         val user = userVerifyService.verifyNormalUserAndGet(userId)
 
-        val reviewGroup = reviewGroupCommandUseCase.updateReviewGroup(
-            userId = user.userId,
-            reviewGroupId = reviewGroupId,
-            reviewGroupUpdateRequest = ReviewGroupUpdateRequest(
-                reviewGroupName = reviewGroupUpdateApiRequest.reviewGroupName,
+        val reviewGroup =
+            reviewGroupCommandUseCase.updateReviewGroup(
+                userId = user.userId,
+                reviewGroupId = reviewGroupId,
+                reviewGroupUpdateRequest =
+                    ReviewGroupUpdateRequest(
+                        reviewGroupName = reviewGroupUpdateApiRequest.reviewGroupName,
+                    ),
             )
-        )
 
         return ResponseEntity.ok().body(
-            ReviewGroupResponse(reviewGroup.reviewGroupId)
+            ReviewGroupResponse(reviewGroup.reviewGroupId),
         )
     }
-
 
     data class ReviewCreateGroupApiRequest(
         @JsonProperty("courseGroupId", required = true) val courseGroupId: Long,

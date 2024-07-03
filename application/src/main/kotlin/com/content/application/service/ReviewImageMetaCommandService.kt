@@ -20,13 +20,14 @@ class ReviewImageMetaCommandService(
         reviewImages: List<ReviewImage>,
         reviewImageMetas: List<ReviewImageMeta>,
     ): List<ReviewImageStorageData> {
-
         return if (reviewImageMetas.isNotEmpty()) {
             processReviewImageByReviewId(
                 reviewImages = reviewImages,
                 reviewImageMetas = reviewImageMetas,
             )
-        } else emptyList()
+        } else {
+            emptyList()
+        }
     }
 
     fun processReviewImageByReviewId(
@@ -42,9 +43,10 @@ class ReviewImageMetaCommandService(
             }
 
             else -> {
-                val findReviewImageMetas = reviewImageMetaQueryPort
-                    .getReviewImageMetasByReviewId(reviewImageMetas.first().reviewId)
-                    .sortedBy { it.sequence }
+                val findReviewImageMetas =
+                    reviewImageMetaQueryPort
+                        .getReviewImageMetasByReviewId(reviewImageMetas.first().reviewId)
+                        .sortedBy { it.sequence }
 
                 upsertIfNotEqualBefore(reviewImageMetas, findReviewImageMetas, reviewImages)
             }
@@ -54,7 +56,7 @@ class ReviewImageMetaCommandService(
     fun upsertIfNotEqualBefore(
         reviewImageMetas: List<ReviewImageMeta>,
         findReviewImageMetas: List<ReviewImageMeta>,
-        reviewImages: List<ReviewImage>
+        reviewImages: List<ReviewImage>,
     ): List<ReviewImageStorageData> {
         if (!reviewImageMetas.isEqual(findReviewImageMetas)) {
             deleteReviewImageMetaIfNotEmpty(findReviewImageMetas)
@@ -74,7 +76,10 @@ class ReviewImageMetaCommandService(
         }
     }
 
-    fun saveReviewImageAndMetas(reviewImages: List<ReviewImage>, reviewImageMetas: List<ReviewImageMeta>): List<ReviewImageStorageData> {
+    fun saveReviewImageAndMetas(
+        reviewImages: List<ReviewImage>,
+        reviewImageMetas: List<ReviewImageMeta>,
+    ): List<ReviewImageStorageData> {
         reviewImageMetaCommandPort.upsertReviewImageMetas(reviewImageMetas)
 
         return reviewImages.zip(reviewImageMetas) { image, meta ->

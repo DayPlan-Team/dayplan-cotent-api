@@ -13,5 +13,4 @@ class CourseSearchService(
     fun searchCourses(courseSearchRequest: CourseSearchRequest): Slice<DetailCourse> {
         return courseSearchPort.findCoursesByAddressCategory(courseSearchRequest)
     }
-
 }

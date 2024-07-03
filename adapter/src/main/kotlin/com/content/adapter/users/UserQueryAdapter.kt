@@ -41,16 +41,16 @@ class UserQueryAdapter(
 
             val response = call.execute()
             if (response.isSuccessful) {
-                val result = response.body()?.users.let {
-                    it?.map { user ->
-                        User(
-                            userId = user.userId,
-                            userAccountStatus = user.userAccountStatus,
-                            nickName = user.nickName,
-                        )
+                val result =
+                    response.body()?.users.let {
+                        it?.map { user ->
+                            User(
+                                userId = user.userId,
+                                userAccountStatus = user.userAccountStatus,
+                                nickName = user.nickName,
+                            )
+                        }
                     }
-
-                }
                 return result ?: emptyList()
             }
             return emptyList()

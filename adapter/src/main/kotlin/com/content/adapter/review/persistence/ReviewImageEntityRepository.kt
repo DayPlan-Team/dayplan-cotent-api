@@ -9,9 +9,15 @@ import org.springframework.stereotype.Repository
 interface ReviewImageEntityRepository : JpaRepository<ReviewImageMetaEntity, Long> {
     fun findReviewImageMetaEntitiesByIdIn(ids: List<Long>): List<ReviewImageMetaEntity>
 
-    fun findReviewImageMetaEntitiesByIdInAndStatus(ids: List<Long>, status: Status): List<ReviewImageMetaEntity>
+    fun findReviewImageMetaEntitiesByIdInAndStatus(
+        ids: List<Long>,
+        status: Status,
+    ): List<ReviewImageMetaEntity>
 
     fun findReviewImageMetaEntitiesByReviewId(reviewId: Long): List<ReviewImageMetaEntity>
 
-    fun findReviewImageMetaEntitiesByReviewIdAndStatus(reviewId: Long, status: Status): List<ReviewImageMetaEntity>
+    fun findReviewImageMetaEntitiesByReviewIdAndStatus(
+        reviewId: Long,
+        status: Status,
+    ): List<ReviewImageMetaEntity>
 }

@@ -2,8 +2,8 @@ package com.content.adapter.review
 
 import com.content.adapter.review.persistence.ReviewImageEntityRepository
 import com.content.adapter.share.Status
-import com.content.domain.review.port.ReviewImageMetaQueryPort
 import com.content.domain.review.ReviewImageMeta
+import com.content.domain.review.port.ReviewImageMetaQueryPort
 import com.content.util.exception.ContentException
 import com.content.util.exceptioncode.ContentExceptionCode
 import org.springframework.stereotype.Component

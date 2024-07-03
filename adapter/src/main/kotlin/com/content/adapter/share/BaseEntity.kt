@@ -11,11 +11,9 @@ import java.time.LocalDateTime
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
 abstract class BaseEntity(
-
     @CreatedDate
     @Column(updatable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
-
     @LastModifiedDate
     val modifiedAt: LocalDateTime = LocalDateTime.now(),
 )

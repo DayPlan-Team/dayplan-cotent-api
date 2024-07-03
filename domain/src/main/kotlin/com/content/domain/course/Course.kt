@@ -12,13 +12,12 @@ data class Course(
     val visitedStatus: Boolean = false,
     val groupId: Long = 0L,
 ) {
-
     companion object {
         fun from(
             courseId: Long,
             placeId: Long,
             courseStage: CourseStage,
-            courseUpsertRequest: CourseUpsertRequest
+            courseUpsertRequest: CourseUpsertRequest,
         ): Course {
             return Course(
                 courseId = courseId,
@@ -33,7 +32,7 @@ data class Course(
         fun from(
             place: Place,
             courseStage: CourseStage,
-            courseUpsertRequest: CourseUpsertRequest
+            courseUpsertRequest: CourseUpsertRequest,
         ): Course {
             return Course(
                 courseId = courseUpsertRequest.courseId,
@@ -61,5 +60,4 @@ data class Course(
             )
         }
     }
-
 }

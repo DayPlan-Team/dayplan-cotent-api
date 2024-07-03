@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component
 
 @Component
 interface CourseGroupSearchPort {
-
     fun findCourseGroupBy(request: CourseGroupAdministrativeSearchRequest): CourseGroupListSearchResponse
 
     fun findCourseGroupByGroupIds(courseGroupIds: List<Long>): List<CourseGroup>

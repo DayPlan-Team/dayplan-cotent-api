@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController
 class CourseVisitedController(
     private val courseVisitedService: CourseVisitedService,
 ) {
-
     @PostMapping
     fun updateDatecourseVisitedStatus(
         @RequestBody userLocation: UserLocationApiRequest,
@@ -23,7 +22,7 @@ class CourseVisitedController(
                 userId = userLocation.userId,
                 latitude = userLocation.latitude,
                 longitude = userLocation.longitude,
-            )
+            ),
         )
 
         return ResponseEntity.ok().build()
@@ -34,5 +33,4 @@ class CourseVisitedController(
         val latitude: Double,
         val longitude: Double,
     )
-
 }

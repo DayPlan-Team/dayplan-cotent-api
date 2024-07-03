@@ -10,13 +10,15 @@ import org.springframework.stereotype.Component
 class DistrictMetricsCommandAdapter(
     private val districtMetricsEntityRepository: DistrictMetricsEntityRepository,
 ) : DistrictMetricsCommandPort {
-
-    override fun upsertDistrict(districtCode: DistrictCode, districtCountType: DistrictCountType) {
-        val newDistrictMetrics = districtMetricsEntityRepository
-            .findDistrictMetricsEntityByDistrictCode(districtCode)
-            .updateDistrictMetrics(districtCountType)
+    override fun upsertDistrict(
+        districtCode: DistrictCode,
+        districtCountType: DistrictCountType,
+    ) {
+        val newDistrictMetrics =
+            districtMetricsEntityRepository
+                .findDistrictMetricsEntityByDistrictCode(districtCode)
+                .updateDistrictMetrics(districtCountType)
 
         districtMetricsEntityRepository.save(newDistrictMetrics)
     }
-
 }

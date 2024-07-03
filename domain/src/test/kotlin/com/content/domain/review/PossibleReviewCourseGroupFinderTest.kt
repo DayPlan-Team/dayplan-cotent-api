@@ -10,82 +10,83 @@ class PossibleReviewCourseGroupFinderTest : BehaviorSpec({
 
     given("그룹에 대한 코스들이 주어져요") {
 
-        val courses = listOf(
-            Course(
-                courseId = 1L,
-                step = 1,
-                placeId = 1L,
-                courseStage = CourseStage.PLACE_FINISH,
-                placeCategory = PlaceCategory.CAFE,
-                visitedStatus = true,
-                groupId = 1L,
-            ),
-            Course(
-                courseId = 2L,
-                step = 2,
-                placeId = 1L,
-                courseStage = CourseStage.PLACE_FINISH,
-                placeCategory = PlaceCategory.CAFE,
-                visitedStatus = true,
-                groupId = 1L,
-            ),
-            /* 거점: courseStage not Place Finish */
-            Course(
-                courseId = 3L,
-                step = 1,
-                placeId = 1L,
-                courseStage = CourseStage.START,
-                placeCategory = PlaceCategory.CAFE,
-                visitedStatus = true,
-                groupId = 2L,
-            ),
-            Course(
-                courseId = 2L,
-                step = 2,
-                placeId = 1L,
-                courseStage = CourseStage.PLACE_FINISH,
-                placeCategory = PlaceCategory.CAFE,
-                visitedStatus = true,
-                groupId = 2L,
-            ),
-            /* 거점: VisitedStatus */
-            Course(
-                courseId = 5L,
-                step = 1,
-                placeId = 1L,
-                courseStage = CourseStage.PLACE_FINISH,
-                placeCategory = PlaceCategory.CAFE,
-                visitedStatus = true,
-                groupId = 3L,
-            ),
-            Course(
-                courseId = 6L,
-                step = 2,
-                placeId = 1L,
-                courseStage = CourseStage.PLACE_FINISH,
-                placeCategory = PlaceCategory.CAFE,
-                visitedStatus = false,
-                groupId = 3L,
-            ),
-            Course(
-                courseId = 7L,
-                step = 1,
-                placeId = 1L,
-                courseStage = CourseStage.PLACE_FINISH,
-                placeCategory = PlaceCategory.CAFE,
-                visitedStatus = false,
-                groupId = 4L,
-            ),
-            Course(
-                courseId = 8L,
-                step = 2,
-                placeId = 1L,
-                courseStage = CourseStage.PLACE_FINISH,
-                placeCategory = PlaceCategory.CAFE,
-                visitedStatus = false,
-                groupId = 4L,
+        val courses =
+            listOf(
+                Course(
+                    courseId = 1L,
+                    step = 1,
+                    placeId = 1L,
+                    courseStage = CourseStage.PLACE_FINISH,
+                    placeCategory = PlaceCategory.CAFE,
+                    visitedStatus = true,
+                    groupId = 1L,
+                ),
+                Course(
+                    courseId = 2L,
+                    step = 2,
+                    placeId = 1L,
+                    courseStage = CourseStage.PLACE_FINISH,
+                    placeCategory = PlaceCategory.CAFE,
+                    visitedStatus = true,
+                    groupId = 1L,
+                ),
+                // 거점: courseStage not Place Finish
+                Course(
+                    courseId = 3L,
+                    step = 1,
+                    placeId = 1L,
+                    courseStage = CourseStage.START,
+                    placeCategory = PlaceCategory.CAFE,
+                    visitedStatus = true,
+                    groupId = 2L,
+                ),
+                Course(
+                    courseId = 2L,
+                    step = 2,
+                    placeId = 1L,
+                    courseStage = CourseStage.PLACE_FINISH,
+                    placeCategory = PlaceCategory.CAFE,
+                    visitedStatus = true,
+                    groupId = 2L,
+                ),
+                // 거점: VisitedStatus
+                Course(
+                    courseId = 5L,
+                    step = 1,
+                    placeId = 1L,
+                    courseStage = CourseStage.PLACE_FINISH,
+                    placeCategory = PlaceCategory.CAFE,
+                    visitedStatus = true,
+                    groupId = 3L,
+                ),
+                Course(
+                    courseId = 6L,
+                    step = 2,
+                    placeId = 1L,
+                    courseStage = CourseStage.PLACE_FINISH,
+                    placeCategory = PlaceCategory.CAFE,
+                    visitedStatus = false,
+                    groupId = 3L,
+                ),
+                Course(
+                    courseId = 7L,
+                    step = 1,
+                    placeId = 1L,
+                    courseStage = CourseStage.PLACE_FINISH,
+                    placeCategory = PlaceCategory.CAFE,
+                    visitedStatus = false,
+                    groupId = 4L,
+                ),
+                Course(
+                    courseId = 8L,
+                    step = 2,
+                    placeId = 1L,
+                    courseStage = CourseStage.PLACE_FINISH,
+                    placeCategory = PlaceCategory.CAFE,
+                    visitedStatus = false,
+                    groupId = 4L,
+                ),
             )
-        )
 
         `when`("리뷰 가능한 코스를 확인하면") {
             val result = PossibleReviewFinder.processPossibleReviewCourseGroup(courses)
@@ -95,7 +96,5 @@ class PossibleReviewCourseGroupFinderTest : BehaviorSpec({
                 result[0] shouldBe 1L
             }
         }
-
     }
-
 })

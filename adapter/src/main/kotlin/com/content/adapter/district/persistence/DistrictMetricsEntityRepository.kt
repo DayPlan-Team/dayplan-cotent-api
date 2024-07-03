@@ -7,7 +7,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface DistrictMetricsEntityRepository : JpaRepository<DistrictMetricsEntity, Long> {
-
     fun findDistrictMetricsEntityByDistrictCode(districtCode: DistrictCode): DistrictMetricsEntity
-
 }

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component
 
 @Component
 interface ReviewGroupCommandPort {
-
     fun createReviewGroup(courseGroup: CourseGroup): ReviewGroup
 
     fun updateReviewGroup(reviewGroup: ReviewGroup): ReviewGroup

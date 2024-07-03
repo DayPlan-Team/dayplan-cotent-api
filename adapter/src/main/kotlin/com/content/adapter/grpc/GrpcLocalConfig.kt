@@ -11,14 +11,13 @@ import java.util.concurrent.TimeUnit
 
 @Configuration
 class GrpcLocalConfig {
-
     @Value("\${grpc.content.server.port}")
     private lateinit var grpcContent: String
 
     @Value("\${grpc.user.server.port}")
     private lateinit var grpcUser: String
 
-    /* 운영 배포시 address 설정 필요함 */
+    // 운영 배포시 address 설정 필요함
     @Bean
     @Qualifier("userManagedChannel")
     fun userManagedChannel(): ManagedChannel {

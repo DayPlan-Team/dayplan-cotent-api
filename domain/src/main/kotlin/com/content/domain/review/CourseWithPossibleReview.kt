@@ -10,8 +10,10 @@ data class CourseWithPossibleReview(
     val modifiedAt: String = DEFAULT_AT,
 ) {
     companion object {
-
-        fun of(course: Course, review: Review): CourseWithPossibleReview {
+        fun of(
+            course: Course,
+            review: Review,
+        ): CourseWithPossibleReview {
             return CourseWithPossibleReview(
                 courseId = course.courseId,
                 createdAt = DateTimeCustomFormatter.timeToDateMinuteFormat(review.createdAt),

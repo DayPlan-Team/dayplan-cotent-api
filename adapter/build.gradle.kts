@@ -1,5 +1,6 @@
+import com.google.protobuf.gradle.GenerateProtoTask
+import com.google.protobuf.gradle.id
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import com.google.protobuf.gradle.*
 
 val jar: Jar by tasks
 val bootJar: BootJar by tasks
@@ -24,26 +25,26 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-noarg:1.8.21")
 
-    /* RedissonClient */
+    // RedissonClient
     implementation("org.redisson:redisson-spring-boot-starter:3.17.7")
 
-    /* MySQL */
+    // MySQL
     runtimeOnly("com.mysql:mysql-connector-j")
     implementation("mysql:mysql-connector-java:8.0.32")
 
-    /* API */
+    // API
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.retrofit2:adapter-java8:2.9.0")
 
-    /* GRPC */
+    // GRPC
     implementation("io.grpc:grpc-kotlin-stub:1.3.0")
     implementation("com.google.protobuf:protobuf-java:3.24.3")
     implementation("io.grpc:grpc-netty-shaded:1.58.0")
     implementation("io.grpc:grpc-protobuf:1.58.0")
     implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
 
-    /* S3 */
+    // S3
     implementation("software.amazon.awssdk:s3:2.21.0")
 
     implementation(project(":util"))
@@ -93,4 +94,12 @@ noArg {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
+}
+
+ktlint {
+    filter {
+        exclude { element ->
+            element.file.path.contains("generated")
+        }
+    }
 }

@@ -2,8 +2,8 @@ package com.content.adapter.course
 
 import com.content.adapter.course.entity.CourseGroupEntity
 import com.content.adapter.course.persistence.CourseGroupEntityRepository
-import com.content.domain.course.port.CourseGroupCommandPort
 import com.content.domain.course.CourseGroup
+import com.content.domain.course.port.CourseGroupCommandPort
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,7 +14,7 @@ class CourseGroupCommandAdapter(
 ) : CourseGroupCommandPort {
     override fun upsertCourseGroup(courseGroup: CourseGroup): CourseGroup {
         return courseGroupEntityRepository.save(
-            CourseGroupEntity.fromCourseGroup(courseGroup)
+            CourseGroupEntity.fromCourseGroup(courseGroup),
         ).toDomainModel()
     }
 }

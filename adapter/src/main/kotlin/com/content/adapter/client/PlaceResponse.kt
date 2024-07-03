@@ -3,7 +3,7 @@ package com.content.adapter.client
 import com.content.domain.share.PlaceCategory
 
 data class PlaceResponse(
-    val places: List<PlaceItem>
+    val places: List<PlaceItem>,
 )
 
 data class PlaceItem(

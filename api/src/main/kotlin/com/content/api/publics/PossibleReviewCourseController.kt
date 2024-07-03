@@ -15,28 +15,30 @@ class PossibleReviewCourseController(
     private val userVerifyService: UserVerifyService,
     private val possibleReviewCourseFindService: PossibleReviewCourseFindService,
 ) {
-
     @GetMapping
-    fun getCourseGroupWithPossibleReview(@RequestHeader("UserId") userId: Long): ResponseEntity<PossibleReviewCourseGroups> {
+    fun getCourseGroupWithPossibleReview(
+        @RequestHeader("UserId") userId: Long,
+    ): ResponseEntity<PossibleReviewCourseGroups> {
         val user = userVerifyService.verifyNormalUserAndGet(userId)
 
-        val possibleReviewCourseGroups = possibleReviewCourseFindService.getPossibleReviewCourseGroup(userId = user.userId)
-            .map {
-                PossibleReviewCourseGroup(
-                    courseGroupId = it.groupId,
-                    courseGroupName = it.groupName,
-                )
-            }
+        val possibleReviewCourseGroups =
+            possibleReviewCourseFindService.getPossibleReviewCourseGroup(userId = user.userId)
+                .map {
+                    PossibleReviewCourseGroup(
+                        courseGroupId = it.groupId,
+                        courseGroupName = it.groupName,
+                    )
+                }
 
         return ResponseEntity.ok(
             PossibleReviewCourseGroups(
-                possibleReviewCourseGroups = possibleReviewCourseGroups
-            )
+                possibleReviewCourseGroups = possibleReviewCourseGroups,
+            ),
         )
     }
 
     data class PossibleReviewCourseGroups(
-        @JsonProperty("possibleReviewCourseCroups") val possibleReviewCourseGroups: List<PossibleReviewCourseGroup>
+        @JsonProperty("possibleReviewCourseCroups") val possibleReviewCourseGroups: List<PossibleReviewCourseGroup>,
     )
 
     data class PossibleReviewCourseGroup(

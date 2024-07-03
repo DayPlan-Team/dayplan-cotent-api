@@ -1,8 +1,7 @@
 package com.content.domain.course
 
 object LocationRectangleRangeCreator {
-
-    /* 위도와 경도 약 500m 오차 */
+    // 위도와 경도 약 500m 오차
     const val LATITUDE_ERROR = 0.0045
     const val LONGITUDE_ERROR = 0.0055
 
@@ -19,5 +18,4 @@ object LocationRectangleRangeCreator {
             max = longitude + LONGITUDE_ERROR,
         )
     }
-
 }

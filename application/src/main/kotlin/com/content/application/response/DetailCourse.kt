@@ -17,7 +17,6 @@ data class DetailCourse(
     val address: String = "",
     val roadAddress: String = "",
 ) {
-
     companion object {
         fun from(
             course: Course,
@@ -37,6 +36,4 @@ data class DetailCourse(
             )
         }
     }
-
-
 }
