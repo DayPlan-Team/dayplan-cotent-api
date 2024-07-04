@@ -132,7 +132,7 @@
 
 
 ## 3. DB 구조
-![img.png](readme/image/Erd.png)
+![img.png](../../user/readme/image/Erd.png)
 
 <br/>
 
